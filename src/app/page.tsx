@@ -2,19 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-
-const imageTools = [
-  {
-    href: "/tools/image/compress",
-    title: "Compress Image",
-    description: "Shrink JPG, PNG, and WebP.",
-  },
-  {
-    href: "/tools/image/resize",
-    title: "Resize Image",
-    description: "Change dimensions with presets",
-  },
-];
+import { HomeImageToolsSection } from "@/components/image/HomeImageToolsSection";
 
 const upcoming = ["PDF Tools", "Video Tools", "Audio Tools", "Developer Tools"];
 
@@ -63,41 +51,7 @@ export default function HomePage() {
         />
       </section>
 
-      <section className="border-t border-line/80 bg-paper/50">
-        <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6">
-          <motion.h2
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.4 }}
-            className="font-display text-3xl font-semibold text-ink"
-          >
-            Image Tools
-          </motion.h2>
-          <p className="mt-2 max-w-2xl text-sm text-ink-soft/75">
-            Live now. More utilities ship every sprint.
-          </p>
-          <ul className="mt-8 grid gap-6 sm:grid-cols-2">
-            {imageTools.map((tool, index) => (
-              <motion.li
-                key={tool.href}
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.35, delay: index * 0.06 }}
-              >
-                <Link
-                  href={tool.href}
-                  className="focus-ring block border-b border-line pb-4 transition hover:border-accent"
-                >
-                  <p className="font-display text-xl font-semibold text-ink">{tool.title}</p>
-                  <p className="mt-2 text-sm text-ink-soft/75">{tool.description}</p>
-                </Link>
-              </motion.li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <HomeImageToolsSection />
 
       <section className="border-t border-line/80">
         <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6">
