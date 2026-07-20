@@ -1,0 +1,69 @@
+---
+description: ToolsHub project context, architecture, and conventions for agent work
+alwaysApply: true
+---
+
+# ToolsHub
+
+Privacy-first online toolkit. **Image Tools** is the first live category. All image processing runs in the browser (Canvas) — never upload user files to a server.
+
+**Also read when starting work:** `AGENTS.md`, `docs/CHECKLIST.md`, `docs/BUSINESS_PLAN.md`
+
+## Stack
+
+Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Zustand, Framer Motion. History in IndexedDB (`src/lib/history/idb.ts`). Export prefs in `localStorage` via `preferencesStore`.
+
+## Where things live
+
+| Area | Path |
+|------|------|
+| Pages | `src/app/tools/image/` |
+| Panels / UI | `src/components/image/` |
+| SEO template | `src/components/seo/ToolPageTemplate` |
+| SEO copy | `src/content/tools/image.ts` |
+| Engine | `src/lib/image/` (engine, compress, resize, formats) |
+| State | `src/stores/imageStore.ts`, `historyStore.ts`, `preferencesStore.ts` |
+
+## Live routes
+
+`/`, `/tools/image`, `/tools/image/compress`, `/tools/image/resize`, `/tools/image/history`
+
+## Processing pipeline
+
+1. `imageStore.setFile` → `loadImageFromFile` (ImageBitmap)
+2. Panel calls `runCompress` / `runResize` (live preview: `{ silent: true }`)
+3. Result blob + preview URL stored in `imageStore`
+4. **Download** → `downloadBlob` + `historyStore.saveDownload(tool)`
+
+## Conventions (must follow)
+
+1. **Privacy:** Client-side only. No server uploads.
+2. **Tool isolation:** `ImageToolWorkspace` clears `imageStore` on route change.
+3. **Live preview:** Debounce; use separate async tokens for compress vs resize to avoid stale results.
+4. **Export format:** `ExportFormatSelect` → `preferencesStore.exportFormatId`. Never silently convert JPG to WebP; flatten transparent letterbox to white for JPEG.
+5. **History:** Save only on **Download** (not preview). Cap 30 entries in IDB.
+6. **SEO pages:** `ToolPageTemplate` + `content/tools/` + `buildToolMetadata`.
+7. **Design:** Tool pages = minimal hero + uploader. Fonts: Syne + Instrument Sans.
+8. **Scope:** Minimal diffs. Match existing patterns. Update `docs/CHECKLIST.md` when shipping checklist items.
+
+## Adding a new image tool
+
+1. SEO content in `src/content/tools/image.ts`
+2. Page at `src/app/tools/image/[tool]/page.tsx` with `ToolPageTemplate` + panel
+3. Panel via `ImageToolWorkspace` (see `CompressionPanel`, `ResizePanel`)
+4. Extend `src/lib/image/` if needed; reuse/extend `imageStore` carefully
+5. Pass `HistoryToolId` to `downloadResult(...)` — extend `types/history.ts` if needed
+6. Nav link in `Navbar.tsx` + hub card in `app/tools/image/page.tsx`
+7. Update `docs/CHECKLIST.md`
+
+## Build (Windows EBUSY fix)
+
+```powershell
+Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force
+Remove-Item -Recurse -Force .next
+npm run build
+```
+
+## Next priorities
+
+Convert tool, Crop tool, programmatic SEO pages, `sitemap.ts` + `robots.ts`, analytics, Web Workers, mobile panel layout. Full list in `docs/CHECKLIST.md`.
