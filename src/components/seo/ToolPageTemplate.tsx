@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { FaqSection, HowToSection, RelatedTools } from "@/components/seo/ToolSections";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
+  buildBreadcrumbJsonLd,
   buildFaqJsonLd,
   buildHowToJsonLd,
   buildWebApplicationJsonLd,
@@ -19,6 +20,13 @@ export function ToolPageTemplate({ content, children }: ToolPageTemplateProps) {
       <JsonLd data={buildWebApplicationJsonLd(content)} />
       <JsonLd data={buildFaqJsonLd(content)} />
       <JsonLd data={buildHowToJsonLd(content)} />
+      <JsonLd
+        data={buildBreadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Image Tools", path: "/tools/image" },
+          { name: content.h1, path: `/tools/image/${content.slug}` },
+        ])}
+      />
 
       <header className="max-w-3xl">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-deep">

@@ -3,12 +3,12 @@ import type { ToolPageContent } from "@/types/seo";
 export const compressToolContent: ToolPageContent = {
   slug: "compress",
   category: "image",
-  title: "Compress Image Online — Free, Private, No Upload | ToolsHub",
+  title: "Compress Image Online — Free, Private, No Upload | PrivyTool",
   description:
     "Compress JPG, PNG, and WebP images in your browser. Fast, private, and free — your files never leave your device.",
   h1: "Compress Image",
   intro:
-    "Shrink image file size without uploading to a server. ToolsHub runs compression locally in your browser for speed and privacy.",
+    "Shrink image file size without uploading to a server. PrivyTool runs compression locally in your browser for speed and privacy.",
   keywords: [
     "compress image",
     "compress jpg",
@@ -47,7 +47,7 @@ export const compressToolContent: ToolPageContent = {
         "You can upload JPG, PNG, and WebP. Compressed output is JPG or WebP for the smallest files.",
     },
     {
-      question: "Is ToolsHub free?",
+      question: "Is PrivyTool free?",
       answer:
         "Yes. Basic image tools are free. Optional premium features may arrive later as traffic grows.",
     },
@@ -74,9 +74,9 @@ export const compressToolContent: ToolPageContent = {
 export const resizeToolContent: ToolPageContent = {
   slug: "resize",
   category: "image",
-  title: "Resize Image Online — Free, Private, No Upload | ToolsHub",
+  title: "Resize Image Online — Free, Private, No Upload | PrivyTool",
   description:
-    "Resize images in your browser with no upload required. Custom width/height, percent scale, and presets — free on ToolsHub.",
+    "Resize images in your browser with no upload required. Custom width/height, percent scale, and presets — free on PrivyTool.",
   h1: "Resize Image",
   intro:
     "Change image dimensions locally in your browser. Choose fit without crop, crop to fill, or stretch — and fill empty edges with white, black, blur, or transparent.",
@@ -99,7 +99,7 @@ export const resizeToolContent: ToolPageContent = {
     {
       question: "Is resizing private?",
       answer:
-        "Yes. ToolsHub does not upload your images. Resize processing runs entirely in your browser.",
+        "Yes. PrivyTool does not upload your images. Resize processing runs entirely in your browser.",
     },
     {
       question: "What happens if the aspect ratio does not match?",
@@ -134,7 +134,7 @@ export const resizeToolContent: ToolPageContent = {
 export const convertToolContent: ToolPageContent = {
   slug: "convert",
   category: "image",
-  title: "Convert Image Format Online — Free, Private, No Upload | ToolsHub",
+  title: "Convert Image Format Online — Free, Private, No Upload | PrivyTool",
   description:
     "Convert JPG, PNG, WebP, and AVIF images in your browser. Fast, private, and free — your files never leave your device.",
   h1: "Convert Image",
@@ -176,10 +176,10 @@ export const convertToolContent: ToolPageContent = {
     {
       question: "What happens to transparency when converting to JPG?",
       answer:
-        "JPG does not support transparency. ToolsHub flattens transparent areas onto a white background when exporting to JPG or JPEG.",
+        "JPG does not support transparency. PrivyTool flattens transparent areas onto a white background when exporting to JPG or JPEG.",
     },
     {
-      question: "Is ToolsHub free?",
+      question: "Is PrivyTool free?",
       answer:
         "Yes. Basic image tools are free. Optional premium features may arrive later as traffic grows.",
     },

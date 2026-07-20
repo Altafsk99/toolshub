@@ -14,7 +14,7 @@ export function Navbar() {
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="focus-ring group flex items-baseline gap-2 rounded-md">
           <span className="font-display text-xl font-bold tracking-tight text-ink sm:text-2xl">
-            ToolsHub
+            PrivyTool
           </span>
           <span className="hidden text-xs font-medium uppercase tracking-[0.18em] text-ink-soft/70 sm:inline">
             Privacy-first utilities

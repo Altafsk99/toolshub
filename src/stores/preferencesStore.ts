@@ -15,6 +15,6 @@ export const usePreferencesStore = create<PreferencesState>()(
       exportFormatId: "jpg",
       setExportFormatId: (exportFormatId) => set({ exportFormatId }),
     }),
-    { name: "toolshub-preferences" },
+    { name: "privytool-preferences" },
   ),
 );

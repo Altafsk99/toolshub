@@ -1,6 +1,8 @@
-# ToolsHub
+# PrivyTool
 
 Privacy-first online toolkit. Image tools process files entirely in the browser — no upload required.
+
+**Domain:** [privytool.com](https://privytool.com)
 
 ## Stack
 
@@ -14,6 +16,7 @@ Privacy-first online toolkit. Image tools process files entirely in the browser 
 
 - Compress (`/tools/image/compress`)
 - Resize (`/tools/image/resize`)
+- Convert (`/tools/image/convert`)
 - History (`/tools/image/history`) — on-device downloads with filter dropdown
 
 ## Develop

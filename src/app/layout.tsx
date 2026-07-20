@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Kameron, Montserrat } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { Analytics } from "@/components/seo/Analytics";
 import "./globals.css";
 
 const display = Kameron({
@@ -18,12 +19,21 @@ const body = Montserrat({
 
 export const metadata: Metadata = {
   title: {
-    default: "ToolsHub — Privacy-first online tools",
-    template: "%s | ToolsHub",
+    default: "PrivyTool — Privacy-first online tools",
+    template: "%s | PrivyTool",
   },
   description:
     "The world's fastest privacy-first toolkit. Compress, resize, and convert images in your browser — no upload required.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://toolshub.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://privytool.com"),
+  robots: { index: true, follow: true },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "PrivyTool",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({
@@ -34,6 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${display.variable} ${body.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans text-foreground">
+        <Analytics />
         <div className="noise-overlay mesh-bg flex min-h-full flex-1 flex-col">
           <Navbar />
           <main className="relative z-10 flex-1">{children}</main>

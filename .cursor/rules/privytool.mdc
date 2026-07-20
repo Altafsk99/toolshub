@@ -1,9 +1,9 @@
 ---
-description: ToolsHub project context, architecture, and conventions for agent work
+description: PrivyTool project context, architecture, and conventions for agent work
 alwaysApply: true
 ---
 
-# ToolsHub
+# PrivyTool
 
 Privacy-first online toolkit. **Image Tools** is the first live category. All image processing runs in the browser (Canvas) — never upload user files to a server.
 
@@ -26,7 +26,7 @@ Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Zustand, Framer M
 
 ## Live routes
 
-`/`, `/tools/image`, `/tools/image/compress`, `/tools/image/resize`, `/tools/image/history`
+`/`, `/tools/image`, `/tools/image/compress`, `/tools/image/resize`, `/tools/image/convert`, `/tools/image/history`
 
 ## Processing pipeline
 
@@ -66,4 +66,4 @@ npm run build
 
 ## Next priorities
 
-Convert tool, Crop tool, programmatic SEO pages, `sitemap.ts` + `robots.ts`, analytics, Web Workers, mobile panel layout. Full list in `docs/CHECKLIST.md`.
+Crop tool, programmatic SEO pages, analytics, Web Workers, mobile panel layout. Full list in `docs/CHECKLIST.md`.

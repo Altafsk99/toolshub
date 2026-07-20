@@ -1,6 +1,6 @@
 import type { HistoryEntryMeta, HistoryEntryRecord, HistoryListItem } from "@/types/history";
 
-const DB_NAME = "toolshub-history";
+const DB_NAME = "privytool-history";
 const DB_VERSION = 1;
 const STORE = "entries";
 const MAX_ENTRIES = 30;
