@@ -52,10 +52,19 @@ export type ConvertLandingPreset = {
   qualityPercent?: number;
 };
 
+export type CropLandingPreset = {
+  tool: "crop";
+  aspect?: "free" | "1:1" | "4:3" | "3:4" | "16:9" | "9:16" | "3:2" | "2:3";
+  shape?: "rect" | "circle";
+  focusX?: number;
+  focusY?: number;
+};
+
 export type SeoLandingPreset =
   | CompressLandingPreset
   | ResizeLandingPreset
-  | ConvertLandingPreset;
+  | ConvertLandingPreset
+  | CropLandingPreset;
 
 export type SeoLandingPage = ToolPageContent & {
   preset: SeoLandingPreset;

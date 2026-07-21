@@ -1,6 +1,7 @@
 import {
   CompressIcon,
   ConvertIcon,
+  CropIcon,
   HistoryIcon,
   ResizeIcon,
 } from "@/components/image/ImageToolIcons";
@@ -41,6 +42,14 @@ export const imageTools: ImageToolItem[] = [
     description: "Switch between PNG, JPG, WebP, and AVIF without uploading.",
     icon: ConvertIcon,
     tint: "from-accent-deep/10 to-mist/80",
+  },
+  {
+    href: "/tools/image/crop",
+    title: "Crop",
+    subtitle: "Crop Image",
+    description: "Square, circle, and social aspect ratio crops with live preview.",
+    icon: CropIcon,
+    tint: "from-[#7ec8a4]/14 to-accent/5",
   },
   {
     href: "/tools/image/history",

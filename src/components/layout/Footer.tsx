@@ -68,6 +68,11 @@ export function Footer() {
               </Link>
             </li>
             <li>
+              <Link href="/tools/image/crop" className="transition hover:text-accent-bright">
+                Crop Image
+              </Link>
+            </li>
+            <li>
               <Link href="/tools/image/history" className="transition hover:text-accent-bright">
                 History
               </Link>

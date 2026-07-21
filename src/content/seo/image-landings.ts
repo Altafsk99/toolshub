@@ -4,6 +4,11 @@ import {
   privacyFaqs,
   relatedFromSlugs,
 } from "@/lib/seo/landing-helpers";
+import {
+  extendedFeaturedSlugs,
+  extendedRelatedMap,
+  extendedSeoLandingPages,
+} from "@/content/seo/image-landings-extended";
 import type { SeoLandingPage } from "@/types/seo";
 
 const compressLandings: SeoLandingPage[] = [
@@ -501,6 +506,7 @@ export const seoLandingPages: SeoLandingPage[] = [
   ...compressLandings,
   ...resizeLandings,
   ...convertLandings,
+  ...extendedSeoLandingPages,
 ];
 
 const bySlug = new Map(seoLandingPages.map((page) => [page.slug, page]));
@@ -539,6 +545,7 @@ export const seoLandingPagesWithRelated: SeoLandingPage[] = seoLandingPages.map(
     "jpg-to-png": ["png-to-jpg", "png-to-webp"],
     "jpg-to-webp": ["png-to-webp", "compress-webp"],
     "png-to-webp": ["png-to-jpg", "jpg-to-webp"],
+    ...extendedRelatedMap,
   };
   return withRelated(page, relatedMap[page.slug] ?? []);
 });
@@ -550,4 +557,5 @@ export const featuredSeoLandingSlugs = [
   "jpg-to-png",
   "resize-passport-photo",
   "resize-for-instagram",
+  ...extendedFeaturedSlugs,
 ] as const;

@@ -109,6 +109,50 @@ export type ResizeResult = {
   qualityUsed?: number;
 };
 
+export type CropAspectPreset =
+  | "free"
+  | "1:1"
+  | "4:3"
+  | "3:4"
+  | "16:9"
+  | "9:16"
+  | "3:2"
+  | "2:3";
+
+export type CropShape = "rect" | "circle";
+
+export type CropOptions = {
+  aspect?: CropAspectPreset;
+  shape?: CropShape;
+  /** 0–1 horizontal focal point for the crop window */
+  focusX?: number;
+  /** 0–1 vertical focal point for the crop window */
+  focusY?: number;
+  /** Used when aspect is "free" */
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  format?: ExportMime;
+  formatId?: ExportFormatId;
+  quality?: number;
+};
+
+export type CropResult = {
+  blob: Blob;
+  filename: string;
+  originalWidth: number;
+  originalHeight: number;
+  width: number;
+  height: number;
+  outputBytes: number;
+  format: ExportMime;
+  formatId?: ExportFormatId;
+  aspect: CropAspectPreset;
+  shape: CropShape;
+  qualityUsed?: number;
+};
+
 export type EngineSource = {
   bitmap: ImageBitmap;
   meta: ImageMeta;

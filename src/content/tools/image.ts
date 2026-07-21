@@ -202,3 +202,74 @@ export const convertToolContent: ToolPageContent = {
     },
   ],
 };
+
+export const cropToolContent: ToolPageContent = {
+  slug: "crop",
+  category: "image",
+  title: "Crop Image Online — Free, Private, No Upload | PrivyTool",
+  description:
+    "Crop images to square, circle, or social aspect ratios in your browser. Free, private, and fast — no upload required.",
+  h1: "Crop Image",
+  intro:
+    "Trim photos locally with square, circle, wide, or story aspect ratios. Focal sliders and live preview — nothing leaves your device.",
+  keywords: [
+    "crop image",
+    "crop image online",
+    "square crop",
+    "circle crop image",
+    "crop photo free",
+  ],
+  howTo: [
+    {
+      name: "Upload your image",
+      text: "Drop a JPG, PNG, or WebP file from your device.",
+    },
+    {
+      name: "Pick aspect and shape",
+      text: "Choose square, 16:9, 9:16 story, or circle. Adjust horizontal and vertical focus.",
+    },
+    {
+      name: "Download",
+      text: "Preview the cropped result, then save it locally.",
+    },
+  ],
+  faqs: [
+    {
+      question: "Do you upload my images?",
+      answer:
+        "No. Cropping runs entirely in your browser using the Canvas API. Your files never leave your device.",
+    },
+    {
+      question: "Can I crop to a circle?",
+      answer:
+        "Yes. Choose Circle shape — the export is PNG with a transparent background outside the circle.",
+    },
+    {
+      question: "Which aspect ratios are supported?",
+      answer:
+        "Square (1:1), 4:3, 3:4 portrait, 16:9 wide, 9:16 story, 3:2 photo, 2:3 portrait, and free crop.",
+    },
+    {
+      question: "Is PrivyTool free?",
+      answer:
+        "Yes. Basic image tools are free. Optional premium features may arrive later as traffic grows.",
+    },
+  ],
+  related: [
+    {
+      href: "/tools/image/resize",
+      title: "Resize Image",
+      description: "Set exact pixel dimensions after cropping.",
+    },
+    {
+      href: "/tools/image/compress",
+      title: "Compress Image",
+      description: "Shrink file size without leaving your browser.",
+    },
+    {
+      href: "/tools/image",
+      title: "All Image Tools",
+      description: "Browse the full privacy-first image toolkit.",
+    },
+  ],
+};

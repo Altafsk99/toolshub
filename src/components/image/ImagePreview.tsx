@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { CropOverlay } from "@/components/image/CropOverlay";
 import { formatBytes, useImageStore } from "@/stores/imageStore";
-
+import { useCropUiStore } from "@/stores/cropUiStore";
 type PreviewMode = "original" | "result";
 
 export function ImagePreview() {
@@ -14,11 +15,14 @@ export function ImagePreview() {
   const resizeResult = useImageStore((s) => s.resizeResult);
   const compressResult = useImageStore((s) => s.compressResult);
   const convertResult = useImageStore((s) => s.convertResult);
+  const cropResult = useImageStore((s) => s.cropResult);
   const resultFilename = useImageStore((s) => s.resultFilename);
   const clear = useImageStore((s) => s.clear);
+  const freeModeActive = useCropUiStore((s) => s.freeModeActive);
+  const freeCropRect = useCropUiStore((s) => s.freeCropRect);
 
-  const hasResult = Boolean(resultPreviewUrl);
-  const [mode, setMode] = useState<PreviewMode>("original");
+  const imgRef = useRef<HTMLImageElement>(null);
+  const hasResult = Boolean(resultPreviewUrl);  const [mode, setMode] = useState<PreviewMode>("original");
 
   useEffect(() => {
     if (hasResult) {
@@ -27,6 +31,12 @@ export function ImagePreview() {
       setMode("original");
     }
   }, [hasResult, resultPreviewUrl]);
+
+  useEffect(() => {
+    if (freeModeActive) {
+      setMode("original");
+    }
+  }, [freeModeActive, freeCropRect]);
 
   if (!previewUrl || !meta) {
     return (
@@ -40,16 +50,26 @@ export function ImagePreview() {
   const displayUrl = showingResult ? resultPreviewUrl : previewUrl;
 
   const resultWidth =
-    resizeResult?.width ?? compressResult?.width ?? convertResult?.width ?? meta.width;
+    resizeResult?.width ??
+    cropResult?.width ??
+    compressResult?.width ??
+    convertResult?.width ??
+    meta.width;
   const resultHeight =
-    resizeResult?.height ?? compressResult?.height ?? convertResult?.height ?? meta.height;
+    resizeResult?.height ??
+    cropResult?.height ??
+    compressResult?.height ??
+    convertResult?.height ??
+    meta.height;
   const resultBytes =
     resizeResult?.outputBytes ??
+    cropResult?.outputBytes ??
     compressResult?.outputBytes ??
     convertResult?.outputBytes ??
     meta.size;
   const resultType =
     resizeResult?.format ??
+    cropResult?.format ??
     compressResult?.format ??
     convertResult?.format ??
     meta.type ??
@@ -68,11 +88,15 @@ export function ImagePreview() {
     ? resizeResult.compressed
       ? "Resized + compressed"
       : "Resized"
-    : compressResult
-      ? "Compressed"
-      : convertResult
-        ? "Converted"
-        : "Result";
+    : cropResult
+      ? cropResult.shape === "circle"
+        ? "Circle crop"
+        : "Cropped"
+      : compressResult
+        ? "Compressed"
+        : convertResult
+          ? "Converted"
+          : "Result";
 
   return (
     <motion.div
@@ -114,19 +138,25 @@ export function ImagePreview() {
       ) : null}
 
       <div className="relative flex max-h-[420px] min-h-64 items-center justify-center bg-[linear-gradient(45deg,#dfeae6_25%,transparent_25%),linear-gradient(-45deg,#dfeae6_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#dfeae6_75%),linear-gradient(-45deg,transparent_75%,#dfeae6_75%)] bg-[length:20px_20px] bg-[position:0_0,0_10px,10px_-10px,-10px_0] p-4">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          key={`${resultRevision}-${displayUrl}`}
-          src={displayUrl}
-          alt={
-            showingResult
-              ? `${badgeLabel} preview of ${meta.name}`
-              : `Preview of ${meta.name}`
-          }
-          className="max-h-[380px] max-w-full object-contain"
-        />
-      </div>
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-4 py-3">
+        <div className="relative inline-block max-h-[380px] max-w-full">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            ref={imgRef}
+            key={`${resultRevision}-${displayUrl}`}
+            src={displayUrl}
+            alt={
+              showingResult
+                ? `${badgeLabel} preview of ${meta.name}`
+                : `Preview of ${meta.name}`
+            }
+            className="block max-h-[380px] max-w-full object-contain"
+          />
+          <CropOverlay
+            imgRef={imgRef}
+            enabled={freeModeActive && !showingResult}
+          />
+        </div>
+      </div>      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-4 py-3">
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold text-ink">{displayName}</p>
           <p className="mt-0.5 text-xs text-ink-soft/70">

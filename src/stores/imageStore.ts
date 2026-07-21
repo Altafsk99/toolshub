@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { compressSource, formatBytes } from "@/lib/image/compress";
+import { cropSource } from "@/lib/image/crop";
 import {
   downloadBlob,
   exportSource,
@@ -15,6 +16,8 @@ import type {
   CompressOptions,
   CompressResult,
   ConvertResult,
+  CropOptions,
+  CropResult,
   EngineSource,
   ExportOptions,
   ImageMeta,
@@ -40,6 +43,7 @@ type ImageState = {
   compressResult: CompressResult | null;
   convertResult: ConvertResult | null;
   resizeResult: ResizeResult | null;
+  cropResult: CropResult | null;
   isProcessing: boolean;
   isPreviewing: boolean;
   error: string | null;
@@ -48,6 +52,8 @@ type ImageState = {
   runIdentityExport: (options?: ExportOptions, opts?: ProcessOpts) => Promise<void>;
   runCompress: (options: CompressOptions, opts?: ProcessOpts) => Promise<void>;
   runResize: (options: ResizeOptions, opts?: ProcessOpts) => Promise<void>;
+  runCrop: (options: CropOptions, opts?: ProcessOpts) => Promise<void>;
+  clearCropResult: () => void;
   downloadResult: (tool?: HistoryToolId) => void;
 };
 
@@ -59,6 +65,7 @@ function revokeUrl(url: string | null) {
 let resizeToken = 0;
 let compressToken = 0;
 let exportToken = 0;
+let cropToken = 0;
 
 export const useImageStore = create<ImageState>((set, get) => ({
   file: null,
@@ -72,6 +79,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
   compressResult: null,
   convertResult: null,
   resizeResult: null,
+  cropResult: null,
   isProcessing: false,
   isPreviewing: false,
   error: null,
@@ -80,6 +88,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
     resizeToken += 1;
     compressToken += 1;
     exportToken += 1;
+    cropToken += 1;
     const prev = get();
     revokeSource(prev.source);
     revokeUrl(prev.previewUrl);
@@ -97,6 +106,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
         compressResult: null,
         convertResult: null,
         resizeResult: null,
+        cropResult: null,
         isProcessing: false,
         isPreviewing: false,
         error: null,
@@ -117,6 +127,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
         compressResult: null,
         convertResult: null,
         resizeResult: null,
+        cropResult: null,
         isProcessing: false,
         isPreviewing: false,
         error: null,
@@ -131,6 +142,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
         compressResult: null,
         convertResult: null,
         resizeResult: null,
+        cropResult: null,
         isProcessing: false,
         isPreviewing: false,
         error: "Could not read that image. Try JPG, PNG, or WebP.",
@@ -142,6 +154,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
     resizeToken += 1;
     compressToken += 1;
     exportToken += 1;
+    cropToken += 1;
     const prev = get();
     revokeSource(prev.source);
     revokeUrl(prev.previewUrl);
@@ -156,6 +169,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
       resultFilename: null,
       compressResult: null,
       resizeResult: null,
+      cropResult: null,
+      convertResult: null,
       isProcessing: false,
       isPreviewing: false,
       error: null,
@@ -203,6 +218,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
           qualityUsed,
         },
         resizeResult: null,
+        cropResult: null,
         isProcessing: false,
         isPreviewing: false,
       });
@@ -240,6 +256,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
         compressResult: result,
         convertResult: null,
         resizeResult: null,
+        cropResult: null,
         isProcessing: false,
         isPreviewing: false,
       });
@@ -277,6 +294,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
         resizeResult: result,
         compressResult: null,
         convertResult: null,
+        cropResult: null,
         isProcessing: false,
         isPreviewing: false,
       });
@@ -290,6 +308,58 @@ export const useImageStore = create<ImageState>((set, get) => ({
     }
   },
 
+  clearCropResult: () => {
+    cropToken += 1;
+    revokeUrl(get().resultPreviewUrl);
+    set({
+      resultPreviewUrl: null,
+      resultBlob: null,
+      resultFilename: null,
+      cropResult: null,
+      isProcessing: false,
+      isPreviewing: false,
+      error: null,
+    });
+  },
+
+  runCrop: async (options, opts) => {
+    const { source } = get();
+    if (!source) return;
+
+    const silent = Boolean(opts?.silent);
+    const token = ++cropToken;
+    set(
+      silent
+        ? { isPreviewing: true, error: null }
+        : { isProcessing: true, isPreviewing: false, error: null },
+    );
+
+    try {
+      const result = await cropSource(source, options);
+      if (token !== cropToken) return;
+      revokeUrl(get().resultPreviewUrl);
+      set({
+        resultBlob: result.blob,
+        resultFilename: result.filename,
+        resultPreviewUrl: URL.createObjectURL(result.blob),
+        resultRevision: get().resultRevision + 1,
+        cropResult: result,
+        compressResult: null,
+        convertResult: null,
+        resizeResult: null,
+        isProcessing: false,
+        isPreviewing: false,
+      });
+    } catch {
+      if (token !== cropToken) return;
+      set({
+        isProcessing: false,
+        isPreviewing: false,
+        error: "Crop failed. Try another aspect ratio or image.",
+      });
+    }
+  },
+
   downloadResult: (tool) => {
     const {
       resultBlob,
@@ -299,6 +369,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
       compressResult,
       convertResult,
       resizeResult,
+      cropResult,
     } = get();
 
     if (resultBlob && resultFilename) {
@@ -307,18 +378,21 @@ export const useImageStore = create<ImageState>((set, get) => ({
       if (tool && file) {
         const width =
           resizeResult?.width ??
+          cropResult?.width ??
           compressResult?.width ??
           convertResult?.width ??
           meta?.width ??
           0;
         const height =
           resizeResult?.height ??
+          cropResult?.height ??
           compressResult?.height ??
           convertResult?.height ??
           meta?.height ??
           0;
         const format =
           resizeResult?.format ??
+          cropResult?.format ??
           compressResult?.format ??
           convertResult?.format ??
           resultBlob.type ??

@@ -2,6 +2,7 @@
 
 import { CompressionPanel } from "@/components/image/CompressionPanel";
 import { ConvertPanel } from "@/components/image/ConvertPanel";
+import { CropPanel } from "@/components/image/CropPanel";
 import { ResizePanel } from "@/components/image/ResizePanel";
 import type { SeoLandingPreset } from "@/types/seo";
 
@@ -15,6 +16,9 @@ export function SeoLandingToolbar({ preset }: SeoLandingToolbarProps) {
   }
   if (preset.tool === "resize") {
     return <ResizePanel preset={preset} />;
+  }
+  if (preset.tool === "crop") {
+    return <CropPanel preset={preset} />;
   }
   return <ConvertPanel preset={preset} />;
 }

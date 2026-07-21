@@ -17,7 +17,7 @@ export function privacyFaqs(extra: FaqItem[] = []): FaqItem[] {
 }
 
 export function parentToolLink(
-  tool: "compress" | "resize" | "convert",
+  tool: "compress" | "resize" | "convert" | "crop",
 ): RelatedTool {
   const map = {
     compress: {
@@ -34,6 +34,11 @@ export function parentToolLink(
       href: "/tools/image/convert",
       title: "Convert Image",
       description: "Switch between PNG, JPG, WebP, and AVIF.",
+    },
+    crop: {
+      href: "/tools/image/crop",
+      title: "Crop Image",
+      description: "Square, circle, and social aspect ratio crops.",
     },
   } as const;
   return map[tool];
