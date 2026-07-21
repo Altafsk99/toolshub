@@ -26,13 +26,26 @@ export const metadata: Metadata = {
     "The world's fastest privacy-first toolkit. Compress, resize, and convert images in your browser — no upload required.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://privytool.com"),
   robots: { index: true, follow: true },
+  icons: {
+    icon: "/icon.svg",
+    apple: "/apple-icon.png",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: "PrivyTool",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "PrivyTool — Free Privacy-First Online Image Tools",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/og-image.png"],
   },
 };
 

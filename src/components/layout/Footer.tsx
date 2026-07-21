@@ -79,7 +79,11 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-4 text-xs text-foam/45 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <p>© {new Date().getFullYear()} PrivyTool. All rights reserved.</p>
-          <p>Processing happens in your browser.</p>
+          <div className="flex items-center gap-4">
+            <Link href="/privacy" className="transition hover:text-foam/80">Privacy Policy</Link>
+            <Link href="/terms" className="transition hover:text-foam/80">Terms of Use</Link>
+            <span>Processing happens in your browser.</span>
+          </div>
         </div>
       </div>
     </footer>
