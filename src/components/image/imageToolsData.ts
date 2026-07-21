@@ -6,6 +6,7 @@ import {
   HistoryIcon,
   ResizeIcon,
   RotateIcon,
+  ScanIcon,
 } from "@/components/image/ImageToolIcons";
 
 export type ImageToolItem = {
@@ -28,6 +29,15 @@ export const imageTools: ImageToolItem[] = [
     tag: "Popular",
     icon: CompressIcon,
     tint: "from-accent/12 to-accent-bright/5",
+  },
+  {
+    href: "/tools/image/scan",
+    title: "Scan",
+    subtitle: "Scan Document",
+    description: "Camera or photo → straighten, enhance, multi-page PDF — no upload.",
+    tag: "New",
+    icon: ScanIcon,
+    tint: "from-[#9bb6ff]/16 to-accent/5",
   },
   {
     href: "/tools/image/resize",

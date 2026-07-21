@@ -17,6 +17,7 @@ const mobileLinks = [
   { href: "/tools/image", label: "Image Tools" },
   { href: "/tools/pdf", label: "PDF Tools" },
   { href: "/tools/image/compress", label: "Compress" },
+  { href: "/tools/image/scan", label: "Scan" },
   { href: "/tools/image/resize", label: "Resize" },
   { href: "/tools/image/crop", label: "Crop" },
   { href: "/tools/image/rotate", label: "Rotate" },

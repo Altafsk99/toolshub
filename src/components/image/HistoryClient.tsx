@@ -14,6 +14,7 @@ function toolLabel(tool: HistoryToolId): string {
   if (tool === "crop") return "Crop";
   if (tool === "rotate") return "Rotate";
   if (tool === "flip") return "Flip";
+  if (tool === "scan") return "Scan";
   return "Resize";
 }
 
@@ -71,6 +72,10 @@ export function HistoryClient() {
   );
   const flipCount = useMemo(
     () => items.filter((item) => item.tool === "flip").length,
+    [items],
+  );
+  const scanCount = useMemo(
+    () => items.filter((item) => item.tool === "scan").length,
     [items],
   );
 
@@ -159,6 +164,7 @@ export function HistoryClient() {
             <option value="crop">Crop ({cropCount})</option>
             <option value="rotate">Rotate ({rotateCount})</option>
             <option value="flip">Flip ({flipCount})</option>
+            <option value="scan">Scan ({scanCount})</option>
           </select>
         </div>
 

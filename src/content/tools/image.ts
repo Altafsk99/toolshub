@@ -385,3 +385,78 @@ export const flipToolContent: ToolPageContent = {
     },
   ],
 };
+
+export const scanToolContent: ToolPageContent = {
+  slug: "scan",
+  category: "image",
+  title: "Scan Document Online — Free Camera Scanner, No Upload | PrivyTool",
+  description:
+    "Scan documents from your camera or photo in the browser. Straighten, enhance, and export multi-page PDF — private, no upload.",
+  h1: "Scan Document",
+  intro:
+    "Turn a phone photo into a clean scanned page. Drag four corners to straighten, apply Enhance or B&W, then download an image or multi-page PDF — all in your browser.",
+  keywords: [
+    "scan document online",
+    "camera document scanner",
+    "cam scanner online",
+    "photo to pdf scanner",
+    "document scanner no upload",
+  ],
+  howTo: [
+    {
+      name: "Add a photo",
+      text: "Upload an image or use your camera. The file stays on your device.",
+    },
+    {
+      name: "Frame the page",
+      text: "Drag the four corner handles to match the document edges. Pick Enhance, Gray, or B&W.",
+    },
+    {
+      name: "Add pages and export",
+      text: "Tap Add page for each sheet, then download the last image or a combined PDF.",
+    },
+  ],
+  faqs: [
+    {
+      question: "Do you upload my scans?",
+      answer:
+        "No. Scanning, filters, and PDF export run entirely in your browser. Nothing is sent to a server.",
+    },
+    {
+      question: "Is this like CamScanner?",
+      answer:
+        "It covers the core flow: capture, straighten with corners, document filters, and multi-page PDF. Auto edge detection is not included yet.",
+    },
+    {
+      question: "Can I scan multiple pages?",
+      answer:
+        "Yes. Apply Add page for each photo, then Download PDF to combine them.",
+    },
+    {
+      question: "Is PrivyTool free?",
+      answer: "Yes. Basic image tools are free with no account required.",
+    },
+  ],
+  related: [
+    {
+      href: "/tools/pdf/images-to-pdf",
+      title: "Images to PDF",
+      description: "Convert existing images into a PDF.",
+    },
+    {
+      href: "/tools/image/crop",
+      title: "Crop Image",
+      description: "Trim photos to exact aspect ratios.",
+    },
+    {
+      href: "/tools/pdf/compress",
+      title: "Compress PDF",
+      description: "Shrink PDF file size after scanning.",
+    },
+    {
+      href: "/tools/image",
+      title: "All Image Tools",
+      description: "Browse the full privacy-first image toolkit.",
+    },
+  ],
+};

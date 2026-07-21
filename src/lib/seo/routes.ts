@@ -5,6 +5,7 @@ import {
   flipToolContent,
   resizeToolContent,
   rotateToolContent,
+  scanToolContent,
 } from "@/content/tools/image";
 import { pdfToolPages } from "@/content/tools/pdf";
 import { getAllBlogPosts } from "@/lib/blog/posts";
@@ -28,6 +29,7 @@ export const imageToolPages: ToolPageContent[] = [
   cropToolContent,
   rotateToolContent,
   flipToolContent,
+  scanToolContent,
 ];
 
 /** Indexable routes for sitemap generation — extend when adding SEO landing pages */

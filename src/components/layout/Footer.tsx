@@ -3,6 +3,7 @@ import Link from "next/link";
 const imageLinks = [
   { href: "/tools/image", label: "All image tools" },
   { href: "/tools/image/compress", label: "Compress" },
+  { href: "/tools/image/scan", label: "Scan" },
   { href: "/tools/image/resize", label: "Resize" },
   { href: "/tools/image/convert", label: "Convert" },
   { href: "/tools/image/crop", label: "Crop" },
