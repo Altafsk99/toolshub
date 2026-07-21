@@ -5,8 +5,14 @@ import { ExportFormatSelect } from "@/components/image/ExportFormatSelect";
 import { getExportFormat, mimeToDefaultFormatId } from "@/lib/image/formats";
 import { formatBytes, useImageStore } from "@/stores/imageStore";
 import { usePreferencesStore } from "@/stores/preferencesStore";
+import type { ExportFormatId } from "@/lib/image/formats";
+import type { ConvertLandingPreset } from "@/types/seo";
 
-export function ConvertPanel() {
+type ConvertPanelProps = {
+  preset?: ConvertLandingPreset;
+};
+
+export function ConvertPanel({ preset }: ConvertPanelProps = {}) {
   const file = useImageStore((s) => s.file);
   const meta = useImageStore((s) => s.meta);
   const isPreviewing = useImageStore((s) => s.isPreviewing);
@@ -18,9 +24,13 @@ export function ConvertPanel() {
   const clear = useImageStore((s) => s.clear);
   const exportFormatId = usePreferencesStore((s) => s.exportFormatId);
 
-  const [qualityPercent, setQualityPercent] = useState(92);
+  const [localFormatId, setLocalFormatId] = useState<ExportFormatId | null>(
+    preset?.exportFormatId ?? null,
+  );
+  const [qualityPercent, setQualityPercent] = useState(preset?.qualityPercent ?? 92);
 
-  const formatOption = getExportFormat(exportFormatId);
+  const activeFormatId = localFormatId ?? exportFormatId;
+  const formatOption = getExportFormat(activeFormatId);
   const sourceFormatId = meta ? mimeToDefaultFormatId(meta.type) : null;
 
   useEffect(() => {
@@ -30,7 +40,7 @@ export function ConvertPanel() {
       void runIdentityExport(
         {
           format: formatOption.mime,
-          formatId: exportFormatId,
+          formatId: activeFormatId,
           quality: formatOption.supportsQuality ? qualityPercent / 100 : undefined,
         },
         { silent: true },
@@ -41,7 +51,7 @@ export function ConvertPanel() {
   }, [
     file,
     meta,
-    exportFormatId,
+    activeFormatId,
     formatOption.mime,
     formatOption.supportsQuality,
     qualityPercent,
@@ -60,7 +70,7 @@ export function ConvertPanel() {
 
   const sameFormat =
     sourceFormatId != null &&
-    sourceFormatId === exportFormatId &&
+    sourceFormatId === activeFormatId &&
     formatOption.mime === meta?.type;
 
   return (
@@ -76,7 +86,12 @@ export function ConvertPanel() {
           </p>
         </div>
 
-        <ExportFormatSelect id="convert-export-format" disabled={!file} />
+        <ExportFormatSelect
+          id="convert-export-format"
+          disabled={!file}
+          value={preset ? activeFormatId : undefined}
+          onChange={preset ? setLocalFormatId : undefined}
+        />
 
         {formatOption.supportsQuality ? (
           <div>

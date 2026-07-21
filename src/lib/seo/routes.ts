@@ -3,6 +3,7 @@ import {
   convertToolContent,
   resizeToolContent,
 } from "@/content/tools/image";
+import { seoLandingPages } from "@/lib/seo/landings";
 import type { ToolPageContent } from "@/types/seo";
 
 export type SitemapEntry = {
@@ -27,6 +28,11 @@ export const publicSitemapEntries: SitemapEntry[] = [
   ...imageToolPages.map((tool) => ({
     path: `/tools/image/${tool.slug}`,
     priority: 0.85,
+    changeFrequency: "monthly" as const,
+  })),
+  ...seoLandingPages.map((page) => ({
+    path: `/tools/image/${page.slug}`,
+    priority: 0.8,
     changeFrequency: "monthly" as const,
   })),
 ];

@@ -26,3 +26,38 @@ export type ToolPageContent = {
   related: RelatedTool[];
   keywords?: string[];
 };
+
+export type CompressLandingPreset = {
+  tool: "compress";
+  mode: "quality" | "target";
+  targetKb?: number;
+  qualityPercent?: number;
+  formatId?: "png" | "jpg" | "jpeg" | "webp" | "avif";
+};
+
+export type ResizeLandingPreset = {
+  tool: "resize";
+  width?: number;
+  height?: number;
+  fit?: "stretch" | "contain" | "cover";
+  fill?: "white" | "black" | "blur" | "transparent";
+  lockAspect?: boolean;
+  /** Scale relative to uploaded image (e.g. 50 = half size) */
+  percent?: number;
+};
+
+export type ConvertLandingPreset = {
+  tool: "convert";
+  exportFormatId: "png" | "jpg" | "jpeg" | "webp" | "avif";
+  qualityPercent?: number;
+};
+
+export type SeoLandingPreset =
+  | CompressLandingPreset
+  | ResizeLandingPreset
+  | ConvertLandingPreset;
+
+export type SeoLandingPage = ToolPageContent & {
+  preset: SeoLandingPreset;
+  parentHref: string;
+};

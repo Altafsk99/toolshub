@@ -5,6 +5,7 @@ import { ExportFormatSelect } from "@/components/image/ExportFormatSelect";
 import { getExportFormat } from "@/lib/image/formats";
 import { formatBytes, useImageStore } from "@/stores/imageStore";
 import { usePreferencesStore } from "@/stores/preferencesStore";
+import type { ResizeLandingPreset } from "@/types/seo";
 import type { CompressMode, ResizeFillMode, ResizeFitMode } from "@/types/image";
 
 const PRESETS = [
@@ -41,7 +42,11 @@ const FILL_OPTIONS: { id: ResizeFillMode; label: string }[] = [
   { id: "transparent", label: "Transparent" },
 ];
 
-export function ResizePanel() {
+type ResizePanelProps = {
+  preset?: ResizeLandingPreset;
+};
+
+export function ResizePanel({ preset }: ResizePanelProps = {}) {
   const file = useImageStore((s) => s.file);
   const meta = useImageStore((s) => s.meta);
   const isPreviewing = useImageStore((s) => s.isPreviewing);
@@ -54,13 +59,13 @@ export function ResizePanel() {
   const exportFormatId = usePreferencesStore((s) => s.exportFormatId);
   const formatOption = getExportFormat(exportFormatId);
 
-  const [width, setWidth] = useState(800);
-  const [height, setHeight] = useState(600);
-  const [lockAspect, setLockAspect] = useState(true);
-  const [percent, setPercent] = useState(100);
+  const [width, setWidth] = useState(preset?.width ?? 800);
+  const [height, setHeight] = useState(preset?.height ?? 600);
+  const [lockAspect, setLockAspect] = useState(preset?.lockAspect ?? true);
+  const [percent, setPercent] = useState(preset?.percent ?? 100);
   const [activePreset, setActivePreset] = useState<string | null>(null);
-  const [fit, setFit] = useState<ResizeFitMode>("contain");
-  const [fill, setFill] = useState<ResizeFillMode>("white");
+  const [fit, setFit] = useState<ResizeFitMode>(preset?.fit ?? "contain");
+  const [fill, setFill] = useState<ResizeFillMode>(preset?.fill ?? "white");
 
   const [compress, setCompress] = useState(false);
   const [compressMode, setCompressMode] = useState<CompressMode>("quality");
@@ -72,11 +77,29 @@ export function ResizePanel() {
 
   useEffect(() => {
     if (!meta) return;
+
+    if (preset?.width != null && preset?.height != null) {
+      setWidth(preset.width);
+      setHeight(preset.height);
+      setPercent(Math.max(1, Math.round((preset.width / meta.width) * 100)));
+      setActivePreset(null);
+      return;
+    }
+
+    if (preset?.percent != null) {
+      const p = preset.percent;
+      setPercent(p);
+      setWidth(Math.max(1, Math.round((meta.width * p) / 100)));
+      setHeight(Math.max(1, Math.round((meta.height * p) / 100)));
+      setActivePreset(null);
+      return;
+    }
+
     setWidth(meta.width);
     setHeight(meta.height);
     setPercent(100);
     setActivePreset(null);
-  }, [meta]);
+  }, [meta, preset]);
 
   // Live preview whenever resize / compress inputs change
   useEffect(() => {

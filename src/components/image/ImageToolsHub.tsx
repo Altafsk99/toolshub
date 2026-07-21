@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ImageToolCard } from "@/components/image/ImageToolCard";
 import { imageTools } from "@/components/image/imageToolsData";
+import { SeoPopularLinks } from "@/components/seo/SeoPopularLinks";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -56,6 +57,8 @@ export function ImageToolsHub() {
             </motion.li>
           ))}
         </ul>
+
+        <SeoPopularLinks />
 
         <motion.p
           initial={{ opacity: 0 }}

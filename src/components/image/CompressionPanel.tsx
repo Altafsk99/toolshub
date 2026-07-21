@@ -5,11 +5,17 @@ import { ExportFormatSelect } from "@/components/image/ExportFormatSelect";
 import { getExportFormat } from "@/lib/image/formats";
 import { formatBytes, useImageStore } from "@/stores/imageStore";
 import { usePreferencesStore } from "@/stores/preferencesStore";
+import type { ExportFormatId } from "@/lib/image/formats";
+import type { CompressLandingPreset } from "@/types/seo";
 import type { CompressMode } from "@/types/image";
 
 const KB_PRESETS = [20, 50, 100, 200] as const;
 
-export function CompressionPanel() {
+type CompressionPanelProps = {
+  preset?: CompressLandingPreset;
+};
+
+export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
   const file = useImageStore((s) => s.file);
   const meta = useImageStore((s) => s.meta);
   const isPreviewing = useImageStore((s) => s.isPreviewing);
@@ -21,12 +27,16 @@ export function CompressionPanel() {
   const clear = useImageStore((s) => s.clear);
   const exportFormatId = usePreferencesStore((s) => s.exportFormatId);
 
-  const [mode, setMode] = useState<CompressMode>("quality");
-  const [qualityPercent, setQualityPercent] = useState(70);
-  const [targetKb, setTargetKb] = useState(100);
-  const [customKb, setCustomKb] = useState("100");
+  const [mode, setMode] = useState<CompressMode>(preset?.mode ?? "quality");
+  const [qualityPercent, setQualityPercent] = useState(preset?.qualityPercent ?? 70);
+  const [targetKb, setTargetKb] = useState(preset?.targetKb ?? 100);
+  const [customKb, setCustomKb] = useState(String(preset?.targetKb ?? 100));
+  const [localFormatId, setLocalFormatId] = useState<ExportFormatId | null>(
+    preset?.formatId ?? null,
+  );
 
-  const formatOption = getExportFormat(exportFormatId);
+  const activeFormatId = localFormatId ?? exportFormatId;
+  const formatOption = getExportFormat(activeFormatId);
   const debounceMs = mode === "target" ? 320 : 140;
 
   useEffect(() => {
@@ -40,7 +50,7 @@ export function CompressionPanel() {
           qualityPercent,
           targetKb: mode === "target" ? targetKb : undefined,
           format: formatOption.mime,
-          formatId: exportFormatId,
+          formatId: activeFormatId,
         },
         { silent: true },
       );
@@ -53,7 +63,7 @@ export function CompressionPanel() {
     mode,
     qualityPercent,
     targetKb,
-    exportFormatId,
+    activeFormatId,
     formatOption.mime,
     debounceMs,
     runCompress,
@@ -169,7 +179,12 @@ export function CompressionPanel() {
           </div>
         )}
 
-        <ExportFormatSelect id="compress-export-format" disabled={!file} />
+        <ExportFormatSelect
+          id="compress-export-format"
+          disabled={!file}
+          value={preset?.formatId ? activeFormatId : undefined}
+          onChange={preset?.formatId ? setLocalFormatId : undefined}
+        />
 
         {meta ? (
           <div className="rounded-md border border-line bg-foam/60 px-3 py-3 text-sm">
