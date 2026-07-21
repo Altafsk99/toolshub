@@ -12,6 +12,8 @@ function toolLabel(tool: HistoryToolId): string {
   if (tool === "compress") return "Compress";
   if (tool === "convert") return "Convert";
   if (tool === "crop") return "Crop";
+  if (tool === "rotate") return "Rotate";
+  if (tool === "flip") return "Flip";
   return "Resize";
 }
 
@@ -61,6 +63,14 @@ export function HistoryClient() {
   );
   const cropCount = useMemo(
     () => items.filter((item) => item.tool === "crop").length,
+    [items],
+  );
+  const rotateCount = useMemo(
+    () => items.filter((item) => item.tool === "rotate").length,
+    [items],
+  );
+  const flipCount = useMemo(
+    () => items.filter((item) => item.tool === "flip").length,
     [items],
   );
 
@@ -147,6 +157,8 @@ export function HistoryClient() {
             <option value="resize">Resize ({resizeCount})</option>
             <option value="convert">Convert ({convertCount})</option>
             <option value="crop">Crop ({cropCount})</option>
+            <option value="rotate">Rotate ({rotateCount})</option>
+            <option value="flip">Flip ({flipCount})</option>
           </select>
         </div>
 
@@ -186,7 +198,7 @@ export function HistoryClient() {
           ) : filteredItems.length === 0 ? (
             <p className="px-4 py-10 text-sm text-ink-soft/70">
               {items.length === 0
-                ? "No history yet. Compress, resize, convert, or crop an image and click Download to save it here."
+                ? "No history yet. Compress, resize, convert, crop, rotate, or flip an image and click Download to save it here."
                 : `No ${filter === "all" ? "" : `${toolLabel(filter).toLowerCase()} `}history in this filter.`}
             </p>
           ) : (

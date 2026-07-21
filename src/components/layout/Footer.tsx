@@ -73,6 +73,16 @@ export function Footer() {
               </Link>
             </li>
             <li>
+              <Link href="/tools/image/rotate" className="transition hover:text-accent-bright">
+                Rotate Image
+              </Link>
+            </li>
+            <li>
+              <Link href="/tools/image/flip" className="transition hover:text-accent-bright">
+                Flip Image
+              </Link>
+            </li>
+            <li>
               <Link href="/tools/image/history" className="transition hover:text-accent-bright">
                 History
               </Link>

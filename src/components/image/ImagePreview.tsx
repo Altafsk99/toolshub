@@ -16,6 +16,8 @@ export function ImagePreview() {
   const compressResult = useImageStore((s) => s.compressResult);
   const convertResult = useImageStore((s) => s.convertResult);
   const cropResult = useImageStore((s) => s.cropResult);
+  const rotateResult = useImageStore((s) => s.rotateResult);
+  const flipResult = useImageStore((s) => s.flipResult);
   const resultFilename = useImageStore((s) => s.resultFilename);
   const clear = useImageStore((s) => s.clear);
   const freeModeActive = useCropUiStore((s) => s.freeModeActive);
@@ -52,24 +54,32 @@ export function ImagePreview() {
   const resultWidth =
     resizeResult?.width ??
     cropResult?.width ??
+    rotateResult?.width ??
+    flipResult?.width ??
     compressResult?.width ??
     convertResult?.width ??
     meta.width;
   const resultHeight =
     resizeResult?.height ??
     cropResult?.height ??
+    rotateResult?.height ??
+    flipResult?.height ??
     compressResult?.height ??
     convertResult?.height ??
     meta.height;
   const resultBytes =
     resizeResult?.outputBytes ??
     cropResult?.outputBytes ??
+    rotateResult?.outputBytes ??
+    flipResult?.outputBytes ??
     compressResult?.outputBytes ??
     convertResult?.outputBytes ??
     meta.size;
   const resultType =
     resizeResult?.format ??
     cropResult?.format ??
+    rotateResult?.format ??
+    flipResult?.format ??
     compressResult?.format ??
     convertResult?.format ??
     meta.type ??
@@ -92,11 +102,17 @@ export function ImagePreview() {
       ? cropResult.shape === "circle"
         ? "Circle crop"
         : "Cropped"
-      : compressResult
-        ? "Compressed"
-        : convertResult
-          ? "Converted"
-          : "Result";
+      : rotateResult
+        ? `Rotated ${rotateResult.angle}°`
+        : flipResult
+          ? flipResult.axis === "horizontal"
+            ? "Flipped H"
+            : "Flipped V"
+          : compressResult
+            ? "Compressed"
+            : convertResult
+              ? "Converted"
+              : "Result";
 
   return (
     <motion.div

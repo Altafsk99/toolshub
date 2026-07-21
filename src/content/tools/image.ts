@@ -273,3 +273,115 @@ export const cropToolContent: ToolPageContent = {
     },
   ],
 };
+
+export const rotateToolContent: ToolPageContent = {
+  slug: "rotate",
+  category: "image",
+  title: "Rotate Image Online — Free, Private, No Upload | PrivyTool",
+  description:
+    "Rotate JPG, PNG, or WebP photos in your browser. 90°, 180°, or custom angles — free and private on PrivyTool.",
+  h1: "Rotate Image",
+  intro:
+    "Turn photos clockwise or counter-clockwise without uploading. PrivyTool rotates locally in your browser — your files never leave your device.",
+  keywords: ["rotate image", "rotate image online", "rotate photo 90 degrees", "flip and rotate image"],
+  howTo: [
+    { name: "Upload your image", text: "Drop a JPG, PNG, or WebP file from your device." },
+    { name: "Pick an angle", text: "Use quick 90° or 180° buttons, or set a custom angle." },
+    { name: "Choose background", text: "Pick white, black, or transparent for empty corners at custom angles." },
+    { name: "Download", text: "Preview updates live — download when it looks right." },
+  ],
+  faqs: [
+    {
+      question: "Do you upload my images?",
+      answer:
+        "No. Rotation runs entirely in your browser using the Canvas API. Your files never leave your device.",
+    },
+    {
+      question: "Can I rotate by a custom angle?",
+      answer: "Yes. Use the angle slider for any value from -180° to 180°.",
+    },
+    {
+      question: "Will rotating change image quality?",
+      answer:
+        "PrivyTool re-encodes the output in your chosen format. PNG stays lossless; JPG/WebP use the quality slider.",
+    },
+    {
+      question: "Is PrivyTool free?",
+      answer:
+        "Yes. Basic image tools are free. Optional premium features may arrive later as traffic grows.",
+    },
+  ],
+  related: [
+    {
+      href: "/tools/image/flip",
+      title: "Flip Image",
+      description: "Mirror photos horizontally or vertically.",
+    },
+    {
+      href: "/tools/image/crop",
+      title: "Crop Image",
+      description: "Trim to square, circle, or social aspect ratios.",
+    },
+    {
+      href: "/tools/image",
+      title: "All Image Tools",
+      description: "Browse the full privacy-first image toolkit.",
+    },
+  ],
+};
+
+export const flipToolContent: ToolPageContent = {
+  slug: "flip",
+  category: "image",
+  title: "Flip Image Online — Free, Private, No Upload | PrivyTool",
+  description:
+    "Flip images horizontally or vertically in your browser. Free, private mirror tool — no upload required.",
+  h1: "Flip Image",
+  intro:
+    "Mirror photos left-to-right or top-to-bottom locally. PrivyTool flips in your browser — nothing is sent to a server.",
+  keywords: ["flip image", "flip image horizontally", "mirror image online", "flip photo vertical"],
+  howTo: [
+    { name: "Upload your image", text: "Drop a JPG, PNG, or WebP file from your device." },
+    { name: "Choose direction", text: "Select horizontal (mirror) or vertical flip." },
+    { name: "Download", text: "Preview updates live — download when it looks right." },
+  ],
+
+  faqs: [
+    {
+      question: "Do you upload my images?",
+      answer:
+        "No. Flipping runs entirely in your browser using the Canvas API. Your files never leave your device.",
+    },
+    {
+      question: "What's the difference between horizontal and vertical flip?",
+      answer:
+        "Horizontal flip mirrors left-to-right (like a selfie camera). Vertical flip mirrors top-to-bottom.",
+    },
+    {
+      question: "Can I flip and then rotate?",
+      answer: "Yes. Flip here, download, then open the result in Rotate — or vice versa.",
+    },
+    {
+      question: "Is PrivyTool free?",
+      answer:
+        "Yes. Basic image tools are free. Optional premium features may arrive later as traffic grows.",
+    },
+  ],
+  related: [
+    {
+      href: "/tools/image/rotate",
+      title: "Rotate Image",
+      description: "Turn photos 90°, 180°, or any custom angle.",
+    },
+    {
+      href: "/tools/image/crop",
+      title: "Crop Image",
+      description: "Trim to square, circle, or social aspect ratios.",
+    },
+    {
+      href: "/tools/image",
+      title: "All Image Tools",
+      description: "Browse the full privacy-first image toolkit.",
+    },
+  ],
+};

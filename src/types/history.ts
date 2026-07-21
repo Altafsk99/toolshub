@@ -1,4 +1,4 @@
-export type HistoryToolId = "compress" | "resize" | "convert" | "crop";
+export type HistoryToolId = "compress" | "resize" | "convert" | "crop" | "rotate" | "flip";
 
 export type HistoryEntryMeta = {
   id: string;

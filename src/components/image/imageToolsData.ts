@@ -2,8 +2,10 @@ import {
   CompressIcon,
   ConvertIcon,
   CropIcon,
+  FlipIcon,
   HistoryIcon,
   ResizeIcon,
+  RotateIcon,
 } from "@/components/image/ImageToolIcons";
 
 export type ImageToolItem = {
@@ -50,6 +52,22 @@ export const imageTools: ImageToolItem[] = [
     description: "Square, circle, and social aspect ratio crops with live preview.",
     icon: CropIcon,
     tint: "from-[#7ec8a4]/14 to-accent/5",
+  },
+  {
+    href: "/tools/image/rotate",
+    title: "Rotate",
+    subtitle: "Rotate Image",
+    description: "Turn photos 90°, 180°, or any custom angle without uploading.",
+    icon: RotateIcon,
+    tint: "from-[#c8a87e]/14 to-accent/5",
+  },
+  {
+    href: "/tools/image/flip",
+    title: "Flip",
+    subtitle: "Flip Image",
+    description: "Mirror images horizontally or vertically in your browser.",
+    icon: FlipIcon,
+    tint: "from-[#a8c87e]/14 to-accent/5",
   },
   {
     href: "/tools/image/history",

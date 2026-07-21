@@ -60,11 +60,26 @@ export type CropLandingPreset = {
   focusY?: number;
 };
 
+export type RotateLandingPreset = {
+  tool: "rotate";
+  angle?: number;
+  fill?: "white" | "black" | "transparent";
+  qualityPercent?: number;
+};
+
+export type FlipLandingPreset = {
+  tool: "flip";
+  axis?: "horizontal" | "vertical";
+  qualityPercent?: number;
+};
+
 export type SeoLandingPreset =
   | CompressLandingPreset
   | ResizeLandingPreset
   | ConvertLandingPreset
-  | CropLandingPreset;
+  | CropLandingPreset
+  | RotateLandingPreset
+  | FlipLandingPreset;
 
 export type SeoLandingPage = ToolPageContent & {
   preset: SeoLandingPreset;

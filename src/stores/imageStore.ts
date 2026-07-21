@@ -10,6 +10,7 @@ import {
   revokeSource,
 } from "@/lib/image/engine";
 import { resizeSource } from "@/lib/image/resize";
+import { flipSource, rotateSource } from "@/lib/image/transform";
 import { useHistoryStore } from "@/stores/historyStore";
 import type { HistoryToolId } from "@/types/history";
 import type {
@@ -20,9 +21,13 @@ import type {
   CropResult,
   EngineSource,
   ExportOptions,
+  FlipOptions,
+  FlipResult,
   ImageMeta,
   ResizeOptions,
   ResizeResult,
+  RotateOptions,
+  RotateResult,
 } from "@/types/image";
 
 export type ProcessOpts = {
@@ -44,6 +49,8 @@ type ImageState = {
   convertResult: ConvertResult | null;
   resizeResult: ResizeResult | null;
   cropResult: CropResult | null;
+  rotateResult: RotateResult | null;
+  flipResult: FlipResult | null;
   isProcessing: boolean;
   isPreviewing: boolean;
   error: string | null;
@@ -54,6 +61,10 @@ type ImageState = {
   runResize: (options: ResizeOptions, opts?: ProcessOpts) => Promise<void>;
   runCrop: (options: CropOptions, opts?: ProcessOpts) => Promise<void>;
   clearCropResult: () => void;
+  runRotate: (options: RotateOptions, opts?: ProcessOpts) => Promise<void>;
+  clearRotateResult: () => void;
+  runFlip: (options: FlipOptions, opts?: ProcessOpts) => Promise<void>;
+  clearFlipResult: () => void;
   downloadResult: (tool?: HistoryToolId) => void;
 };
 
@@ -66,6 +77,8 @@ let resizeToken = 0;
 let compressToken = 0;
 let exportToken = 0;
 let cropToken = 0;
+let rotateToken = 0;
+let flipToken = 0;
 
 export const useImageStore = create<ImageState>((set, get) => ({
   file: null,
@@ -80,6 +93,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
   convertResult: null,
   resizeResult: null,
   cropResult: null,
+  rotateResult: null,
+  flipResult: null,
   isProcessing: false,
   isPreviewing: false,
   error: null,
@@ -89,6 +104,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
     compressToken += 1;
     exportToken += 1;
     cropToken += 1;
+    rotateToken += 1;
+    flipToken += 1;
     const prev = get();
     revokeSource(prev.source);
     revokeUrl(prev.previewUrl);
@@ -107,6 +124,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
         convertResult: null,
         resizeResult: null,
         cropResult: null,
+        rotateResult: null,
+        flipResult: null,
         isProcessing: false,
         isPreviewing: false,
         error: null,
@@ -128,6 +147,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
         convertResult: null,
         resizeResult: null,
         cropResult: null,
+        rotateResult: null,
+        flipResult: null,
         isProcessing: false,
         isPreviewing: false,
         error: null,
@@ -143,6 +164,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
         convertResult: null,
         resizeResult: null,
         cropResult: null,
+        rotateResult: null,
+        flipResult: null,
         isProcessing: false,
         isPreviewing: false,
         error: "Could not read that image. Try JPG, PNG, or WebP.",
@@ -155,6 +178,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
     compressToken += 1;
     exportToken += 1;
     cropToken += 1;
+    rotateToken += 1;
+    flipToken += 1;
     const prev = get();
     revokeSource(prev.source);
     revokeUrl(prev.previewUrl);
@@ -170,6 +195,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
       compressResult: null,
       resizeResult: null,
       cropResult: null,
+      rotateResult: null,
+      flipResult: null,
       convertResult: null,
       isProcessing: false,
       isPreviewing: false,
@@ -219,6 +246,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
         },
         resizeResult: null,
         cropResult: null,
+        rotateResult: null,
+        flipResult: null,
         isProcessing: false,
         isPreviewing: false,
       });
@@ -257,6 +286,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
         convertResult: null,
         resizeResult: null,
         cropResult: null,
+        rotateResult: null,
+        flipResult: null,
         isProcessing: false,
         isPreviewing: false,
       });
@@ -295,6 +326,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
         compressResult: null,
         convertResult: null,
         cropResult: null,
+        rotateResult: null,
+        flipResult: null,
         isProcessing: false,
         isPreviewing: false,
       });
@@ -316,6 +349,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
       resultBlob: null,
       resultFilename: null,
       cropResult: null,
+      rotateResult: null,
+      flipResult: null,
       isProcessing: false,
       isPreviewing: false,
       error: null,
@@ -347,6 +382,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
         compressResult: null,
         convertResult: null,
         resizeResult: null,
+        rotateResult: null,
+        flipResult: null,
         isProcessing: false,
         isPreviewing: false,
       });
@@ -356,6 +393,114 @@ export const useImageStore = create<ImageState>((set, get) => ({
         isProcessing: false,
         isPreviewing: false,
         error: "Crop failed. Try another aspect ratio or image.",
+      });
+    }
+  },
+
+  clearRotateResult: () => {
+    rotateToken += 1;
+    revokeUrl(get().resultPreviewUrl);
+    set({
+      resultPreviewUrl: null,
+      resultBlob: null,
+      resultFilename: null,
+      rotateResult: null,
+      isProcessing: false,
+      isPreviewing: false,
+      error: null,
+    });
+  },
+
+  runRotate: async (options, opts) => {
+    const { source } = get();
+    if (!source) return;
+
+    const silent = Boolean(opts?.silent);
+    const token = ++rotateToken;
+    set(
+      silent
+        ? { isPreviewing: true, error: null }
+        : { isProcessing: true, isPreviewing: false, error: null },
+    );
+
+    try {
+      const result = await rotateSource(source, options);
+      if (token !== rotateToken) return;
+      revokeUrl(get().resultPreviewUrl);
+      set({
+        resultBlob: result.blob,
+        resultFilename: result.filename,
+        resultPreviewUrl: URL.createObjectURL(result.blob),
+        resultRevision: get().resultRevision + 1,
+        rotateResult: result,
+        compressResult: null,
+        convertResult: null,
+        resizeResult: null,
+        cropResult: null,
+        flipResult: null,
+        isProcessing: false,
+        isPreviewing: false,
+      });
+    } catch {
+      if (token !== rotateToken) return;
+      set({
+        isProcessing: false,
+        isPreviewing: false,
+        error: "Rotate failed. Try another angle or image.",
+      });
+    }
+  },
+
+  clearFlipResult: () => {
+    flipToken += 1;
+    revokeUrl(get().resultPreviewUrl);
+    set({
+      resultPreviewUrl: null,
+      resultBlob: null,
+      resultFilename: null,
+      flipResult: null,
+      isProcessing: false,
+      isPreviewing: false,
+      error: null,
+    });
+  },
+
+  runFlip: async (options, opts) => {
+    const { source } = get();
+    if (!source) return;
+
+    const silent = Boolean(opts?.silent);
+    const token = ++flipToken;
+    set(
+      silent
+        ? { isPreviewing: true, error: null }
+        : { isProcessing: true, isPreviewing: false, error: null },
+    );
+
+    try {
+      const result = await flipSource(source, options);
+      if (token !== flipToken) return;
+      revokeUrl(get().resultPreviewUrl);
+      set({
+        resultBlob: result.blob,
+        resultFilename: result.filename,
+        resultPreviewUrl: URL.createObjectURL(result.blob),
+        resultRevision: get().resultRevision + 1,
+        flipResult: result,
+        compressResult: null,
+        convertResult: null,
+        resizeResult: null,
+        cropResult: null,
+        rotateResult: null,
+        isProcessing: false,
+        isPreviewing: false,
+      });
+    } catch {
+      if (token !== flipToken) return;
+      set({
+        isProcessing: false,
+        isPreviewing: false,
+        error: "Flip failed. Try again with another image.",
       });
     }
   },
@@ -370,6 +515,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
       convertResult,
       resizeResult,
       cropResult,
+      rotateResult,
+      flipResult,
     } = get();
 
     if (resultBlob && resultFilename) {
@@ -379,6 +526,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
         const width =
           resizeResult?.width ??
           cropResult?.width ??
+          rotateResult?.width ??
+          flipResult?.width ??
           compressResult?.width ??
           convertResult?.width ??
           meta?.width ??
@@ -386,6 +535,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
         const height =
           resizeResult?.height ??
           cropResult?.height ??
+          rotateResult?.height ??
+          flipResult?.height ??
           compressResult?.height ??
           convertResult?.height ??
           meta?.height ??
@@ -393,6 +544,8 @@ export const useImageStore = create<ImageState>((set, get) => ({
         const format =
           resizeResult?.format ??
           cropResult?.format ??
+          rotateResult?.format ??
+          flipResult?.format ??
           compressResult?.format ??
           convertResult?.format ??
           resultBlob.type ??

@@ -5,10 +5,20 @@ import {
   relatedFromSlugs,
 } from "@/lib/seo/landing-helpers";
 import {
+  batch3FeaturedSlugs,
+  batch3RelatedMap,
+  batch3SeoLandingPages,
+} from "@/content/seo/image-landings-batch3";
+import {
   extendedFeaturedSlugs,
   extendedRelatedMap,
   extendedSeoLandingPages,
 } from "@/content/seo/image-landings-extended";
+import {
+  transformFeaturedSlugs,
+  transformRelatedMap,
+  transformSeoLandingPages,
+} from "@/content/seo/image-landings-transform";
 import type { SeoLandingPage } from "@/types/seo";
 
 const compressLandings: SeoLandingPage[] = [
@@ -507,6 +517,8 @@ export const seoLandingPages: SeoLandingPage[] = [
   ...resizeLandings,
   ...convertLandings,
   ...extendedSeoLandingPages,
+  ...transformSeoLandingPages,
+  ...batch3SeoLandingPages,
 ];
 
 const bySlug = new Map(seoLandingPages.map((page) => [page.slug, page]));
@@ -546,6 +558,8 @@ export const seoLandingPagesWithRelated: SeoLandingPage[] = seoLandingPages.map(
     "jpg-to-webp": ["png-to-webp", "compress-webp"],
     "png-to-webp": ["png-to-jpg", "jpg-to-webp"],
     ...extendedRelatedMap,
+    ...transformRelatedMap,
+    ...batch3RelatedMap,
   };
   return withRelated(page, relatedMap[page.slug] ?? []);
 });
@@ -558,4 +572,6 @@ export const featuredSeoLandingSlugs = [
   "resize-passport-photo",
   "resize-for-instagram",
   ...extendedFeaturedSlugs,
+  ...transformFeaturedSlugs,
+  ...batch3FeaturedSlugs,
 ] as const;

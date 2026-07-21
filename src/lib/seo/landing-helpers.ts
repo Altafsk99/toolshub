@@ -17,7 +17,7 @@ export function privacyFaqs(extra: FaqItem[] = []): FaqItem[] {
 }
 
 export function parentToolLink(
-  tool: "compress" | "resize" | "convert" | "crop",
+  tool: "compress" | "resize" | "convert" | "crop" | "rotate" | "flip",
 ): RelatedTool {
   const map = {
     compress: {
@@ -39,6 +39,16 @@ export function parentToolLink(
       href: "/tools/image/crop",
       title: "Crop Image",
       description: "Square, circle, and social aspect ratio crops.",
+    },
+    rotate: {
+      href: "/tools/image/rotate",
+      title: "Rotate Image",
+      description: "Turn photos 90°, 180°, or any custom angle.",
+    },
+    flip: {
+      href: "/tools/image/flip",
+      title: "Flip Image",
+      description: "Mirror photos horizontally or vertically.",
     },
   } as const;
   return map[tool];

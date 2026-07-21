@@ -10,6 +10,8 @@ const navLinks = [
   { href: "/tools/image/compress", label: "Compress" },
   { href: "/tools/image/resize", label: "Resize" },
   { href: "/tools/image/crop", label: "Crop" },
+  { href: "/tools/image/rotate", label: "Rotate" },
+  { href: "/tools/image/flip", label: "Flip" },
   { href: "/tools/image/convert", label: "Convert" },
   { href: "/tools/image/history", label: "History" },
 ] as const;

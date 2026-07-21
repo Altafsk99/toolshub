@@ -153,6 +153,54 @@ export type CropResult = {
   qualityUsed?: number;
 };
 
+export type FlipAxis = "horizontal" | "vertical";
+
+export type RotateOptions = {
+  /** Clockwise degrees */
+  angle: number;
+  /** Background for empty corners after rotation */
+  fill?: ResizeFillMode;
+  format?: ExportMime;
+  formatId?: ExportFormatId;
+  quality?: number;
+};
+
+export type FlipOptions = {
+  axis: FlipAxis;
+  format?: ExportMime;
+  formatId?: ExportFormatId;
+  quality?: number;
+};
+
+export type RotateResult = {
+  blob: Blob;
+  filename: string;
+  originalWidth: number;
+  originalHeight: number;
+  width: number;
+  height: number;
+  outputBytes: number;
+  format: ExportMime;
+  formatId?: ExportFormatId;
+  angle: number;
+  fill?: ResizeFillMode;
+  qualityUsed?: number;
+};
+
+export type FlipResult = {
+  blob: Blob;
+  filename: string;
+  originalWidth: number;
+  originalHeight: number;
+  width: number;
+  height: number;
+  outputBytes: number;
+  format: ExportMime;
+  formatId?: ExportFormatId;
+  axis: FlipAxis;
+  qualityUsed?: number;
+};
+
 export type EngineSource = {
   bitmap: ImageBitmap;
   meta: ImageMeta;

@@ -103,10 +103,18 @@ export function buildOrganizationJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": `${SITE_URL}/#organization`,
     name: SITE_NAME,
-    url: SITE_URL,
+    url: absoluteUrl("/"),
+    logo: {
+      "@type": "ImageObject",
+      url: absoluteUrl("/icon-512.png"),
+      width: 512,
+      height: 512,
+    },
+    image: absoluteUrl("/og-image.png"),
     description:
-      "Privacy-first online tools. Image processing runs in your browser — no upload required.",
+      "Privacy-first online tools. Compress, resize, convert, crop, rotate, and flip images in your browser — no upload required.",
   };
 }
 
@@ -114,16 +122,51 @@ export function buildWebSiteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
     name: SITE_NAME,
-    url: SITE_URL,
+    url: absoluteUrl("/"),
     description:
-      "Free privacy-first online toolkit. Compress, resize, and convert images in your browser.",
+      "Free privacy-first online toolkit. Compress, resize, convert, crop, rotate, and flip images in your browser.",
+    inLanguage: "en-US",
     publisher: {
-      "@type": "Organization",
-      name: SITE_NAME,
-      url: SITE_URL,
+      "@id": `${SITE_URL}/#organization`,
     },
   };
+}
+
+export function buildHomeItemListJsonLd() {
+  return buildItemListJsonLd("PrivyTool Image Tools", [
+    {
+      name: "Compress Image",
+      path: "/tools/image/compress",
+      description: "Shrink JPG, PNG, and WebP with quality or target KB presets.",
+    },
+    {
+      name: "Resize Image",
+      path: "/tools/image/resize",
+      description: "Set dimensions, fit modes, and optional compression.",
+    },
+    {
+      name: "Convert Image",
+      path: "/tools/image/convert",
+      description: "Switch between PNG, JPG, WebP, and AVIF.",
+    },
+    {
+      name: "Crop Image",
+      path: "/tools/image/crop",
+      description: "Square, circle, and social aspect ratio crops.",
+    },
+    {
+      name: "Rotate Image",
+      path: "/tools/image/rotate",
+      description: "Turn photos 90°, 180°, or any custom angle.",
+    },
+    {
+      name: "Flip Image",
+      path: "/tools/image/flip",
+      description: "Mirror photos horizontally or vertically.",
+    },
+  ]);
 }
 
 export function buildBreadcrumbJsonLd(items: { name: string; path: string }[]) {

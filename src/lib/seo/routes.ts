@@ -2,7 +2,9 @@ import {
   compressToolContent,
   convertToolContent,
   cropToolContent,
+  flipToolContent,
   resizeToolContent,
+  rotateToolContent,
 } from "@/content/tools/image";
 import { seoLandingPages } from "@/lib/seo/landings";
 import type { ToolPageContent } from "@/types/seo";
@@ -21,6 +23,8 @@ export const imageToolPages: ToolPageContent[] = [
   resizeToolContent,
   convertToolContent,
   cropToolContent,
+  rotateToolContent,
+  flipToolContent,
 ];
 
 /** Indexable routes for sitemap generation — extend when adding SEO landing pages */
