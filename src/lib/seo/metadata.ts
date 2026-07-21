@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { BlogPost } from "@/types/blog";
 import type { ToolPageContent } from "@/types/seo";
 
 const SITE_NAME = "PrivyTool";
@@ -211,6 +212,34 @@ export function buildItemListJsonLd(
       url: absoluteUrl(item.path),
       description: item.description,
     })),
+  };
+}
+
+export function buildArticleJsonLd(post: BlogPost) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    author: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: absoluteUrl("/"),
+    },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: absoluteUrl("/"),
+      logo: {
+        "@type": "ImageObject",
+        url: absoluteUrl("/icon-512.png"),
+      },
+    },
+    mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
+    image: absoluteUrl("/og-image.png"),
+    keywords: post.keywords.join(", "),
   };
 }
 

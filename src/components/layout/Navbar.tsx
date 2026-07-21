@@ -5,7 +5,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 
-const navLinks = [
+/** Slim desktop nav — hubs + content. Tool shortcuts live in the mobile menu. */
+const desktopLinks = [
+  { href: "/tools/image", label: "Image Tools" },
+  { href: "/tools/pdf", label: "PDF Tools" },
+  { href: "/blog", label: "Blog" },
+  { href: "/tools/image/history", label: "History" },
+] as const;
+
+const mobileLinks = [
   { href: "/tools/image", label: "Image Tools" },
   { href: "/tools/pdf", label: "PDF Tools" },
   { href: "/tools/image/compress", label: "Compress" },
@@ -14,14 +22,24 @@ const navLinks = [
   { href: "/tools/image/rotate", label: "Rotate" },
   { href: "/tools/image/flip", label: "Flip" },
   { href: "/tools/image/convert", label: "Convert" },
+  { href: "/blog", label: "Blog" },
   { href: "/tools/image/history", label: "History" },
 ] as const;
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 function isActiveLink(href: string, pathname: string): boolean {
-  if (href === "/tools/image") return pathname === "/tools/image";
-  if (href === "/tools/pdf") return pathname === "/tools/pdf";
+  if (href === "/tools/image") {
+    return (
+      pathname === "/tools/image" ||
+      (pathname.startsWith("/tools/image/") &&
+        !pathname.startsWith("/tools/image/history"))
+    );
+  }
+  if (href === "/tools/pdf") {
+    return pathname === "/tools/pdf" || pathname.startsWith("/tools/pdf/");
+  }
+  if (href === "/blog") return pathname === "/blog" || pathname.startsWith("/blog/");
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -39,11 +57,7 @@ function MenuIcon({ open }: { open: boolean }) {
       <motion.span
         className="absolute left-0 block h-0.5 w-6 rounded-full bg-current"
         initial={false}
-        animate={
-          open
-            ? { top: 9, rotate: 45 }
-            : { top: 2, rotate: 0 }
-        }
+        animate={open ? { top: 9, rotate: 45 } : { top: 2, rotate: 0 }}
         transition={transition}
         style={{ transformOrigin: "center" }}
       />
@@ -56,11 +70,7 @@ function MenuIcon({ open }: { open: boolean }) {
       <motion.span
         className="absolute left-0 block h-0.5 w-6 rounded-full bg-current"
         initial={false}
-        animate={
-          open
-            ? { top: 9, rotate: -45 }
-            : { top: 16, rotate: 0 }
-        }
+        animate={open ? { top: 9, rotate: -45 } : { top: 16, rotate: 0 }}
         transition={transition}
         style={{ transformOrigin: "center" }}
       />
@@ -96,28 +106,26 @@ export function Navbar() {
   const linkTone = (href: string, mobile = false) => {
     const active = isActiveLink(href, pathname);
     const base = mobile ? mobileLinkClassName : linkClassName;
-    return active
-      ? `${base} bg-mist text-ink`
-      : `${base} text-ink-soft`;
+    return active ? `${base} bg-mist text-ink` : `${base} text-ink-soft`;
   };
 
   return (
     <header className="relative z-30 border-b border-line/80 bg-paper/70 backdrop-blur-md">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
-        <Link href="/" className="focus-ring group flex min-w-0 shrink items-baseline gap-2 rounded-md">
-          <span className="truncate font-display text-xl font-bold tracking-tight text-ink transition-colors duration-200 group-hover:text-accent-deep sm:text-2xl">
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+        <Link
+          href="/"
+          className="focus-ring group flex shrink-0 items-baseline gap-2.5 rounded-md"
+        >
+          <span className="font-display text-xl font-bold tracking-tight text-ink transition-colors duration-200 group-hover:text-accent-deep sm:text-2xl">
             PrivyTool
           </span>
-          <span className="hidden text-xs font-medium uppercase tracking-[0.18em] text-ink-soft/70 sm:inline">
+          <span className="hidden text-xs font-medium uppercase tracking-[0.18em] text-ink-soft/70 lg:inline">
             Privacy-first utilities
           </span>
         </Link>
 
-        <nav
-          className="hidden items-center gap-1 md:flex md:gap-2"
-          aria-label="Primary"
-        >
-          {navLinks.map((link) => (
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+          {desktopLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -131,7 +139,7 @@ export function Navbar() {
 
         <motion.button
           type="button"
-          className="focus-ring inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-ink-soft transition-colors duration-200 hover:bg-mist hover:text-ink md:hidden"
+          className="focus-ring inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-ink-soft transition-colors duration-200 hover:bg-mist hover:text-ink lg:hidden"
           aria-expanded={open}
           aria-controls={menuId}
           aria-label={open ? "Close menu" : "Open menu"}
@@ -149,7 +157,7 @@ export function Navbar() {
             <motion.button
               type="button"
               aria-label="Close menu"
-              className="fixed inset-0 top-16 z-40 bg-ink/20 backdrop-blur-[1px] md:hidden"
+              className="fixed inset-0 top-16 z-40 bg-ink/20 backdrop-blur-[1px] lg:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -159,14 +167,14 @@ export function Navbar() {
             <motion.nav
               id={menuId}
               aria-label="Primary"
-              className="absolute inset-x-0 top-full z-50 overflow-hidden border-b border-line bg-paper/95 shadow-[var(--shadow-soft)] backdrop-blur-md md:hidden"
+              className="absolute inset-x-0 top-full z-50 overflow-hidden border-b border-line bg-paper/95 shadow-[var(--shadow-soft)] backdrop-blur-md lg:hidden"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.32, ease }}
             >
               <ul className="mx-auto max-w-6xl divide-y divide-line px-4 py-2 sm:px-6">
-                {navLinks.map((link, index) => (
+                {mobileLinks.map((link, index) => (
                   <motion.li
                     key={link.href}
                     initial={{ opacity: 0, x: -14 }}
@@ -181,7 +189,9 @@ export function Navbar() {
                     <Link
                       href={link.href}
                       className={linkTone(link.href, true)}
-                      aria-current={isActiveLink(link.href, pathname) ? "page" : undefined}
+                      aria-current={
+                        isActiveLink(link.href, pathname) ? "page" : undefined
+                      }
                       onClick={() => setOpen(false)}
                     >
                       {link.label}

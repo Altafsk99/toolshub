@@ -7,6 +7,7 @@ import {
   rotateToolContent,
 } from "@/content/tools/image";
 import { pdfToolPages } from "@/content/tools/pdf";
+import { getAllBlogPosts } from "@/lib/blog/posts";
 import { seoLandingPages } from "@/lib/seo/landings";
 import { pdfSeoLandingPages } from "@/lib/seo/pdf-landings";
 import type { ToolPageContent } from "@/types/seo";
@@ -36,6 +37,7 @@ export const publicSitemapEntries: SitemapEntry[] = [
   { path: "/tools/pdf", priority: 0.9, changeFrequency: "weekly" },
   { path: "/privacy", priority: 0.3, changeFrequency: "monthly" },
   { path: "/terms", priority: 0.3, changeFrequency: "monthly" },
+  { path: "/blog", priority: 0.7, changeFrequency: "weekly" },
 
   ...imageToolPages.map((tool) => ({
     path: `/tools/image/${tool.slug}`,
@@ -55,6 +57,11 @@ export const publicSitemapEntries: SitemapEntry[] = [
   ...pdfSeoLandingPages.map((page) => ({
     path: `/tools/pdf/${page.slug}`,
     priority: 0.8,
+    changeFrequency: "monthly" as const,
+  })),
+  ...getAllBlogPosts().map((post) => ({
+    path: `/blog/${post.slug}`,
+    priority: 0.65,
     changeFrequency: "monthly" as const,
   })),
 ];

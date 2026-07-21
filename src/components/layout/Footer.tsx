@@ -1,124 +1,79 @@
 import Link from "next/link";
 
-const categories = [
-  { href: "/tools/image", label: "Image Tools", live: true },
-  { href: "/tools/pdf", label: "PDF Tools", live: true },
-  { href: "#", label: "Video Tools", live: false },
-  { href: "#", label: "Developer Tools", live: false },
+const imageLinks = [
+  { href: "/tools/image", label: "All image tools" },
+  { href: "/tools/image/compress", label: "Compress" },
+  { href: "/tools/image/resize", label: "Resize" },
+  { href: "/tools/image/convert", label: "Convert" },
+  { href: "/tools/image/crop", label: "Crop" },
+  { href: "/tools/image/rotate", label: "Rotate" },
+  { href: "/tools/image/flip", label: "Flip" },
 ];
+
+const pdfLinks = [
+  { href: "/tools/pdf", label: "All PDF tools" },
+  { href: "/tools/pdf/merge", label: "Merge" },
+  { href: "/tools/pdf/split", label: "Split" },
+  { href: "/tools/pdf/rotate", label: "Rotate" },
+  { href: "/tools/pdf/images-to-pdf", label: "Images to PDF" },
+];
+
+const moreLinks = [
+  { href: "/blog", label: "Blog" },
+  { href: "/tools/image/history", label: "History" },
+  { href: "/privacy", label: "Privacy Policy" },
+  { href: "/terms", label: "Terms of Use" },
+];
+
+function FooterColumn({
+  title,
+  links,
+}: {
+  title: string;
+  links: { href: string; label: string }[];
+}) {
+  return (
+    <div>
+      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-foam/50">
+        {title}
+      </p>
+      <ul className="mt-4 space-y-2 text-sm text-foam/85">
+        {links.map((item) => (
+          <li key={item.href}>
+            <Link href={item.href} className="transition hover:text-accent-bright">
+              {item.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export function Footer() {
   return (
     <footer className="relative z-10 mt-auto border-t border-line bg-ink text-foam">
-      <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
-        <div>
+      <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-12 sm:px-6 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
+        <div className="sm:col-span-2 lg:col-span-1">
           <p className="font-display text-2xl font-bold">PrivyTool</p>
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-foam/70">
             Fast browser-based utilities. Your files stay on your device — we never
             upload your images or PDFs to a server.
           </p>
+          <p className="mt-4 text-xs text-foam/40">
+            Video &amp; developer tools — soon
+          </p>
         </div>
 
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-foam/50">
-            Categories
-          </p>
-          <ul className="mt-4 space-y-2 text-sm">
-            {categories.map((item) => (
-              <li key={item.label}>
-                {item.live ? (
-                  <Link
-                    href={item.href}
-                    className="text-foam/85 transition hover:text-accent-bright"
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <span className="text-foam/40">
-                    {item.label}{" "}
-                    <span className="text-[10px] uppercase tracking-wider">Soon</span>
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-foam/50">
-            Product
-          </p>
-          <ul className="mt-4 space-y-2 text-sm text-foam/85">
-            <li>
-              <Link
-                href="/tools/image/compress"
-                className="transition hover:text-accent-bright"
-              >
-                Compress Image
-              </Link>
-            </li>
-            <li>
-              <Link href="/tools/image/resize" className="transition hover:text-accent-bright">
-                Resize Image
-              </Link>
-            </li>
-            <li>
-              <Link href="/tools/image/convert" className="transition hover:text-accent-bright">
-                Convert Image
-              </Link>
-            </li>
-            <li>
-              <Link href="/tools/image/crop" className="transition hover:text-accent-bright">
-                Crop Image
-              </Link>
-            </li>
-            <li>
-              <Link href="/tools/image/rotate" className="transition hover:text-accent-bright">
-                Rotate Image
-              </Link>
-            </li>
-            <li>
-              <Link href="/tools/image/flip" className="transition hover:text-accent-bright">
-                Flip Image
-              </Link>
-            </li>
-            <li>
-              <Link href="/tools/pdf/merge" className="transition hover:text-accent-bright">
-                Merge PDF
-              </Link>
-            </li>
-            <li>
-              <Link href="/tools/pdf/split" className="transition hover:text-accent-bright">
-                Split PDF
-              </Link>
-            </li>
-            <li>
-              <Link href="/tools/pdf/rotate" className="transition hover:text-accent-bright">
-                Rotate PDF
-              </Link>
-            </li>
-            <li>
-              <Link href="/tools/pdf/images-to-pdf" className="transition hover:text-accent-bright">
-                Images to PDF
-              </Link>
-            </li>
-            <li>
-              <Link href="/tools/image/history" className="transition hover:text-accent-bright">
-                History
-              </Link>
-            </li>
-          </ul>
-        </div>
+        <FooterColumn title="Image" links={imageLinks} />
+        <FooterColumn title="PDF" links={pdfLinks} />
+        <FooterColumn title="More" links={moreLinks} />
       </div>
 
       <div className="border-t border-white/10">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-4 text-xs text-foam/45 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <p>© {new Date().getFullYear()} PrivyTool. All rights reserved.</p>
-          <div className="flex items-center gap-4">
-            <Link href="/privacy" className="transition hover:text-foam/80">Privacy Policy</Link>
-            <Link href="/terms" className="transition hover:text-foam/80">Terms of Use</Link>
-            <span>Processing happens in your browser.</span>
-          </div>
+          <p>Processing happens in your browser.</p>
         </div>
       </div>
     </footer>
