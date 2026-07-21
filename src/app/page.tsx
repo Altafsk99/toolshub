@@ -9,19 +9,18 @@ import {
 } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "PrivyTool — Free Privacy-First Online Image Tools",
+  title: "PrivyTool — Free Privacy-First Online Tools",
   description:
-    "Compress, resize, convert, crop, rotate, and flip images in your browser. No upload, no account — 100% private and free on PrivyTool.",
+    "Compress, resize, and convert images; merge, split, and rotate PDFs — all in your browser. No upload, no account, 100% private.",
   path: "/",
   keywords: [
     "online tools",
     "image tools",
+    "pdf tools",
+    "merge pdf online",
+    "split pdf",
+    "jpg to pdf",
     "compress image online",
-    "resize image online",
-    "convert image format",
-    "crop image online",
-    "rotate image online",
-    "flip image online",
     "privacy first",
     "no upload",
   ],

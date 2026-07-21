@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const categories = [
   { href: "/tools/image", label: "Image Tools", live: true },
-  { href: "#", label: "PDF Tools", live: false },
+  { href: "/tools/pdf", label: "PDF Tools", live: true },
   { href: "#", label: "Video Tools", live: false },
   { href: "#", label: "Developer Tools", live: false },
 ];
@@ -80,6 +80,26 @@ export function Footer() {
             <li>
               <Link href="/tools/image/flip" className="transition hover:text-accent-bright">
                 Flip Image
+              </Link>
+            </li>
+            <li>
+              <Link href="/tools/pdf/merge" className="transition hover:text-accent-bright">
+                Merge PDF
+              </Link>
+            </li>
+            <li>
+              <Link href="/tools/pdf/split" className="transition hover:text-accent-bright">
+                Split PDF
+              </Link>
+            </li>
+            <li>
+              <Link href="/tools/pdf/rotate" className="transition hover:text-accent-bright">
+                Rotate PDF
+              </Link>
+            </li>
+            <li>
+              <Link href="/tools/pdf/images-to-pdf" className="transition hover:text-accent-bright">
+                Images to PDF
               </Link>
             </li>
             <li>

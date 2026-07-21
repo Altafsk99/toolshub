@@ -1,4 +1,4 @@
-import type { FaqItem, RelatedTool, SeoLandingPage } from "@/types/seo";
+import type { FaqItem, PdfSeoLandingPage, RelatedTool, SeoLandingPage } from "@/types/seo";
 
 const PRIVACY_FAQ: FaqItem = {
   question: "Do you upload my images?",
@@ -60,6 +60,73 @@ export function hubLink(): RelatedTool {
     title: "All Image Tools",
     description: "Browse the full privacy-first image toolkit.",
   };
+}
+
+const PDF_PRIVACY_FAQ: FaqItem = {
+  question: "Do you upload my PDFs?",
+  answer:
+    "No. PDF processing runs entirely in your browser using pdf-lib. Your files never leave your device.",
+};
+
+export function pdfPrivacyFaqs(extra: FaqItem[] = []): FaqItem[] {
+  return [
+    ...extra,
+    PDF_PRIVACY_FAQ,
+    {
+      question: "Is PrivyTool free?",
+      answer: "Yes. Basic PDF tools are free with no account required.",
+    },
+  ];
+}
+
+export function pdfParentToolLink(
+  tool: "merge-pdf" | "split-pdf" | "rotate-pdf" | "images-to-pdf",
+): RelatedTool {
+  const map = {
+    "merge-pdf": {
+      href: "/tools/pdf/merge",
+      title: "Merge PDF",
+      description: "Combine multiple PDF files with live preview.",
+    },
+    "split-pdf": {
+      href: "/tools/pdf/split",
+      title: "Split PDF",
+      description: "Extract pages or split every page into a ZIP.",
+    },
+    "rotate-pdf": {
+      href: "/tools/pdf/rotate",
+      title: "Rotate PDF",
+      description: "Turn PDF pages 90°, 180°, or 270°.",
+    },
+    "images-to-pdf": {
+      href: "/tools/pdf/images-to-pdf",
+      title: "Images to PDF",
+      description: "Convert JPG, PNG, and WebP into one PDF.",
+    },
+  } as const;
+  return map[tool];
+}
+
+export function pdfHubLink(): RelatedTool {
+  return {
+    href: "/tools/pdf",
+    title: "All PDF Tools",
+    description: "Browse merge, split, rotate, and images-to-PDF tools.",
+  };
+}
+
+export function pdfRelatedFromSlugs(
+  slugs: string[],
+  bySlug: Map<string, PdfSeoLandingPage>,
+): RelatedTool[] {
+  return slugs
+    .map((slug) => bySlug.get(slug))
+    .filter((page): page is PdfSeoLandingPage => page != null)
+    .map((page) => ({
+      href: `/tools/pdf/${page.slug}`,
+      title: page.h1,
+      description: page.intro.slice(0, 120),
+    }));
 }
 
 export function relatedFromSlugs(

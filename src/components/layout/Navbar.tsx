@@ -7,6 +7,7 @@ import { useEffect, useId, useState } from "react";
 
 const navLinks = [
   { href: "/tools/image", label: "Image Tools" },
+  { href: "/tools/pdf", label: "PDF Tools" },
   { href: "/tools/image/compress", label: "Compress" },
   { href: "/tools/image/resize", label: "Resize" },
   { href: "/tools/image/crop", label: "Crop" },
@@ -20,6 +21,7 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 function isActiveLink(href: string, pathname: string): boolean {
   if (href === "/tools/image") return pathname === "/tools/image";
+  if (href === "/tools/pdf") return pathname === "/tools/pdf";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 

@@ -6,7 +6,9 @@ import {
   resizeToolContent,
   rotateToolContent,
 } from "@/content/tools/image";
+import { pdfToolPages } from "@/content/tools/pdf";
 import { seoLandingPages } from "@/lib/seo/landings";
+import { pdfSeoLandingPages } from "@/lib/seo/pdf-landings";
 import type { ToolPageContent } from "@/types/seo";
 
 export type SitemapEntry = {
@@ -31,13 +33,24 @@ export const imageToolPages: ToolPageContent[] = [
 export const publicSitemapEntries: SitemapEntry[] = [
   { path: "/", priority: 1, changeFrequency: "weekly" },
   { path: "/tools/image", priority: 0.9, changeFrequency: "weekly" },
+  { path: "/tools/pdf", priority: 0.9, changeFrequency: "weekly" },
   ...imageToolPages.map((tool) => ({
     path: `/tools/image/${tool.slug}`,
     priority: 0.85,
     changeFrequency: "monthly" as const,
   })),
+  ...pdfToolPages.map((tool) => ({
+    path: `/tools/pdf/${tool.slug}`,
+    priority: 0.85,
+    changeFrequency: "monthly" as const,
+  })),
   ...seoLandingPages.map((page) => ({
     path: `/tools/image/${page.slug}`,
+    priority: 0.8,
+    changeFrequency: "monthly" as const,
+  })),
+  ...pdfSeoLandingPages.map((page) => ({
+    path: `/tools/pdf/${page.slug}`,
     priority: 0.8,
     changeFrequency: "monthly" as const,
   })),

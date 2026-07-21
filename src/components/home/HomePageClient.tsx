@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { HomeImageToolsSection } from "@/components/image/HomeImageToolsSection";
 
-const upcoming = ["PDF Tools", "Video Tools", "Audio Tools", "Developer Tools"];
+const upcoming = ["Video Tools", "Audio Tools", "Developer Tools"];
 
 export function HomePageClient() {
   return (
@@ -24,7 +24,7 @@ export function HomePageClient() {
             never leave your browser.
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-ink-soft/75">
-            No upload. No account. Compress, resize, and convert on-device.
+            No upload. No account. Compress, resize, merge PDFs, and more — all on-device.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
@@ -34,10 +34,16 @@ export function HomePageClient() {
               Compress an image
             </Link>
             <Link
+              href="/tools/pdf/merge"
+              className="focus-ring inline-flex h-12 items-center rounded-md border border-line bg-paper px-6 text-sm font-semibold text-ink transition hover:bg-mist"
+            >
+              Merge PDFs
+            </Link>
+            <Link
               href="/tools/image"
               className="focus-ring inline-flex h-12 items-center rounded-md px-5 text-sm font-semibold text-accent-deep transition hover:bg-mist"
             >
-              Browse image tools
+              Browse all tools
             </Link>
           </div>
         </motion.div>

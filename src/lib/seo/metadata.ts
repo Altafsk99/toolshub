@@ -42,11 +42,15 @@ export function buildPageMetadata(input: PageMetadataInput): Metadata {
   };
 }
 
+export function toolPagePath(content: ToolPageContent): string {
+  return `/tools/${content.category}/${content.slug}`;
+}
+
 export function buildToolMetadata(content: ToolPageContent): Metadata {
   return buildPageMetadata({
     title: content.title,
     description: content.description,
-    path: `/tools/image/${content.slug}`,
+    path: toolPagePath(content),
     keywords: content.keywords,
   });
 }
@@ -57,7 +61,7 @@ export function buildWebApplicationJsonLd(content: ToolPageContent) {
     "@type": "WebApplication",
     name: content.h1,
     description: content.description,
-    url: absoluteUrl(`/tools/image/${content.slug}`),
+    url: absoluteUrl(toolPagePath(content)),
     applicationCategory: "MultimediaApplication",
     operatingSystem: "Any",
     offers: {
@@ -114,7 +118,7 @@ export function buildOrganizationJsonLd() {
     },
     image: absoluteUrl("/og-image.png"),
     description:
-      "Privacy-first online tools. Compress, resize, convert, crop, rotate, and flip images in your browser — no upload required.",
+      "Privacy-first online tools. Compress, resize, convert, crop, rotate, and flip images; merge, split, rotate PDFs — all in your browser.",
   };
 }
 
@@ -126,7 +130,7 @@ export function buildWebSiteJsonLd() {
     name: SITE_NAME,
     url: absoluteUrl("/"),
     description:
-      "Free privacy-first online toolkit. Compress, resize, convert, crop, rotate, and flip images in your browser.",
+      "Free privacy-first online toolkit. Compress and edit images; merge, split, and rotate PDFs in your browser.",
     inLanguage: "en-US",
     publisher: {
       "@id": `${SITE_URL}/#organization`,
@@ -135,7 +139,7 @@ export function buildWebSiteJsonLd() {
 }
 
 export function buildHomeItemListJsonLd() {
-  return buildItemListJsonLd("PrivyTool Image Tools", [
+  return buildItemListJsonLd("PrivyTool — Free Online Tools", [
     {
       name: "Compress Image",
       path: "/tools/image/compress",
@@ -147,9 +151,24 @@ export function buildHomeItemListJsonLd() {
       description: "Set dimensions, fit modes, and optional compression.",
     },
     {
-      name: "Convert Image",
-      path: "/tools/image/convert",
-      description: "Switch between PNG, JPG, WebP, and AVIF.",
+      name: "Merge PDF",
+      path: "/tools/pdf/merge",
+      description: "Combine multiple PDF files with live preview.",
+    },
+    {
+      name: "Split PDF",
+      path: "/tools/pdf/split",
+      description: "Extract pages or split every page into a ZIP.",
+    },
+    {
+      name: "Rotate PDF",
+      path: "/tools/pdf/rotate",
+      description: "Turn PDF pages 90°, 180°, or 270°.",
+    },
+    {
+      name: "Images to PDF",
+      path: "/tools/pdf/images-to-pdf",
+      description: "Convert JPG, PNG, and WebP into one PDF.",
     },
     {
       name: "Crop Image",
@@ -157,14 +176,9 @@ export function buildHomeItemListJsonLd() {
       description: "Square, circle, and social aspect ratio crops.",
     },
     {
-      name: "Rotate Image",
-      path: "/tools/image/rotate",
-      description: "Turn photos 90°, 180°, or any custom angle.",
-    },
-    {
-      name: "Flip Image",
-      path: "/tools/image/flip",
-      description: "Mirror photos horizontally or vertically.",
+      name: "Convert Image",
+      path: "/tools/image/convert",
+      description: "Switch between PNG, JPG, WebP, and AVIF.",
     },
   ]);
 }

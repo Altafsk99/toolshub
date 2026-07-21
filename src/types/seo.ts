@@ -14,9 +14,11 @@ export type RelatedTool = {
   description: string;
 };
 
+export type ToolCategory = "image" | "pdf";
+
 export type ToolPageContent = {
   slug: string;
-  category: "image";
+  category: ToolCategory;
   title: string;
   description: string;
   h1: string;
@@ -73,6 +75,28 @@ export type FlipLandingPreset = {
   qualityPercent?: number;
 };
 
+export type MergePdfLandingPreset = {
+  tool: "merge-pdf";
+};
+
+export type SplitPdfLandingPreset = {
+  tool: "split-pdf";
+  mode?: "every-page" | "range" | "extract";
+  fromPage?: number;
+  toPage?: number;
+};
+
+export type RotatePdfLandingPreset = {
+  tool: "rotate-pdf";
+  angle?: 90 | 180 | 270;
+  scope?: "all" | "range";
+};
+
+export type ImagesToPdfLandingPreset = {
+  tool: "images-to-pdf";
+  pageSize?: "fit" | "a4" | "letter";
+};
+
 export type SeoLandingPreset =
   | CompressLandingPreset
   | ResizeLandingPreset
@@ -81,7 +105,18 @@ export type SeoLandingPreset =
   | RotateLandingPreset
   | FlipLandingPreset;
 
+export type PdfSeoLandingPreset =
+  | MergePdfLandingPreset
+  | SplitPdfLandingPreset
+  | RotatePdfLandingPreset
+  | ImagesToPdfLandingPreset;
+
 export type SeoLandingPage = ToolPageContent & {
   preset: SeoLandingPreset;
+  parentHref: string;
+};
+
+export type PdfSeoLandingPage = ToolPageContent & {
+  preset: PdfSeoLandingPreset;
   parentHref: string;
 };
