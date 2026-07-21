@@ -15,7 +15,7 @@ export function Footer() {
           <p className="font-display text-2xl font-bold">PrivyTool</p>
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-foam/70">
             Fast browser-based utilities. Your files stay on your device — we never
-            upload your images to a server.
+            upload your images or PDFs to a server.
           </p>
         </div>
 
