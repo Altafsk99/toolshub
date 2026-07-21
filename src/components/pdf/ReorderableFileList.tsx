@@ -49,7 +49,7 @@ export function ReorderableFileList({
             </div>
           ) : null}
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-ink" title={item.name}>
+            <p className=" text-sm font-medium text-ink" title={item.name}>
               {item.name}
             </p>
             <p className="text-xs text-ink-soft/65">{item.detail}</p>

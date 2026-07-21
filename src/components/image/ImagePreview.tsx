@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { CropOverlay } from "@/components/image/CropOverlay";
 import { formatBytes, useImageStore } from "@/stores/imageStore";
 import { useCropUiStore } from "@/stores/cropUiStore";
+
 type PreviewMode = "original" | "result";
 
 export function ImagePreview() {
@@ -24,7 +25,8 @@ export function ImagePreview() {
   const freeCropRect = useCropUiStore((s) => s.freeCropRect);
 
   const imgRef = useRef<HTMLImageElement>(null);
-  const hasResult = Boolean(resultPreviewUrl);  const [mode, setMode] = useState<PreviewMode>("original");
+  const hasResult = Boolean(resultPreviewUrl);
+  const [mode, setMode] = useState<PreviewMode>("original");
 
   useEffect(() => {
     if (hasResult) {
@@ -42,7 +44,7 @@ export function ImagePreview() {
 
   if (!previewUrl || !meta) {
     return (
-      <div className="flex min-h-64 items-center justify-center rounded-[var(--radius-lg)] border border-line bg-paper/60 px-6 py-10 text-center text-sm text-ink-soft/70">
+      <div className="flex min-h-48 items-center justify-center rounded-[var(--radius-lg)] border border-line bg-paper/60 px-4 py-8 text-center text-sm text-ink-soft/70 sm:min-h-64 sm:px-6 sm:py-10">
         Preview appears here after you select an image.
       </div>
     );
@@ -84,9 +86,7 @@ export function ImagePreview() {
     convertResult?.format ??
     meta.type ??
     "image";
-  const displayName = showingResult
-    ? (resultFilename ?? meta.name)
-    : meta.name;
+  const displayName = showingResult ? (resultFilename ?? meta.name) : meta.name;
 
   const dims = showingResult
     ? `${resultWidth}×${resultHeight}`
@@ -122,12 +122,12 @@ export function ImagePreview() {
       className="overflow-hidden rounded-[var(--radius-lg)] border border-line bg-paper"
     >
       {hasResult ? (
-        <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-2">
-          <div className="flex gap-1 rounded-md bg-mist/70 p-1">
+        <div className="flex flex-col gap-2 border-b border-line px-3 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-4">
+          <div className="flex w-full gap-1 rounded-md bg-mist/70 p-1 sm:w-auto">
             <button
               type="button"
               onClick={() => setMode("original")}
-              className={`focus-ring rounded-md px-3 py-1 text-xs font-semibold transition ${
+              className={`focus-ring min-h-10 flex-1 rounded-md px-3 py-2 text-xs font-semibold transition sm:flex-none sm:py-1.5 ${
                 mode === "original"
                   ? "bg-paper text-ink shadow-sm"
                   : "text-ink-soft hover:text-ink"
@@ -138,7 +138,7 @@ export function ImagePreview() {
             <button
               type="button"
               onClick={() => setMode("result")}
-              className={`focus-ring rounded-md px-3 py-1 text-xs font-semibold transition ${
+              className={`focus-ring min-h-10 flex-1 rounded-md px-3 py-2 text-xs font-semibold transition sm:flex-none sm:py-1.5 ${
                 mode === "result"
                   ? "bg-paper text-ink shadow-sm"
                   : "text-ink-soft hover:text-ink"
@@ -148,13 +148,15 @@ export function ImagePreview() {
             </button>
           </div>
           {showingResult ? (
-            <span className="text-xs font-medium text-accent-deep">{badgeLabel} preview</span>
+            <span className="hidden text-xs font-medium text-accent-deep sm:inline">
+              {badgeLabel} preview
+            </span>
           ) : null}
         </div>
       ) : null}
 
-      <div className="relative flex max-h-[420px] min-h-64 items-center justify-center bg-[linear-gradient(45deg,#dfeae6_25%,transparent_25%),linear-gradient(-45deg,#dfeae6_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#dfeae6_75%),linear-gradient(-45deg,transparent_75%,#dfeae6_75%)] bg-[length:20px_20px] bg-[position:0_0,0_10px,10px_-10px,-10px_0] p-4">
-        <div className="relative inline-block max-h-[380px] max-w-full">
+      <div className="relative flex max-h-[260px] min-h-48 items-center justify-center bg-[linear-gradient(45deg,#dfeae6_25%,transparent_25%),linear-gradient(-45deg,#dfeae6_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#dfeae6_75%),linear-gradient(-45deg,transparent_75%,#dfeae6_75%)] bg-[length:20px_20px] bg-[position:0_0,0_10px,10px_-10px,-10px_0] p-3 sm:max-h-[420px] sm:min-h-64 sm:p-4">
+        <div className="relative inline-block max-h-[220px] max-w-full sm:max-h-[380px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             ref={imgRef}
@@ -165,16 +167,15 @@ export function ImagePreview() {
                 ? `${badgeLabel} preview of ${meta.name}`
                 : `Preview of ${meta.name}`
             }
-            className="block max-h-[380px] max-w-full object-contain"
+            className="block max-h-[220px] max-w-full object-contain sm:max-h-[380px]"
           />
-          <CropOverlay
-            imgRef={imgRef}
-            enabled={freeModeActive && !showingResult}
-          />
+          <CropOverlay imgRef={imgRef} enabled={freeModeActive && !showingResult} />
         </div>
-      </div>      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-4 py-3">
+      </div>
+
+      <div className="flex items-center justify-between gap-3 border-t border-line px-3 py-3 sm:px-4">
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-ink">{displayName}</p>
+          <p className=" text-sm font-semibold text-ink">{displayName}</p>
           <p className="mt-0.5 text-xs text-ink-soft/70">
             {dims} · {formatBytes(bytes)} · {typeLabel}
           </p>
@@ -182,7 +183,7 @@ export function ImagePreview() {
         <button
           type="button"
           onClick={clear}
-          className="focus-ring rounded-md px-3 py-1.5 text-sm font-medium text-ink-soft transition hover:bg-mist hover:text-ink"
+          className="focus-ring shrink-0 rounded-md px-3 py-2 text-sm font-medium text-ink-soft transition hover:bg-mist hover:text-ink"
         >
           Remove
         </button>

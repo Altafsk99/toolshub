@@ -2,6 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ExportFormatSelect } from "@/components/image/ExportFormatSelect";
+import {
+  PanelActions,
+  panelPrimaryBtnClass,
+  panelSecondaryBtnClass,
+  panelSectionClass,
+  panelShellClass,
+  rangeInputClass,
+} from "@/components/image/PanelChrome";
 import { getExportFormat, mimeToDefaultFormatId } from "@/lib/image/formats";
 import { formatBytes, useImageStore } from "@/stores/imageStore";
 import { usePreferencesStore } from "@/stores/preferencesStore";
@@ -74,8 +82,8 @@ export function ConvertPanel({ preset }: ConvertPanelProps = {}) {
     formatOption.mime === meta?.type;
 
   return (
-    <div className="flex h-full flex-col justify-between gap-6">
-      <div className="space-y-5">
+    <div className={panelShellClass}>
+      <div className={panelSectionClass}>
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-soft/60">
             Convert
@@ -109,7 +117,7 @@ export function ConvertPanel({ preset }: ConvertPanelProps = {}) {
               value={qualityPercent}
               onChange={(e) => setQualityPercent(Number(e.target.value))}
               disabled={!file}
-              className="mt-3 w-full accent-[var(--accent)] disabled:opacity-40"
+              className={rangeInputClass}
             />
             <p className="mt-2 text-xs text-ink-soft/65">
               Higher quality keeps more detail. Lower quality shrinks the file.
@@ -154,7 +162,7 @@ export function ConvertPanel({ preset }: ConvertPanelProps = {}) {
                   </p>
                 ) : null}
                 {resultFilename ? (
-                  <p className="mt-2 truncate text-xs text-ink-soft/60" title={resultFilename}>
+                  <p className="mt-2  text-xs text-ink-soft/60" title={resultFilename}>
                     File: {resultFilename}
                   </p>
                 ) : null}
@@ -177,25 +185,21 @@ export function ConvertPanel({ preset }: ConvertPanelProps = {}) {
         ) : null}
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
+      <PanelActions>
         <button
           type="button"
           disabled={!convertResult}
           onClick={() => downloadResult("convert")}
-          className="focus-ring inline-flex h-11 items-center justify-center rounded-md bg-ink px-5 text-sm font-semibold text-foam transition hover:bg-ink-soft disabled:cursor-not-allowed disabled:opacity-40"
+          className={panelPrimaryBtnClass}
         >
           Download
         </button>
         {file ? (
-          <button
-            type="button"
-            onClick={clear}
-            className="focus-ring h-11 rounded-md px-4 text-sm font-medium text-ink-soft transition hover:bg-mist"
-          >
+          <button type="button" onClick={clear} className={panelSecondaryBtnClass}>
             Start over
           </button>
         ) : null}
-      </div>
+      </PanelActions>
     </div>
   );
 }

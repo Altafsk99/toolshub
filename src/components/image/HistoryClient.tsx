@@ -213,7 +213,7 @@ export function HistoryClient() {
                     }`}
                   >
                     <span className="flex items-center justify-between gap-3">
-                      <span className="truncate text-sm font-semibold text-ink">
+                      <span className=" text-sm font-semibold text-ink">
                         {item.outputName}
                       </span>
                       <span className="shrink-0 text-xs font-medium text-accent-deep">

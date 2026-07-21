@@ -2,6 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { ExportFormatSelect } from "@/components/image/ExportFormatSelect";
+import {
+  PanelActions,
+  chipClass,
+  panelPrimaryBtnClass,
+  panelSecondaryBtnClass,
+  panelSectionClass,
+  panelShellClass,
+  rangeInputClass,
+} from "@/components/image/PanelChrome";
 import { getExportFormat } from "@/lib/image/formats";
 import { formatBytes, useImageStore } from "@/stores/imageStore";
 import { usePreferencesStore } from "@/stores/preferencesStore";
@@ -72,8 +81,8 @@ export function RotatePanel({ preset }: RotatePanelProps = {}) {
   ]);
 
   return (
-    <div className="flex h-full flex-col justify-between gap-6">
-      <div className="space-y-5">
+    <div className={panelShellClass}>
+      <div className={panelSectionClass}>
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-soft/60">
             Rotate
@@ -86,18 +95,14 @@ export function RotatePanel({ preset }: RotatePanelProps = {}) {
 
         <div>
           <p className="text-sm font-semibold text-ink">Quick rotate</p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
             {QUICK_ANGLES.map((option) => (
               <button
                 key={option.label}
                 type="button"
                 disabled={!file}
                 onClick={() => setAngle(option.angle)}
-                className={`focus-ring rounded-md px-3 py-1.5 text-sm font-medium transition disabled:opacity-40 ${
-                  angle === option.angle
-                    ? "bg-ink text-foam"
-                    : "bg-mist text-ink-soft hover:bg-mist/80"
-                }`}
+                className={chipClass(angle === option.angle)}
               >
                 {option.label}
               </button>
@@ -121,7 +126,7 @@ export function RotatePanel({ preset }: RotatePanelProps = {}) {
             value={angle}
             disabled={!file}
             onChange={(e) => setAngle(Number(e.target.value))}
-            className="mt-3 w-full accent-[var(--accent)] disabled:opacity-40"
+            className={rangeInputClass}
           />
           <p className="mt-2 text-xs text-ink-soft/65">
             Positive values rotate clockwise. Negative values rotate counter-clockwise.
@@ -133,18 +138,14 @@ export function RotatePanel({ preset }: RotatePanelProps = {}) {
           <p className="mt-1 text-xs text-ink-soft/65">
             Fills empty corners when rotating at custom angles.
           </p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
             {BACKGROUND_OPTIONS.map((option) => (
               <button
                 key={option.id}
                 type="button"
                 disabled={!file}
                 onClick={() => setFill(option.id)}
-                className={`focus-ring rounded-md px-3 py-1.5 text-sm font-medium transition disabled:opacity-40 ${
-                  fill === option.id
-                    ? "bg-ink text-foam"
-                    : "bg-mist text-ink-soft hover:bg-mist/80"
-                }`}
+                className={chipClass(fill === option.id)}
               >
                 {option.label}
               </button>
@@ -177,7 +178,7 @@ export function RotatePanel({ preset }: RotatePanelProps = {}) {
               value={qualityPercent}
               disabled={!file}
               onChange={(e) => setQualityPercent(Number(e.target.value))}
-              className="mt-3 w-full accent-[var(--accent)] disabled:opacity-40"
+              className={rangeInputClass}
             />
           </div>
         ) : null}
@@ -200,7 +201,7 @@ export function RotatePanel({ preset }: RotatePanelProps = {}) {
                   </span>
                 </div>
                 {resultFilename ? (
-                  <p className="mt-2 truncate text-xs text-ink-soft/60" title={resultFilename}>
+                  <p className="mt-2  text-xs text-ink-soft/60" title={resultFilename}>
                     File: {resultFilename}
                   </p>
                 ) : null}
@@ -223,25 +224,21 @@ export function RotatePanel({ preset }: RotatePanelProps = {}) {
         ) : null}
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
+      <PanelActions>
         <button
           type="button"
           disabled={!rotateResult}
           onClick={() => downloadResult("rotate")}
-          className="focus-ring inline-flex h-11 items-center justify-center rounded-md bg-ink px-5 text-sm font-semibold text-foam transition hover:bg-ink-soft disabled:cursor-not-allowed disabled:opacity-40"
+          className={panelPrimaryBtnClass}
         >
           Download
         </button>
         {file ? (
-          <button
-            type="button"
-            onClick={clear}
-            className="focus-ring h-11 rounded-md px-4 text-sm font-medium text-ink-soft transition hover:bg-mist"
-          >
+          <button type="button" onClick={clear} className={panelSecondaryBtnClass}>
             Start over
           </button>
         ) : null}
-      </div>
+      </PanelActions>
     </div>
   );
 }

@@ -2,6 +2,16 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ExportFormatSelect } from "@/components/image/ExportFormatSelect";
+import {
+  PanelActions,
+  chipClass,
+  modeTabClass,
+  panelPrimaryBtnClass,
+  panelSecondaryBtnClass,
+  panelSectionClass,
+  panelShellClass,
+  rangeInputClass,
+} from "@/components/image/PanelChrome";
 import { getExportFormat } from "@/lib/image/formats";
 import { formatBytes, useImageStore } from "@/stores/imageStore";
 import { usePreferencesStore } from "@/stores/preferencesStore";
@@ -26,6 +36,7 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
   const downloadResult = useImageStore((s) => s.downloadResult);
   const clear = useImageStore((s) => s.clear);
   const exportFormatId = usePreferencesStore((s) => s.exportFormatId);
+  const setExportFormatId = usePreferencesStore((s) => s.setExportFormatId);
 
   const [mode, setMode] = useState<CompressMode>(preset?.mode ?? "quality");
   const [qualityPercent, setQualityPercent] = useState(preset?.qualityPercent ?? 70);
@@ -38,6 +49,14 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
   const activeFormatId = localFormatId ?? exportFormatId;
   const formatOption = getExportFormat(activeFormatId);
   const debounceMs = mode === "target" ? 320 : 140;
+
+  const setActiveFormat = (id: ExportFormatId) => {
+    if (preset?.formatId) {
+      setLocalFormatId(id);
+    } else {
+      setExportFormatId(id);
+    }
+  };
 
   useEffect(() => {
     if (!file || !meta) return;
@@ -95,8 +114,8 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
   };
 
   return (
-    <div className="flex h-full flex-col justify-between gap-6">
-      <div className="space-y-5">
+    <div className={panelShellClass}>
+      <div className={panelSectionClass}>
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-soft/60">
             Compression
@@ -106,58 +125,92 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
           </p>
         </div>
 
+        <ExportFormatSelect
+          id="compress-export-format"
+          disabled={!file}
+          value={preset?.formatId ? activeFormatId : undefined}
+          onChange={preset?.formatId ? setLocalFormatId : undefined}
+        />
+
         <div className="flex gap-2 rounded-md bg-mist/70 p-1">
-          <ModeButton
-            active={mode === "quality"}
+          <button
+            type="button"
             onClick={() => setMode("quality")}
-            label="Quality"
-          />
-          <ModeButton
-            active={mode === "target"}
+            className={modeTabClass(mode === "quality")}
+          >
+            Quality
+          </button>
+          <button
+            type="button"
             onClick={() => setMode("target")}
-            label="Target size"
-          />
+            className={modeTabClass(mode === "target")}
+          >
+            Target size
+          </button>
         </div>
 
         {mode === "quality" ? (
-          <div>
-            <div className="flex items-center justify-between gap-3">
-              <label htmlFor="quality" className="text-sm font-semibold text-ink">
-                Quality
-              </label>
-              <span className="text-sm tabular-nums text-ink-soft">{qualityPercent}%</span>
+          formatOption.supportsQuality ? (
+            <div>
+              <div className="flex items-center justify-between gap-3">
+                <label htmlFor="quality" className="text-sm font-semibold text-ink">
+                  Quality
+                </label>
+                <span className="text-sm tabular-nums text-ink-soft">{qualityPercent}%</span>
+              </div>
+              <input
+                id="quality"
+                type="range"
+                min={1}
+                max={100}
+                value={qualityPercent}
+                onChange={(e) => setQualityPercent(Number(e.target.value))}
+                disabled={!file}
+                className={rangeInputClass}
+              />
+              <p className="mt-2 text-xs text-ink-soft/65">
+                Lower quality = smaller file. Higher quality = better detail.
+              </p>
             </div>
-            <input
-              id="quality"
-              type="range"
-              min={1}
-              max={100}
-              value={qualityPercent}
-              onChange={(e) => setQualityPercent(Number(e.target.value))}
-              disabled={!file || !formatOption.supportsQuality}
-              className="mt-3 w-full accent-[var(--accent)] disabled:opacity-40"
-            />
-            <p className="mt-2 text-xs text-ink-soft/65">
-              {formatOption.supportsQuality
-                ? "Lower quality = smaller file. Higher quality = better detail."
-                : "PNG is lossless — quality doesn’t apply. Use JPG/WebP/AVIF to shrink with quality."}
-            </p>
-          </div>
+          ) : (
+            <div className="rounded-md border border-line bg-mist/50 px-3 py-3">
+              <p className="text-sm font-semibold text-ink">
+                {formatOption.label} won’t shrink with quality
+              </p>
+              <p className="mt-1 text-xs leading-relaxed text-ink-soft/70">
+                PNG is lossless. Switch to JPG or WebP to compress, or use Target size.
+              </p>
+              <div className="mt-3 grid grid-cols-3 gap-2">
+                {(["jpg", "webp", "avif"] as const).map((id) => (
+                  <button
+                    key={id}
+                    type="button"
+                    disabled={!file}
+                    onClick={() => setActiveFormat(id)}
+                    className={chipClass(false)}
+                  >
+                    {id.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )
         ) : (
           <div>
             <label className="text-sm font-semibold text-ink">Target size (KB)</label>
-            <div className="mt-3 flex flex-wrap gap-2">
+            {!formatOption.supportsQuality ? (
+              <p className="mt-1 text-xs text-ink-soft/65">
+                Tip: JPG or WebP usually hit KB targets more easily than PNG.
+              </p>
+            ) : null}
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
               {KB_PRESETS.map((kb) => (
                 <button
                   key={kb}
                   type="button"
                   disabled={!file}
                   onClick={() => applyPreset(kb)}
-                  className={`focus-ring rounded-md px-3 py-1.5 text-sm font-medium transition disabled:opacity-40 ${
-                    targetKb === kb
-                      ? "bg-ink text-foam"
-                      : "bg-mist text-ink-soft hover:bg-mist/80"
-                  }`}
+                  className={chipClass(targetKb === kb)}
                 >
                   {kb} KB
                 </button>
@@ -168,23 +221,17 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
                 type="number"
                 min={1}
                 step={1}
+                inputMode="numeric"
                 value={customKb}
                 disabled={!file}
                 onChange={(e) => applyCustomKb(e.target.value)}
-                className="focus-ring w-28 rounded-md border border-line bg-paper px-3 py-2 text-sm tabular-nums disabled:opacity-40"
+                className="focus-ring min-h-11 w-28 rounded-md border border-line bg-paper px-3 py-2 text-base tabular-nums disabled:opacity-40 sm:text-sm"
                 aria-label="Custom target size in KB"
               />
               <span className="text-sm text-ink-soft/70">KB (custom)</span>
             </div>
           </div>
         )}
-
-        <ExportFormatSelect
-          id="compress-export-format"
-          disabled={!file}
-          value={preset?.formatId ? activeFormatId : undefined}
-          onChange={preset?.formatId ? setLocalFormatId : undefined}
-        />
 
         {meta ? (
           <div className="rounded-md border border-line bg-foam/60 px-3 py-3 text-sm">
@@ -205,13 +252,22 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
                 {savedLabel ? (
                   <div className="mt-2 flex justify-between gap-3">
                     <span className="text-ink-soft/70">Saved</span>
-                    <span className="font-semibold tabular-nums text-accent-deep">
+                    <span
+                      className={`font-semibold tabular-nums ${
+                        savedLabel.saved > 0 ? "text-accent-deep" : "text-ink-soft"
+                      }`}
+                    >
                       {formatBytes(Math.max(0, savedLabel.saved))} ({savedLabel.pct}%)
                     </span>
                   </div>
                 ) : null}
+                {savedLabel && savedLabel.saved <= 0 && !formatOption.supportsQuality ? (
+                  <p className="mt-2 text-xs text-ink-soft/65">
+                    No size change yet — pick JPG/WebP above, or switch to Target size.
+                  </p>
+                ) : null}
                 {resultFilename ? (
-                  <p className="mt-2 truncate text-xs text-ink-soft/60" title={resultFilename}>
+                  <p className="mt-2  text-xs text-ink-soft/60" title={resultFilename}>
                     File: {resultFilename}
                   </p>
                 ) : null}
@@ -234,47 +290,21 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
         ) : null}
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
+      <PanelActions>
         <button
           type="button"
           disabled={!compressResult}
           onClick={() => downloadResult("compress")}
-          className="focus-ring inline-flex h-11 items-center justify-center rounded-md bg-ink px-5 text-sm font-semibold text-foam transition hover:bg-ink-soft disabled:cursor-not-allowed disabled:opacity-40"
+          className={panelPrimaryBtnClass}
         >
           Download
         </button>
         {file ? (
-          <button
-            type="button"
-            onClick={clear}
-            className="focus-ring h-11 rounded-md px-4 text-sm font-medium text-ink-soft transition hover:bg-mist"
-          >
+          <button type="button" onClick={clear} className={panelSecondaryBtnClass}>
             Start over
           </button>
         ) : null}
-      </div>
+      </PanelActions>
     </div>
-  );
-}
-
-function ModeButton({
-  active,
-  onClick,
-  label,
-}: {
-  active: boolean;
-  onClick: () => void;
-  label: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`focus-ring flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
-        active ? "bg-paper text-ink shadow-sm" : "text-ink-soft hover:text-ink"
-      }`}
-    >
-      {label}
-    </button>
   );
 }

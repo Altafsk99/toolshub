@@ -65,7 +65,7 @@ export function ExportFormatSelect({
         value={selected}
         disabled={disabled}
         onChange={(e) => handleChange(e.target.value as ExportFormatId)}
-        className="focus-ring mt-2 w-full rounded-md border border-line bg-paper px-3 py-2 text-sm disabled:opacity-40"
+        className="focus-ring mt-2 min-h-11 w-full rounded-md border border-line bg-paper px-3 py-2 text-base disabled:opacity-40 sm:text-sm"
       >
         {EXPORT_FORMATS.map((format) => {
           const isSupported = support ? support[format.id] : true;

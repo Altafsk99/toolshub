@@ -25,7 +25,7 @@ export function ToolPageTemplate({ content, children }: ToolPageTemplateProps) {
   const categoryPath = `/tools/${content.category}`;
 
   return (
-    <div className="relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+    <div className="relative mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-14">
       <JsonLd data={buildWebApplicationJsonLd(content)} />
       <JsonLd data={buildFaqJsonLd(content)} />
       <JsonLd data={buildHowToJsonLd(content)} />
@@ -41,15 +41,15 @@ export function ToolPageTemplate({ content, children }: ToolPageTemplateProps) {
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-deep">
           {categoryLabel}
         </p>
-        <h1 className="mt-3 font-display text-4xl font-bold text-ink sm:text-5xl">
+        <h1 className="mt-2 font-display text-3xl font-bold text-ink sm:mt-3 sm:text-5xl">
           {content.h1}
         </h1>
-        <p className="mt-4 text-base leading-relaxed text-ink-soft/80 sm:text-lg">
+        <p className="mt-3 text-sm leading-relaxed text-ink-soft/80 sm:mt-4 sm:text-lg">
           {content.intro}
         </p>
       </header>
 
-      <div className="mt-10">{children}</div>
+      <div className="mt-6 sm:mt-10">{children}</div>
 
       <HowToSection steps={content.howTo} />
       <FaqSection faqs={content.faqs} />

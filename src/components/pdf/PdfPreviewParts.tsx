@@ -132,7 +132,7 @@ export function PdfLargePage({ thumbnailUrl, label, meta, loading }: PdfLargePag
         )}
       </div>
       <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-2.5 text-xs text-ink-soft/75">
-        <span className="truncate font-medium text-ink" title={label}>
+        <span className=" font-medium text-ink" title={label}>
           {label}
         </span>
         {meta ? <span className="shrink-0 tabular-nums">{meta}</span> : null}

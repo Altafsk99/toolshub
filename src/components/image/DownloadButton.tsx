@@ -5,11 +5,13 @@ import { useImageStore } from "@/stores/imageStore";
 type DownloadButtonProps = {
   label?: string;
   prepareFirst?: boolean;
+  className?: string;
 };
 
 export function DownloadButton({
   label = "Download",
   prepareFirst = true,
+  className,
 }: DownloadButtonProps) {
   const file = useImageStore((s) => s.file);
   const resultBlob = useImageStore((s) => s.resultBlob);
@@ -32,7 +34,10 @@ export function DownloadButton({
       type="button"
       disabled={disabled}
       onClick={() => void handleClick()}
-      className="focus-ring inline-flex h-11 items-center justify-center rounded-md bg-ink px-5 text-sm font-semibold text-foam transition hover:bg-ink-soft disabled:cursor-not-allowed disabled:opacity-40"
+      className={
+        className ??
+        "focus-ring inline-flex h-11 items-center justify-center rounded-md bg-ink px-5 text-sm font-semibold text-foam transition hover:bg-ink-soft disabled:cursor-not-allowed disabled:opacity-40"
+      }
     >
       {isProcessing ? "Preparing…" : label}
     </button>

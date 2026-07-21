@@ -2,6 +2,18 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ExportFormatSelect } from "@/components/image/ExportFormatSelect";
+import {
+  PanelActions,
+  chipClass,
+  modeTabClass,
+  panelPrimaryBtnClass,
+  panelSecondaryBtnClass,
+  panelSectionClass,
+  panelShellClass,
+  rangeInputClass,
+  numberInputClass,
+  checkboxRowClass,
+} from "@/components/image/PanelChrome";
 import { getExportFormat } from "@/lib/image/formats";
 import { formatBytes, useImageStore } from "@/stores/imageStore";
 import { usePreferencesStore } from "@/stores/preferencesStore";
@@ -222,8 +234,8 @@ export function ResizePanel({ preset }: ResizePanelProps = {}) {
   const fitHelp = FIT_OPTIONS.find((o) => o.id === fit)?.help;
 
   return (
-    <div className="flex h-full flex-col justify-between gap-6">
-      <div className="space-y-5">
+    <div className={panelShellClass}>
+      <div className={panelSectionClass}>
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-soft/60">
             Resize
@@ -242,10 +254,11 @@ export function ResizePanel({ preset }: ResizePanelProps = {}) {
               id="resize-width"
               type="number"
               min={1}
+              inputMode="numeric"
               value={width}
               disabled={!file}
               onChange={(e) => onWidthChange(Number(e.target.value) || 1)}
-              className="focus-ring mt-2 w-full rounded-md border border-line bg-paper px-3 py-2 text-sm tabular-nums disabled:opacity-40"
+              className={numberInputClass}
             />
           </div>
           <div>
@@ -256,21 +269,22 @@ export function ResizePanel({ preset }: ResizePanelProps = {}) {
               id="resize-height"
               type="number"
               min={1}
+              inputMode="numeric"
               value={height}
               disabled={!file}
               onChange={(e) => onHeightChange(Number(e.target.value) || 1)}
-              className="focus-ring mt-2 w-full rounded-md border border-line bg-paper px-3 py-2 text-sm tabular-nums disabled:opacity-40"
+              className={numberInputClass}
             />
           </div>
         </div>
 
-        <label className="flex items-center gap-2 text-sm text-ink-soft">
+        <label className={checkboxRowClass}>
           <input
             type="checkbox"
             checked={lockAspect}
             disabled={!file}
             onChange={(e) => setLockAspect(e.target.checked)}
-            className="accent-[var(--accent)] disabled:opacity-40"
+            className="size-4 accent-[var(--accent)] disabled:opacity-40"
           />
           Lock aspect ratio
         </label>
@@ -290,7 +304,7 @@ export function ResizePanel({ preset }: ResizePanelProps = {}) {
             value={Math.min(200, percent)}
             disabled={!file}
             onChange={(e) => onPercentChange(Number(e.target.value))}
-            className="mt-3 w-full accent-[var(--accent)] disabled:opacity-40"
+            className={rangeInputClass}
           />
         </div>
 
@@ -300,7 +314,7 @@ export function ResizePanel({ preset }: ResizePanelProps = {}) {
             {FIT_OPTIONS.map((option) => (
               <label
                 key={option.id}
-                className={`flex cursor-pointer items-start gap-3 rounded-md border px-3 py-2.5 transition ${
+                className={`flex min-h-11 cursor-pointer items-start gap-3 rounded-md border px-3 py-3 transition sm:py-2.5 ${
                   fit === option.id
                     ? "border-accent bg-mist/80"
                     : "border-line bg-paper/60 hover:border-accent/40"
@@ -332,18 +346,14 @@ export function ResizePanel({ preset }: ResizePanelProps = {}) {
         {fit === "contain" ? (
           <div>
             <p className="text-sm font-semibold text-ink">Empty space fill</p>
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
               {FILL_OPTIONS.map((option) => (
                 <button
                   key={option.id}
                   type="button"
                   disabled={!file}
                   onClick={() => setFill(option.id)}
-                  className={`focus-ring rounded-md px-3 py-1.5 text-sm font-medium transition disabled:opacity-40 ${
-                    fill === option.id
-                      ? "bg-ink text-foam"
-                      : "bg-mist text-ink-soft hover:bg-mist/80"
-                  }`}
+                  className={chipClass(fill === option.id)}
                 >
                   {option.label}
                 </button>
@@ -354,18 +364,14 @@ export function ResizePanel({ preset }: ResizePanelProps = {}) {
 
         <div>
           <p className="text-sm font-semibold text-ink">Presets</p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
             {PRESETS.map((preset) => (
               <button
                 key={preset.label}
                 type="button"
                 disabled={!file}
                 onClick={() => applyPreset(preset)}
-                className={`focus-ring rounded-md px-3 py-1.5 text-sm font-medium transition disabled:opacity-40 ${
-                  activePreset === preset.label
-                    ? "bg-ink text-foam"
-                    : "bg-mist text-ink-soft hover:bg-mist/80"
-                }`}
+                className={chipClass(activePreset === preset.label)}
               >
                 {preset.label}
               </button>
@@ -383,13 +389,13 @@ export function ResizePanel({ preset }: ResizePanelProps = {}) {
         ) : null}
 
         <div className="rounded-md border border-line bg-paper/80 p-4">
-          <label className="flex items-center gap-2 text-sm font-semibold text-ink">
+          <label className={`${checkboxRowClass} font-semibold text-ink`}>
             <input
               type="checkbox"
               checked={compress}
               disabled={!file}
               onChange={(e) => setCompress(e.target.checked)}
-              className="accent-[var(--accent)] disabled:opacity-40"
+              className="size-4 accent-[var(--accent)] disabled:opacity-40"
             />
             Also compress output
           </label>
@@ -403,22 +409,14 @@ export function ResizePanel({ preset }: ResizePanelProps = {}) {
                 <button
                   type="button"
                   onClick={() => setCompressMode("quality")}
-                  className={`focus-ring flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
-                    compressMode === "quality"
-                      ? "bg-paper text-ink shadow-sm"
-                      : "text-ink-soft hover:text-ink"
-                  }`}
+                  className={modeTabClass(compressMode === "quality")}
                 >
                   Quality
                 </button>
                 <button
                   type="button"
                   onClick={() => setCompressMode("target")}
-                  className={`focus-ring flex-1 rounded-md px-3 py-2 text-sm font-semibold transition ${
-                    compressMode === "target"
-                      ? "bg-paper text-ink shadow-sm"
-                      : "text-ink-soft hover:text-ink"
-                  }`}
+                  className={modeTabClass(compressMode === "target")}
                 >
                   Target size
                 </button>
@@ -442,7 +440,7 @@ export function ResizePanel({ preset }: ResizePanelProps = {}) {
                     value={qualityPercent}
                     disabled={!formatOption.supportsQuality}
                     onChange={(e) => setQualityPercent(Number(e.target.value))}
-                    className="mt-3 w-full accent-[var(--accent)] disabled:opacity-40"
+                    className={rangeInputClass}
                   />
                   {!formatOption.supportsQuality ? (
                     <p className="mt-2 text-xs text-ink-soft/65">
@@ -453,17 +451,13 @@ export function ResizePanel({ preset }: ResizePanelProps = {}) {
               ) : (
                 <div>
                   <p className="text-sm font-semibold text-ink">Target size (KB)</p>
-                  <div className="mt-3 flex flex-wrap gap-2">
+                  <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
                     {KB_PRESETS.map((kb) => (
                       <button
                         key={kb}
                         type="button"
                         onClick={() => applyKbPreset(kb)}
-                        className={`focus-ring rounded-md px-3 py-1.5 text-sm font-medium transition ${
-                          targetKb === kb
-                            ? "bg-ink text-foam"
-                            : "bg-mist text-ink-soft hover:bg-mist/80"
-                        }`}
+                        className={chipClass(targetKb === kb)}
                       >
                         {kb} KB
                       </button>
@@ -473,9 +467,11 @@ export function ResizePanel({ preset }: ResizePanelProps = {}) {
                     <input
                       type="number"
                       min={1}
+                      step={1}
+                      inputMode="numeric"
                       value={customKb}
                       onChange={(e) => applyCustomKb(e.target.value)}
-                      className="focus-ring w-28 rounded-md border border-line bg-paper px-3 py-2 text-sm tabular-nums"
+                      className="focus-ring min-h-11 w-28 rounded-md border border-line bg-paper px-3 py-2 text-base tabular-nums disabled:opacity-40 sm:text-sm"
                       aria-label="Custom target size in KB"
                     />
                     <span className="text-sm text-ink-soft/70">KB</span>
@@ -528,7 +524,7 @@ export function ResizePanel({ preset }: ResizePanelProps = {}) {
                   </span>
                 </div>
                 {resultFilename ? (
-                  <p className="mt-2 truncate text-xs text-ink-soft/60" title={resultFilename}>
+                  <p className="mt-2  text-xs text-ink-soft/60" title={resultFilename}>
                     File: {resultFilename}
                   </p>
                 ) : null}
@@ -547,25 +543,21 @@ export function ResizePanel({ preset }: ResizePanelProps = {}) {
         ) : null}
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
+      <PanelActions>
         <button
           type="button"
           disabled={!resizeResult}
           onClick={() => downloadResult("resize")}
-          className="focus-ring inline-flex h-11 items-center justify-center rounded-md bg-ink px-5 text-sm font-semibold text-foam transition hover:bg-ink-soft disabled:cursor-not-allowed disabled:opacity-40"
+          className={panelPrimaryBtnClass}
         >
           Download
         </button>
         {file ? (
-          <button
-            type="button"
-            onClick={clear}
-            className="focus-ring h-11 rounded-md px-4 text-sm font-medium text-ink-soft transition hover:bg-mist"
-          >
+          <button type="button" onClick={clear} className={panelSecondaryBtnClass}>
             Start over
           </button>
         ) : null}
-      </div>
+      </PanelActions>
     </div>
   );
 }

@@ -2,6 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { ExportFormatSelect } from "@/components/image/ExportFormatSelect";
+import {
+  PanelActions,
+  modeTabClass,
+  panelPrimaryBtnClass,
+  panelSecondaryBtnClass,
+  panelSectionClass,
+  panelShellClass,
+  rangeInputClass,
+} from "@/components/image/PanelChrome";
 import { getExportFormat } from "@/lib/image/formats";
 import { formatBytes, useImageStore } from "@/stores/imageStore";
 import { usePreferencesStore } from "@/stores/preferencesStore";
@@ -57,8 +66,8 @@ export function FlipPanel({ preset }: FlipPanelProps = {}) {
   ]);
 
   return (
-    <div className="flex h-full flex-col justify-between gap-6">
-      <div className="space-y-5">
+    <div className={panelShellClass}>
+      <div className={panelSectionClass}>
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-soft/60">
             Flip
@@ -71,7 +80,7 @@ export function FlipPanel({ preset }: FlipPanelProps = {}) {
 
         <div>
           <p className="text-sm font-semibold text-ink">Direction</p>
-          <div className="mt-3 flex gap-2">
+          <div className="mt-3 flex gap-2 rounded-md bg-mist/70 p-1">
             {(
               [
                 { id: "horizontal" as const, label: "Horizontal" },
@@ -83,11 +92,7 @@ export function FlipPanel({ preset }: FlipPanelProps = {}) {
                 type="button"
                 disabled={!file}
                 onClick={() => setAxis(option.id)}
-                className={`focus-ring flex-1 rounded-md px-3 py-2 text-sm font-semibold transition disabled:opacity-40 ${
-                  axis === option.id
-                    ? "bg-ink text-foam"
-                    : "bg-mist text-ink-soft hover:bg-mist/80"
-                }`}
+                className={modeTabClass(axis === option.id)}
               >
                 {option.label}
               </button>
@@ -113,7 +118,7 @@ export function FlipPanel({ preset }: FlipPanelProps = {}) {
               value={qualityPercent}
               disabled={!file}
               onChange={(e) => setQualityPercent(Number(e.target.value))}
-              className="mt-3 w-full accent-[var(--accent)] disabled:opacity-40"
+              className={rangeInputClass}
             />
           </div>
         ) : null}
@@ -137,7 +142,7 @@ export function FlipPanel({ preset }: FlipPanelProps = {}) {
                   </span>
                 </div>
                 {resultFilename ? (
-                  <p className="mt-2 truncate text-xs text-ink-soft/60" title={resultFilename}>
+                  <p className="mt-2  text-xs text-ink-soft/60" title={resultFilename}>
                     File: {resultFilename}
                   </p>
                 ) : null}
@@ -160,25 +165,21 @@ export function FlipPanel({ preset }: FlipPanelProps = {}) {
         ) : null}
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
+      <PanelActions>
         <button
           type="button"
           disabled={!flipResult}
           onClick={() => downloadResult("flip")}
-          className="focus-ring inline-flex h-11 items-center justify-center rounded-md bg-ink px-5 text-sm font-semibold text-foam transition hover:bg-ink-soft disabled:cursor-not-allowed disabled:opacity-40"
+          className={panelPrimaryBtnClass}
         >
           Download
         </button>
         {file ? (
-          <button
-            type="button"
-            onClick={clear}
-            className="focus-ring h-11 rounded-md px-4 text-sm font-medium text-ink-soft transition hover:bg-mist"
-          >
+          <button type="button" onClick={clear} className={panelSecondaryBtnClass}>
             Start over
           </button>
         ) : null}
-      </div>
+      </PanelActions>
     </div>
   );
 }

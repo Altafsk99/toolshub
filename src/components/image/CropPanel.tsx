@@ -2,6 +2,17 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ExportFormatSelect } from "@/components/image/ExportFormatSelect";
+import {
+  PanelActions,
+  chipClass,
+  modeTabClass,
+  panelAccentBtnClass,
+  panelPrimaryBtnClass,
+  panelSecondaryBtnClass,
+  panelSectionClass,
+  panelShellClass,
+  rangeInputClass,
+} from "@/components/image/PanelChrome";
 import { getExportFormat } from "@/lib/image/formats";
 import { formatBytes, useImageStore } from "@/stores/imageStore";
 import { useCropUiStore } from "@/stores/cropUiStore";
@@ -137,8 +148,8 @@ export function CropPanel({ preset }: CropPanelProps = {}) {
   }, [aspect, shape]);
 
   return (
-    <div className="flex h-full flex-col justify-between gap-6">
-      <div className="space-y-5">
+    <div className={panelShellClass}>
+      <div className={panelSectionClass}>
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-soft/60">
             Crop
@@ -151,18 +162,14 @@ export function CropPanel({ preset }: CropPanelProps = {}) {
 
         <div>
           <p className="text-sm font-semibold text-ink">Aspect ratio</p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
             {ASPECT_PRESETS.map((option) => (
               <button
                 key={option.id}
                 type="button"
                 disabled={!file}
                 onClick={() => setAspect(option.id)}
-                className={`focus-ring rounded-md px-3 py-1.5 text-sm font-medium transition disabled:opacity-40 ${
-                  aspect === option.id
-                    ? "bg-ink text-foam"
-                    : "bg-mist text-ink-soft hover:bg-mist/80"
-                }`}
+                className={chipClass(aspect === option.id)}
               >
                 {option.label}
               </button>
@@ -172,7 +179,7 @@ export function CropPanel({ preset }: CropPanelProps = {}) {
 
         <div>
           <p className="text-sm font-semibold text-ink">Shape</p>
-          <div className="mt-3 flex gap-2">
+          <div className="mt-3 flex gap-2 rounded-md bg-mist/70 p-1">
             {(
               [
                 { id: "rect" as const, label: "Rectangle" },
@@ -184,11 +191,7 @@ export function CropPanel({ preset }: CropPanelProps = {}) {
                 type="button"
                 disabled={!file}
                 onClick={() => setShape(option.id)}
-                className={`focus-ring flex-1 rounded-md px-3 py-2 text-sm font-semibold transition disabled:opacity-40 ${
-                  shape === option.id
-                    ? "bg-ink text-foam"
-                    : "bg-mist text-ink-soft hover:bg-mist/80"
-                }`}
+                className={modeTabClass(shape === option.id)}
               >
                 {option.label}
               </button>
@@ -220,7 +223,7 @@ export function CropPanel({ preset }: CropPanelProps = {}) {
                 value={Math.round(focusX * 100)}
                 disabled={!file}
                 onChange={(e) => setFocusX(Number(e.target.value) / 100)}
-                className="mt-3 w-full accent-[var(--accent)] disabled:opacity-40"
+                className={rangeInputClass}
               />
             </div>
             <div>
@@ -240,7 +243,7 @@ export function CropPanel({ preset }: CropPanelProps = {}) {
                 value={Math.round(focusY * 100)}
                 disabled={!file}
                 onChange={(e) => setFocusY(Number(e.target.value) / 100)}
-                className="mt-3 w-full accent-[var(--accent)] disabled:opacity-40"
+                className={rangeInputClass}
               />
             </div>
           </>
@@ -273,7 +276,7 @@ export function CropPanel({ preset }: CropPanelProps = {}) {
               value={qualityPercent}
               disabled={!file}
               onChange={(e) => setQualityPercent(Number(e.target.value))}
-              className="mt-3 w-full accent-[var(--accent)] disabled:opacity-40"
+              className={rangeInputClass}
             />
           </div>
         ) : null}
@@ -295,7 +298,7 @@ export function CropPanel({ preset }: CropPanelProps = {}) {
                   </span>
                 </div>
                 {resultFilename ? (
-                  <p className="mt-2 truncate text-xs text-ink-soft/60" title={resultFilename}>
+                  <p className="mt-2  text-xs text-ink-soft/60" title={resultFilename}>
                     File: {resultFilename}
                   </p>
                 ) : null}
@@ -315,12 +318,12 @@ export function CropPanel({ preset }: CropPanelProps = {}) {
         ) : null}
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
+      <PanelActions>
         <button
           type="button"
           disabled={!canApply || isProcessing}
           onClick={applyCrop}
-          className="focus-ring inline-flex h-11 items-center justify-center rounded-md bg-accent px-5 text-sm font-semibold text-foam transition hover:bg-accent-deep disabled:cursor-not-allowed disabled:opacity-40"
+          className={panelAccentBtnClass}
         >
           {isProcessing ? "Cropping…" : "Apply crop"}
         </button>
@@ -328,20 +331,16 @@ export function CropPanel({ preset }: CropPanelProps = {}) {
           type="button"
           disabled={!cropResult}
           onClick={() => downloadResult("crop")}
-          className="focus-ring inline-flex h-11 items-center justify-center rounded-md bg-ink px-5 text-sm font-semibold text-foam transition hover:bg-ink-soft disabled:cursor-not-allowed disabled:opacity-40"
+          className={panelPrimaryBtnClass}
         >
           Download
         </button>
         {file ? (
-          <button
-            type="button"
-            onClick={clear}
-            className="focus-ring h-11 rounded-md px-4 text-sm font-medium text-ink-soft transition hover:bg-mist"
-          >
+          <button type="button" onClick={clear} className={panelSecondaryBtnClass}>
             Start over
           </button>
         ) : null}
-      </div>
+      </PanelActions>
     </div>
   );
 }

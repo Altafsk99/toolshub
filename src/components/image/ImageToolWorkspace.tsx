@@ -6,6 +6,11 @@ import { usePathname } from "next/navigation";
 import { DragDropUploader } from "@/components/image/DragDropUploader";
 import { DownloadButton } from "@/components/image/DownloadButton";
 import { ImagePreview } from "@/components/image/ImagePreview";
+import {
+  PanelActions,
+  panelPrimaryBtnClass,
+  panelSecondaryBtnClass,
+} from "@/components/image/PanelChrome";
 import { useImageStore } from "@/stores/imageStore";
 
 type ImageToolWorkspaceProps = {
@@ -28,26 +33,24 @@ export function ImageToolWorkspace({
   const activePath = useRef<string | null>(null);
 
   useEffect(() => {
-    // New tool route → drop any previous upload/result
     if (activePath.current !== pathname) {
       clear();
       activePath.current = pathname;
     }
 
     return () => {
-      // Leaving the tool page → clear so the next tool starts empty
       clear();
       activePath.current = null;
     };
   }, [pathname, clear]);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+    <div className="grid gap-4 sm:gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
       <div className="space-y-4">
         {!file ? <DragDropUploader /> : null}
         <ImagePreview />
       </div>
-      <div className="flex flex-col justify-between gap-6 rounded-[var(--radius-lg)] border border-line bg-paper/70 p-5">
+      <div className="flex flex-col justify-between gap-5 rounded-[var(--radius-lg)] border border-line bg-paper/70 p-4 sm:gap-6 sm:p-5">
         {toolbar ?? (
           <>
             <div>
@@ -58,18 +61,14 @@ export function ImageToolWorkspace({
                 Load an image, preview it, then export from the canvas engine.
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <DownloadButton label={downloadLabel} />
+            <PanelActions>
+              <DownloadButton label={downloadLabel} className={panelPrimaryBtnClass} />
               {file ? (
-                <button
-                  type="button"
-                  onClick={clear}
-                  className="focus-ring h-11 rounded-md px-4 text-sm font-medium text-ink-soft transition hover:bg-mist"
-                >
+                <button type="button" onClick={clear} className={panelSecondaryBtnClass}>
                   Start over
                 </button>
               ) : null}
-            </div>
+            </PanelActions>
           </>
         )}
       </div>
