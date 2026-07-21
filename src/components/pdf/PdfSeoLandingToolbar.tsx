@@ -1,5 +1,6 @@
 "use client";
 
+import { CompressPanel } from "@/components/pdf/CompressPanel";
 import { ImagesToPdfPanel } from "@/components/pdf/ImagesToPdfPanel";
 import { MergePanel } from "@/components/pdf/MergePanel";
 import { RotatePanel } from "@/components/pdf/RotatePanel";
@@ -19,6 +20,9 @@ export function PdfSeoLandingToolbar({ preset }: PdfSeoLandingToolbarProps) {
   }
   if (preset.tool === "rotate-pdf") {
     return <RotatePanel preset={preset} />;
+  }
+  if (preset.tool === "compress-pdf") {
+    return <CompressPanel preset={preset} />;
   }
   return <ImagesToPdfPanel preset={preset} />;
 }

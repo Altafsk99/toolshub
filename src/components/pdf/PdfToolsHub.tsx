@@ -35,8 +35,8 @@ export function PdfToolsHub() {
             PDF Tools
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-ink-soft/80">
-            Merge, split, rotate, and convert images to PDF — all in your browser. No upload,
-            no account.
+            Merge, compress, split, rotate, and convert images to PDF — all in your browser. No
+            upload, no account.
           </p>
         </motion.header>
 

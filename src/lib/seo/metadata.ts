@@ -152,6 +152,11 @@ export function buildHomeItemListJsonLd() {
       description: "Set dimensions, fit modes, and optional compression.",
     },
     {
+      name: "Compress PDF",
+      path: "/tools/pdf/compress",
+      description: "Reduce PDF file size with live preview.",
+    },
+    {
       name: "Merge PDF",
       path: "/tools/pdf/merge",
       description: "Combine multiple PDF files with live preview.",

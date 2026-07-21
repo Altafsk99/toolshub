@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { downloadBlob } from "@/lib/image/engine";
+import { compressPdf } from "@/lib/pdf/compress";
 import {
   formatBytes,
   imagesToPdf,
@@ -13,6 +14,7 @@ import {
 import { clearPdfPreviewCache, isPdfPreviewable } from "@/lib/pdf/preview";
 import type {
   ImagePageSize,
+  PdfCompressLevel,
   PdfFileMeta,
   PdfImageMeta,
   RotateAngle,
@@ -44,6 +46,8 @@ type PdfStore = {
   resultBlob: Blob | null;
   resultFilename: string | null;
   resultPreviewUrl: string | null;
+  compressOriginalBytes: number | null;
+  compressOutputBytes: number | null;
   isProcessing: boolean;
   isPreviewing: boolean;
   error: string | null;
@@ -68,6 +72,7 @@ type PdfStore = {
     opts?: PdfRunOptions,
   ) => Promise<void>;
   runImagesToPdf: (pageSize: ImagePageSize, opts?: PdfRunOptions) => Promise<void>;
+  runCompress: (level: PdfCompressLevel, opts?: PdfRunOptions) => Promise<void>;
   downloadResult: () => void;
   clear: () => void;
 };
@@ -76,6 +81,7 @@ let mergeToken = 0;
 let splitToken = 0;
 let rotateToken = 0;
 let imagesToPdfToken = 0;
+let compressToken = 0;
 
 function newId(): string {
   return crypto.randomUUID();
@@ -113,7 +119,14 @@ function applyBinaryResult(
   state: Pick<PdfStore, "resultPreviewUrl">,
   blob: Blob,
   filename: string,
-): Pick<PdfStore, "resultBlob" | "resultFilename" | "resultPreviewUrl" | "isProcessing" | "isPreviewing"> {
+): Pick<
+  PdfStore,
+  | "resultBlob"
+  | "resultFilename"
+  | "resultPreviewUrl"
+  | "isProcessing"
+  | "isPreviewing"
+> {
   revokeResultPreview(state.resultPreviewUrl);
   return {
     resultBlob: blob,
@@ -126,12 +139,22 @@ function applyBinaryResult(
 
 function clearBinaryResult(
   state: Pick<PdfStore, "resultPreviewUrl">,
-): Pick<PdfStore, "resultBlob" | "resultFilename" | "resultPreviewUrl" | "isPreviewing"> {
+): Pick<
+  PdfStore,
+  | "resultBlob"
+  | "resultFilename"
+  | "resultPreviewUrl"
+  | "isPreviewing"
+  | "compressOriginalBytes"
+  | "compressOutputBytes"
+> {
   return {
     resultBlob: null,
     resultFilename: null,
     resultPreviewUrl: revokeResultPreview(state.resultPreviewUrl),
     isPreviewing: false,
+    compressOriginalBytes: null,
+    compressOutputBytes: null,
   };
 }
 
@@ -142,6 +165,8 @@ export const usePdfStore = create<PdfStore>((set, get) => ({
   resultBlob: null,
   resultFilename: null,
   resultPreviewUrl: null,
+  compressOriginalBytes: null,
+  compressOutputBytes: null,
   isProcessing: false,
   isPreviewing: false,
   error: null,
@@ -397,6 +422,8 @@ export const usePdfStore = create<PdfStore>((set, get) => ({
       if (token !== imagesToPdfToken) return;
       set((s) => ({
         ...applyBinaryResult(s, result.blob, result.filename),
+        compressOriginalBytes: null,
+        compressOutputBytes: null,
       }));
     } catch (err) {
       if (token !== imagesToPdfToken) return;
@@ -404,6 +431,40 @@ export const usePdfStore = create<PdfStore>((set, get) => ({
         isProcessing: false,
         isPreviewing: false,
         error: err instanceof Error ? err.message : "Could not build PDF.",
+      });
+    }
+  },
+
+  runCompress: async (level, opts) => {
+    const silent = Boolean(opts?.silent);
+    const token = ++compressToken;
+    const { singlePdf } = get();
+
+    if (!singlePdf) {
+      if (!silent) set({ error: "Upload a PDF first." });
+      return;
+    }
+
+    set(
+      silent
+        ? { isPreviewing: true, error: null }
+        : { isProcessing: true, isPreviewing: false, error: null },
+    );
+
+    try {
+      const result = await compressPdf(singlePdf.file, level);
+      if (token !== compressToken) return;
+      set((s) => ({
+        ...applyBinaryResult(s, result.blob, result.filename),
+        compressOriginalBytes: result.originalBytes,
+        compressOutputBytes: result.outputBytes,
+      }));
+    } catch (err) {
+      if (token !== compressToken) return;
+      set({
+        isProcessing: false,
+        isPreviewing: false,
+        error: err instanceof Error ? err.message : "Compress failed.",
       });
     }
   },
@@ -419,6 +480,7 @@ export const usePdfStore = create<PdfStore>((set, get) => ({
     splitToken += 1;
     rotateToken += 1;
     imagesToPdfToken += 1;
+    compressToken += 1;
     const { imageFiles, resultPreviewUrl } = get();
     revokeImagePreviews(imageFiles);
     revokeResultPreview(resultPreviewUrl);
@@ -430,6 +492,8 @@ export const usePdfStore = create<PdfStore>((set, get) => ({
       resultBlob: null,
       resultFilename: null,
       resultPreviewUrl: null,
+      compressOriginalBytes: null,
+      compressOutputBytes: null,
       isProcessing: false,
       isPreviewing: false,
       error: null,

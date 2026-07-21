@@ -12,6 +12,7 @@ const imageLinks = [
 
 const pdfLinks = [
   { href: "/tools/pdf", label: "All PDF tools" },
+  { href: "/tools/pdf/compress", label: "Compress" },
   { href: "/tools/pdf/merge", label: "Merge" },
   { href: "/tools/pdf/split", label: "Split" },
   { href: "/tools/pdf/rotate", label: "Rotate" },

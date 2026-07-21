@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+// import { AdSlot } from "@/components/seo/AdSlot"; // AdSense paused — re-enable later
 import { FaqSection, HowToSection, RelatedTools } from "@/components/seo/ToolSections";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
@@ -6,8 +7,8 @@ import {
   buildFaqJsonLd,
   buildHowToJsonLd,
   buildWebApplicationJsonLd,
+  toolPagePath,
 } from "@/lib/seo/metadata";
-import { toolPagePath } from "@/lib/seo/metadata";
 import type { ToolCategory, ToolPageContent } from "@/types/seo";
 
 const categoryLabels: Record<ToolCategory, string> = {
@@ -23,6 +24,7 @@ type ToolPageTemplateProps = {
 export function ToolPageTemplate({ content, children }: ToolPageTemplateProps) {
   const categoryLabel = categoryLabels[content.category];
   const categoryPath = `/tools/${content.category}`;
+  // const toolAdSlot = process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOOL;
 
   return (
     <div className="relative mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-14">
@@ -50,6 +52,14 @@ export function ToolPageTemplate({ content, children }: ToolPageTemplateProps) {
       </header>
 
       <div className="mt-6 sm:mt-10">{children}</div>
+
+      {/* AdSense paused — uncomment when ready to monetize
+      <AdSlot
+        slot={toolAdSlot || "0000000000"}
+        className="mx-auto mt-10 max-w-3xl"
+        format="horizontal"
+      />
+      */}
 
       <HowToSection steps={content.howTo} />
       <FaqSection faqs={content.faqs} />

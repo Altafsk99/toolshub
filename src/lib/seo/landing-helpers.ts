@@ -80,7 +80,7 @@ export function pdfPrivacyFaqs(extra: FaqItem[] = []): FaqItem[] {
 }
 
 export function pdfParentToolLink(
-  tool: "merge-pdf" | "split-pdf" | "rotate-pdf" | "images-to-pdf",
+  tool: "merge-pdf" | "split-pdf" | "rotate-pdf" | "images-to-pdf" | "compress-pdf",
 ): RelatedTool {
   const map = {
     "merge-pdf": {
@@ -103,6 +103,11 @@ export function pdfParentToolLink(
       title: "Images to PDF",
       description: "Convert JPG, PNG, and WebP into one PDF.",
     },
+    "compress-pdf": {
+      href: "/tools/pdf/compress",
+      title: "Compress PDF",
+      description: "Shrink PDF file size with live preview.",
+    },
   } as const;
   return map[tool];
 }
@@ -111,7 +116,7 @@ export function pdfHubLink(): RelatedTool {
   return {
     href: "/tools/pdf",
     title: "All PDF Tools",
-    description: "Browse merge, split, rotate, and images-to-PDF tools.",
+    description: "Browse merge, compress, split, rotate, and images-to-PDF tools.",
   };
 }
 

@@ -97,6 +97,11 @@ export type ImagesToPdfLandingPreset = {
   pageSize?: "fit" | "a4" | "letter";
 };
 
+export type CompressPdfLandingPreset = {
+  tool: "compress-pdf";
+  level?: "high" | "balanced" | "small";
+};
+
 export type SeoLandingPreset =
   | CompressLandingPreset
   | ResizeLandingPreset
@@ -109,7 +114,8 @@ export type PdfSeoLandingPreset =
   | MergePdfLandingPreset
   | SplitPdfLandingPreset
   | RotatePdfLandingPreset
-  | ImagesToPdfLandingPreset;
+  | ImagesToPdfLandingPreset
+  | CompressPdfLandingPreset;
 
 export type SeoLandingPage = ToolPageContent & {
   preset: SeoLandingPreset;

@@ -369,11 +369,85 @@ const imagesToPdfLandings: PdfSeoLandingPage[] = [
   },
 ];
 
+const compressLandings: PdfSeoLandingPage[] = [
+  {
+    slug: "compress-pdf-online",
+    category: "pdf",
+    title: "Compress PDF Online — Free, No Upload | PrivyTool",
+    description:
+      "Compress PDF files in your browser. Reduce size for email and forms — free, private, no upload.",
+    h1: "Compress PDF Online",
+    intro:
+      "Shrink PDF file size locally with live preview. PrivyTool compresses in your browser — nothing is uploaded.",
+    keywords: ["compress pdf online", "pdf compressor free", "reduce pdf size online"],
+    preset: { tool: "compress-pdf", level: "balanced" },
+    parentHref: "/tools/pdf/compress",
+    howTo: [
+      { name: "Add a PDF", text: "Drop your file from your device." },
+      { name: "Pick a level", text: "Balanced works for most email attachments." },
+      { name: "Download", text: "Save when the compressed size looks right." },
+    ],
+    faqs: pdfPrivacyFaqs([
+      {
+        question: "Does compression hurt quality?",
+        answer:
+          "Pages are re-encoded as images. High quality keeps more detail; Smallest prioritizes size.",
+      },
+    ]),
+    related: [],
+  },
+  {
+    slug: "reduce-pdf-file-size",
+    category: "pdf",
+    title: "Reduce PDF File Size — Free Browser Tool | PrivyTool",
+    description:
+      "Reduce PDF file size without uploading. Free on-device compressor with High, Balanced, and Smallest modes.",
+    h1: "Reduce PDF File Size",
+    intro:
+      "Make large PDFs small enough for portals and email. Processing stays on your device with a live size comparison.",
+    keywords: ["reduce pdf file size", "make pdf smaller", "shrink pdf online"],
+    preset: { tool: "compress-pdf", level: "small" },
+    parentHref: "/tools/pdf/compress",
+    howTo: [
+      { name: "Upload PDF", text: "Select the file you want to shrink." },
+      { name: "Choose Smallest", text: "Use the strongest level when forms reject large files." },
+      { name: "Export", text: "Download the reduced PDF." },
+    ],
+    faqs: pdfPrivacyFaqs(),
+    related: [],
+  },
+  {
+    slug: "compress-pdf-for-email",
+    category: "pdf",
+    title: "Compress PDF for Email — Free, Private | PrivyTool",
+    description:
+      "Compress a PDF for email attachments in your browser. No upload — shrink files so they send reliably.",
+    h1: "Compress PDF for Email",
+    intro:
+      "Email providers often reject large attachments. Compress locally, preview the result, then attach the smaller file.",
+    keywords: [
+      "compress pdf for email",
+      "pdf too large for email",
+      "shrink pdf attachment",
+    ],
+    preset: { tool: "compress-pdf", level: "balanced" },
+    parentHref: "/tools/pdf/compress",
+    howTo: [
+      { name: "Add the PDF", text: "Open the attachment you need to send." },
+      { name: "Use Balanced", text: "Good size vs readability for most emails." },
+      { name: "Download and attach", text: "Save the compressed file, then attach it to your message." },
+    ],
+    faqs: pdfPrivacyFaqs(),
+    related: [],
+  },
+];
+
 export const pdfSeoLandingPagesBase: PdfSeoLandingPage[] = [
   ...mergeLandings,
   ...splitLandings,
   ...rotateLandings,
   ...imagesToPdfLandings,
+  ...compressLandings,
 ];
 
 const pdfRelatedMap: Record<string, string[]> = {
@@ -394,6 +468,9 @@ const pdfRelatedMap: Record<string, string[]> = {
   "bulk-images-to-pdf": ["images-to-pdf-online", "jpg-to-pdf"],
   "webp-to-pdf": ["png-to-pdf", "jpg-to-pdf"],
   "photos-to-pdf": ["images-to-pdf-online", "bulk-images-to-pdf"],
+  "compress-pdf-online": ["reduce-pdf-file-size", "compress-pdf-for-email"],
+  "reduce-pdf-file-size": ["compress-pdf-online", "compress-pdf-for-email"],
+  "compress-pdf-for-email": ["compress-pdf-online", "reduce-pdf-file-size"],
 };
 
 function withPdfRelated(page: PdfSeoLandingPage, relatedSlugs: string[]): PdfSeoLandingPage {
@@ -414,6 +491,7 @@ export const pdfSeoLandingPages: PdfSeoLandingPage[] = pdfSeoLandingPagesBase.ma
 
 export const featuredPdfSeoLandingSlugs = [
   "merge-pdf-online",
+  "compress-pdf-online",
   "split-pdf-online",
   "rotate-pdf-online",
   "jpg-to-pdf",

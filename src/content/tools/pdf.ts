@@ -227,9 +227,78 @@ export const imagesToPdfToolContent: ToolPageContent = {
   ],
 };
 
+export const compressPdfToolContent: ToolPageContent = {
+  slug: "compress",
+  category: "pdf",
+  title: "Compress PDF Online — Free, Private, No Upload | PrivyTool",
+  description:
+    "Reduce PDF file size in your browser. Free, private PDF compressor with live preview — no upload required.",
+  h1: "Compress PDF",
+  intro:
+    "Shrink large PDFs for email and forms without uploading. PrivyTool compresses pages locally in your browser with a live size comparison.",
+  keywords: [
+    "compress pdf",
+    "reduce pdf size",
+    "pdf compressor online",
+    "shrink pdf free",
+    "compress pdf no upload",
+  ],
+  howTo: [
+    {
+      name: "Add your PDF",
+      text: "Drop a PDF from your device. It stays in your browser only.",
+    },
+    {
+      name: "Choose compression level",
+      text: "Pick High quality, Balanced, or Smallest. Preview and file size update live.",
+    },
+    {
+      name: "Download",
+      text: "Save the compressed PDF when the size looks right.",
+    },
+  ],
+  faqs: [
+    pdfPrivacyFaq,
+    {
+      question: "Will text stay sharp?",
+      answer:
+        "Compression re-encodes pages as images, so tiny text can look softer. Use High quality for readable documents, or Smallest when size matters most.",
+    },
+    {
+      question: "Why didn’t my PDF get smaller?",
+      answer:
+        "Some PDFs are already heavily compressed. Try Smallest, or split and compress sections separately.",
+    },
+    pdfFreeFaq,
+  ],
+  related: [
+    {
+      href: "/tools/pdf/merge",
+      title: "Merge PDF",
+      description: "Combine PDFs before or after compressing.",
+    },
+    {
+      href: "/tools/pdf/split",
+      title: "Split PDF",
+      description: "Extract pages to shrink what you keep.",
+    },
+    {
+      href: "/tools/image/compress",
+      title: "Compress Image",
+      description: "Shrink images before converting to PDF.",
+    },
+    {
+      href: "/tools/pdf",
+      title: "All PDF Tools",
+      description: "Browse the full privacy-first PDF toolkit.",
+    },
+  ],
+};
+
 export const pdfToolPages = [
   mergePdfToolContent,
   splitPdfToolContent,
   rotatePdfToolContent,
   imagesToPdfToolContent,
+  compressPdfToolContent,
 ];

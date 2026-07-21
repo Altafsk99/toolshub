@@ -11,11 +11,12 @@ import {
 export const metadata: Metadata = buildPageMetadata({
   title: "PDF Tools — Merge, Split, Rotate & Images to PDF | PrivyTool",
   description:
-    "Free privacy-first PDF tools that run in your browser. Merge, split, rotate PDFs, and convert images to PDF — no upload required.",
+    "Free privacy-first PDF tools that run in your browser. Merge, compress, split, rotate PDFs, and convert images to PDF — no upload required.",
   path: "/tools/pdf",
   keywords: [
     "pdf tools",
     "merge pdf online",
+    "compress pdf",
     "split pdf",
     "rotate pdf",
     "images to pdf",

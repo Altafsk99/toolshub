@@ -4,8 +4,13 @@ import Script from "next/script";
 
 const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 const clarityId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID;
+// AdSense paused — re-enable with AdSlot in ToolPageTemplate
+// const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
+// const adsenseEnabled = process.env.NEXT_PUBLIC_ADSENSE_ENABLED === "true";
 
 export function Analytics() {
+  // const loadAds = Boolean(adsenseClient && adsenseEnabled);
+
   if (!gaId && !clarityId) return null;
 
   return (
@@ -38,6 +43,18 @@ export function Analytics() {
           `}
         </Script>
       ) : null}
+
+      {/* AdSense paused
+      {loadAds ? (
+        <Script
+          id="adsense-loader"
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      ) : null}
+      */}
     </>
   );
 }

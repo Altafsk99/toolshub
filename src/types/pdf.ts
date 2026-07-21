@@ -24,6 +24,8 @@ export type SplitMode = "every-page" | "range" | "extract";
 
 export type ImagePageSize = "fit" | "a4" | "letter";
 
+export type PdfCompressLevel = "high" | "balanced" | "small";
+
 export type PdfProcessResult = {
   blob: Blob;
   filename: string;

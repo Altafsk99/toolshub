@@ -1,4 +1,5 @@
 import {
+  CompressPdfIcon,
   ImagesToPdfIcon,
   MergeIcon,
   RotatePdfIcon,
@@ -24,6 +25,15 @@ export const pdfTools: PdfToolItem[] = [
     tag: "Popular",
     icon: MergeIcon,
     tint: "from-accent/12 to-accent-bright/5",
+  },
+  {
+    href: "/tools/pdf/compress",
+    title: "Compress",
+    subtitle: "Compress PDF",
+    description: "Reduce PDF file size in your browser with live size comparison.",
+    tag: "New",
+    icon: CompressPdfIcon,
+    tint: "from-[#8fb7ff]/16 to-accent/5",
   },
   {
     href: "/tools/pdf/split",
