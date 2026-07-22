@@ -43,6 +43,7 @@ export function ScanPanel() {
   const clearAll = useScanStore((s) => s.clearAll);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -85,10 +86,45 @@ export function ScanPanel() {
     void setSourceFile(file);
   };
 
+  /** Phones: native camera app via capture. Desktop: in-page getUserMedia preview. */
+  const prefersNativeCamera = () => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(pointer: coarse)").matches || /Mobi|Android|iPhone/i.test(navigator.userAgent);
+  };
+
+  const cameraErrorMessage = (err: unknown) => {
+    const name = err instanceof DOMException ? err.name : "";
+    if (name === "NotAllowedError" || name === "PermissionDeniedError") {
+      return "Camera permission is blocked. Allow camera for this site in browser settings, or upload a photo.";
+    }
+    if (name === "NotFoundError" || name === "DevicesNotFoundError") {
+      return "No camera was found on this device. Upload a photo instead.";
+    }
+    if (name === "NotReadableError" || name === "TrackStartError") {
+      return "Camera is in use by another app. Close it and try again, or upload a photo.";
+    }
+    if (name === "SecurityError") {
+      return "Camera is blocked by site security settings. Upload a photo, or try again after the latest deploy.";
+    }
+    return "Could not access the camera. Allow permission in the browser, or upload a photo instead.";
+  };
+
   const startCamera = async () => {
     setCameraError(null);
+
+    // Mobile: open the system camera (works even when in-page webcam is flaky).
+    if (prefersNativeCamera()) {
+      cameraInputRef.current?.click();
+      return;
+    }
+
+    if (!window.isSecureContext) {
+      setCameraError("Camera needs HTTPS. Upload a photo instead.");
+      return;
+    }
+
     if (!navigator.mediaDevices?.getUserMedia) {
-      setCameraError("Camera is not supported in this browser. Upload a photo instead.");
+      cameraInputRef.current?.click();
       return;
     }
 
@@ -105,23 +141,24 @@ export function ScanPanel() {
             height: { ideal: 1080 },
           },
         });
-      } catch {
-        stream = await navigator.mediaDevices.getUserMedia({
-          audio: false,
-          video: true,
-        });
+      } catch (firstErr) {
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            audio: false,
+            video: true,
+          });
+        } catch {
+          throw firstErr;
+        }
       }
 
       streamRef.current = stream;
       setCameraStarting(false);
-    } catch {
+    } catch (err) {
       stopCamera();
-      setCameraError(
-        "Could not access the camera. Allow permission in the browser, or upload a photo instead.",
-      );
+      setCameraError(cameraErrorMessage(err));
     }
   };
-
   useEffect(() => {
     if (!cameraOpen || cameraStarting) return;
     const stream = streamRef.current;
@@ -243,6 +280,22 @@ export function ScanPanel() {
               accept="image/*"
               className="sr-only"
               onChange={(e) => onFile(e.target.files)}
+            />
+            <input
+              ref={cameraInputRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              className="sr-only"
+              onChange={(e) => {
+                if (!e.target.files?.length) {
+                  setCameraError("Camera capture was cancelled.");
+                  e.target.value = "";
+                  return;
+                }
+                onFile(e.target.files);
+                e.target.value = "";
+              }}
             />
           </div>
         ) : (
