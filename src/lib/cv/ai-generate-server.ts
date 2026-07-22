@@ -130,7 +130,9 @@ function buildPrompt(
 async function callOpenAi(env: CvAiEnv, prompt: string): Promise<Partial<CvData>> {
   const apiKey = env.OPENAI_API_KEY;
   if (!apiKey) {
-    throw new Error("OPENAI_API_KEY is not configured. Add it to .env.local or .dev.vars.");
+    throw new Error(
+      "OPENAI_API_KEY is not configured. Local: add it to .dev.vars. Cloudflare: Settings → Variables (Preview + Production), then Retry deployment.",
+    );
   }
 
   const baseUrl = (env.OPENAI_BASE_URL ?? "https://api.openai.com/v1").replace(/\/$/, "");
