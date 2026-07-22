@@ -10,6 +10,7 @@
     "start": "serve out -l 3000",
     "preview": "npm run build && serve out -l 3000",
     "pages:dev": "npm run build && npx wrangler pages dev out --compatibility-date=2024-11-01",
+    "deploy:cf": "npm run build && npx wrangler deploy",
     "lint": "eslint"
   },
   "dependencies": {
