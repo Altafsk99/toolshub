@@ -14,6 +14,7 @@ import type { ToolCategory, ToolPageContent } from "@/types/seo";
 const categoryLabels: Record<ToolCategory, string> = {
   image: "Image Tools",
   pdf: "PDF Tools",
+  cv: "CV Tools",
 };
 
 type ToolPageTemplateProps = {

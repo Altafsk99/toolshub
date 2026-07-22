@@ -14,7 +14,7 @@ export type RelatedTool = {
   description: string;
 };
 
-export type ToolCategory = "image" | "pdf";
+export type ToolCategory = "image" | "pdf" | "cv";
 
 export type ToolPageContent = {
   slug: string;

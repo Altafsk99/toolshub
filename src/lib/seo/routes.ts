@@ -20,7 +20,7 @@ export type SitemapEntry = {
 };
 
 /** Routes that should not appear in sitemap or search indexes */
-export const NOINDEX_PATHS = ["/tools/image/history"] as const;
+export const NOINDEX_PATHS = ["/tools/image/history", "/tools/cv"] as const;
 
 export const imageToolPages: ToolPageContent[] = [
   compressToolContent,

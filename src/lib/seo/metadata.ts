@@ -47,12 +47,16 @@ export function toolPagePath(content: ToolPageContent): string {
   return `/tools/${content.category}/${content.slug}`;
 }
 
-export function buildToolMetadata(content: ToolPageContent): Metadata {
+export function buildToolMetadata(
+  content: ToolPageContent,
+  options?: { noIndex?: boolean },
+): Metadata {
   return buildPageMetadata({
     title: content.title,
     description: content.description,
     path: toolPagePath(content),
     keywords: content.keywords,
+    noIndex: options?.noIndex,
   });
 }
 
