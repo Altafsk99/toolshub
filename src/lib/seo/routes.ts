@@ -37,6 +37,7 @@ export const publicSitemapEntries: SitemapEntry[] = [
   { path: "/", priority: 1, changeFrequency: "weekly" },
   { path: "/tools/image", priority: 0.9, changeFrequency: "weekly" },
   { path: "/tools/pdf", priority: 0.9, changeFrequency: "weekly" },
+  { path: "/guide", priority: 0.75, changeFrequency: "monthly" },
   { path: "/privacy", priority: 0.3, changeFrequency: "monthly" },
   { path: "/terms", priority: 0.3, changeFrequency: "monthly" },
   { path: "/blog", priority: 0.7, changeFrequency: "weekly" },

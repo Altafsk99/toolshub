@@ -21,6 +21,7 @@ const pdfLinks = [
 ];
 
 const moreLinks = [
+  { href: "/guide", label: "How to use" },
   { href: "/blog", label: "Blog" },
   { href: "/tools/image/history", label: "History" },
   { href: "/privacy", label: "Privacy Policy" },
