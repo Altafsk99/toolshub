@@ -9,25 +9,38 @@ const ACCEPT =
 
 type DragDropUploaderProps = {
   onFileSelected?: (file: File) => void;
+  /** Allow selecting multiple images (compress batch). Default false. */
+  multiple?: boolean;
 };
 
-export function DragDropUploader({ onFileSelected }: DragDropUploaderProps) {
+export function DragDropUploader({
+  onFileSelected,
+  multiple = false,
+}: DragDropUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const setFile = useImageStore((s) => s.setFile);
+  const setFiles = useImageStore((s) => s.setFiles);
   const error = useImageStore((s) => s.error);
 
   const handleFiles = useCallback(
     async (files: FileList | null) => {
-      const file = files?.[0];
-      if (!file) return;
-      if (!file.type.startsWith("image/")) {
+      if (!files?.length) return;
+
+      const images = Array.from(files).filter((file) => file.type.startsWith("image/"));
+      if (images.length === 0) return;
+
+      if (multiple) {
+        await setFiles(images);
+        if (images.length === 1) onFileSelected?.(images[0]!);
         return;
       }
+
+      const file = images[0]!;
       await setFile(file);
       onFileSelected?.(file);
     },
-    [onFileSelected, setFile],
+    [multiple, onFileSelected, setFile, setFiles],
   );
 
   return (
@@ -66,14 +79,15 @@ export function DragDropUploader({ onFileSelected }: DragDropUploaderProps) {
           className="pointer-events-none absolute -right-8 -top-10 h-40 w-40 rounded-full bg-accent/10 blur-2xl transition group-hover:bg-accent/20"
         />
         <p className="font-display text-xl font-semibold text-ink sm:text-3xl">
-          Drop an image
+          {multiple ? "Drop images" : "Drop an image"}
         </p>
         <p className="mt-2 max-w-md text-sm leading-relaxed text-ink-soft/80">
-          Or tap to browse. JPG, PNG, and WebP — processed entirely in your browser.
-          Nothing is uploaded.
+          {multiple
+            ? "Or tap to browse. One image for live preview, or several to compress into a ZIP — all in your browser."
+            : "Or tap to browse. JPG, PNG, and WebP — processed entirely in your browser. Nothing is uploaded."}
         </p>
         <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-accent-deep">
-          Choose file
+          {multiple ? "Choose files" : "Choose file"}
           <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
             →
           </span>
@@ -82,8 +96,12 @@ export function DragDropUploader({ onFileSelected }: DragDropUploaderProps) {
           ref={inputRef}
           type="file"
           accept={ACCEPT}
+          multiple={multiple}
           className="sr-only"
-          onChange={(e) => void handleFiles(e.target.files)}
+          onChange={(e) => {
+            void handleFiles(e.target.files);
+            e.target.value = "";
+          }}
         />
       </motion.button>
       {error ? (

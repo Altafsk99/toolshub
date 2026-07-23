@@ -8,7 +8,7 @@ export const compressToolContent: ToolPageContent = {
     "Compress JPG, PNG, and WebP images in your browser. Fast, private, and free — your files never leave your device.",
   h1: "Compress Image",
   intro:
-    "Shrink image file size without uploading to a server. PrivyTool runs compression locally in your browser for speed and privacy.",
+    "Shrink one image with live preview, or drop several and download a ZIP — all without uploading to a server. Compression runs locally in your browser.",
   keywords: [
     "compress image",
     "compress jpg",

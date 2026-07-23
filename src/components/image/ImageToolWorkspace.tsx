@@ -16,6 +16,8 @@ import { useImageStore } from "@/stores/imageStore";
 type ImageToolWorkspaceProps = {
   downloadLabel?: string;
   toolbar?: ReactNode;
+  /** Multi-file pick (compress batch only). */
+  allowMultiple?: boolean;
 };
 
 /**
@@ -26,11 +28,15 @@ type ImageToolWorkspaceProps = {
 export function ImageToolWorkspace({
   downloadLabel = "Download image",
   toolbar,
+  allowMultiple = false,
 }: ImageToolWorkspaceProps) {
   const pathname = usePathname();
   const file = useImageStore((s) => s.file);
+  const batchFiles = useImageStore((s) => s.batchFiles);
   const clear = useImageStore((s) => s.clear);
   const activePath = useRef<string | null>(null);
+  const hasSession = Boolean(file) || batchFiles.length > 0;
+  const isBatch = batchFiles.length > 1;
 
   useEffect(() => {
     if (activePath.current !== pathname) {
@@ -47,8 +53,20 @@ export function ImageToolWorkspace({
   return (
     <div className="grid gap-4 sm:gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
       <div className="space-y-4">
-        {!file ? <DragDropUploader /> : null}
-        <ImagePreview />
+        {!hasSession ? <DragDropUploader multiple={allowMultiple} /> : null}
+        {isBatch ? (
+          <div className="rounded-[var(--radius-lg)] border border-line bg-paper/80 px-4 py-6 sm:px-5">
+            <p className="font-display text-xl font-semibold text-ink sm:text-2xl">
+              {batchFiles.length} images ready
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-ink-soft/80">
+              The same quality, target size, and format apply to every file. Compress
+              all, then download one ZIP — still entirely in your browser.
+            </p>
+          </div>
+        ) : (
+          <ImagePreview />
+        )}
       </div>
       <div className="flex flex-col justify-between gap-5 rounded-[var(--radius-lg)] border border-line bg-paper/70 p-4 sm:gap-6 sm:p-5">
         {toolbar ?? (
@@ -63,7 +81,7 @@ export function ImageToolWorkspace({
             </div>
             <PanelActions>
               <DownloadButton label={downloadLabel} className={panelPrimaryBtnClass} />
-              {file ? (
+              {hasSession ? (
                 <button type="button" onClick={clear} className={panelSecondaryBtnClass}>
                   Start over
                 </button>

@@ -28,15 +28,24 @@ type CompressionPanelProps = {
 export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
   const file = useImageStore((s) => s.file);
   const meta = useImageStore((s) => s.meta);
+  const batchFiles = useImageStore((s) => s.batchFiles);
+  const batchResults = useImageStore((s) => s.batchResults);
+  const batchProgress = useImageStore((s) => s.batchProgress);
+  const isProcessing = useImageStore((s) => s.isProcessing);
   const isPreviewing = useImageStore((s) => s.isPreviewing);
   const compressResult = useImageStore((s) => s.compressResult);
   const resultFilename = useImageStore((s) => s.resultFilename);
   const error = useImageStore((s) => s.error);
   const runCompress = useImageStore((s) => s.runCompress);
+  const runCompressBatch = useImageStore((s) => s.runCompressBatch);
+  const downloadBatchZip = useImageStore((s) => s.downloadBatchZip);
   const downloadResult = useImageStore((s) => s.downloadResult);
   const clear = useImageStore((s) => s.clear);
   const exportFormatId = usePreferencesStore((s) => s.exportFormatId);
   const setExportFormatId = usePreferencesStore((s) => s.setExportFormatId);
+
+  const isBatch = batchFiles.length > 1;
+  const hasInput = Boolean(file) || isBatch;
 
   const [mode, setMode] = useState<CompressMode>(preset?.mode ?? "quality");
   const [qualityPercent, setQualityPercent] = useState(preset?.qualityPercent ?? 70);
@@ -50,6 +59,17 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
   const formatOption = getExportFormat(activeFormatId);
   const debounceMs = mode === "target" ? 320 : 140;
 
+  const compressOptions = useMemo(
+    () => ({
+      mode,
+      qualityPercent,
+      targetKb: mode === "target" ? targetKb : undefined,
+      format: formatOption.mime,
+      formatId: activeFormatId,
+    }),
+    [mode, qualityPercent, targetKb, formatOption.mime, activeFormatId],
+  );
+
   const setActiveFormat = (id: ExportFormatId) => {
     if (preset?.formatId) {
       setLocalFormatId(id);
@@ -59,33 +79,23 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
   };
 
   useEffect(() => {
-    if (!file || !meta) return;
+    if (isBatch || !file || !meta) return;
     if (mode === "target" && (!Number.isFinite(targetKb) || targetKb < 1)) return;
 
     const timer = window.setTimeout(() => {
-      void runCompress(
-        {
-          mode,
-          qualityPercent,
-          targetKb: mode === "target" ? targetKb : undefined,
-          format: formatOption.mime,
-          formatId: activeFormatId,
-        },
-        { silent: true },
-      );
+      void runCompress(compressOptions, { silent: true });
     }, debounceMs);
 
     return () => window.clearTimeout(timer);
   }, [
+    isBatch,
     file,
     meta,
-    mode,
-    qualityPercent,
-    targetKb,
-    activeFormatId,
-    formatOption.mime,
+    compressOptions,
     debounceMs,
     runCompress,
+    mode,
+    targetKb,
   ]);
 
   const savedLabel = useMemo(() => {
@@ -97,6 +107,15 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
         : 0;
     return { saved, pct };
   }, [compressResult]);
+
+  const batchTotals = useMemo(() => {
+    if (batchResults.length === 0) return null;
+    const originalBytes = batchResults.reduce((sum, item) => sum + item.originalBytes, 0);
+    const outputBytes = batchResults.reduce((sum, item) => sum + item.outputBytes, 0);
+    const saved = originalBytes - outputBytes;
+    const pct = originalBytes > 0 ? Math.round((saved / originalBytes) * 100) : 0;
+    return { originalBytes, outputBytes, saved, pct };
+  }, [batchResults]);
 
   const applyPreset = (kb: number) => {
     setMode("target");
@@ -121,13 +140,15 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
             Compression
           </p>
           <p className="mt-2 text-sm leading-relaxed text-ink-soft/80">
-            Preview and file size update live. Export format is shared across all tools.
+            {isBatch
+              ? "Same settings for every file. Compress all, then download a ZIP."
+              : "Preview and file size update live. Export format is shared across all tools."}
           </p>
         </div>
 
         <ExportFormatSelect
           id="compress-export-format"
-          disabled={!file}
+          disabled={!hasInput}
           value={preset?.formatId ? activeFormatId : undefined}
           onChange={preset?.formatId ? setLocalFormatId : undefined}
         />
@@ -165,7 +186,7 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
                 max={100}
                 value={qualityPercent}
                 onChange={(e) => setQualityPercent(Number(e.target.value))}
-                disabled={!file}
+                disabled={!hasInput}
                 className={rangeInputClass}
               />
               <p className="mt-2 text-xs text-ink-soft/65">
@@ -185,7 +206,7 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
                   <button
                     key={id}
                     type="button"
-                    disabled={!file}
+                    disabled={!hasInput}
                     onClick={() => setActiveFormat(id)}
                     className={chipClass(false)}
                   >
@@ -208,7 +229,7 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
                 <button
                   key={kb}
                   type="button"
-                  disabled={!file}
+                  disabled={!hasInput}
                   onClick={() => applyPreset(kb)}
                   className={chipClass(targetKb === kb)}
                 >
@@ -223,7 +244,7 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
                 step={1}
                 inputMode="numeric"
                 value={customKb}
-                disabled={!file}
+                disabled={!hasInput}
                 onChange={(e) => applyCustomKb(e.target.value)}
                 className="focus-ring min-h-11 w-28 rounded-md border border-line bg-paper px-3 py-2 text-base tabular-nums disabled:opacity-40 sm:text-sm"
                 aria-label="Custom target size in KB"
@@ -233,7 +254,70 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
           </div>
         )}
 
-        {meta ? (
+        {isBatch ? (
+          <div className="space-y-3">
+            <ul className="max-h-56 space-y-2 overflow-y-auto rounded-md border border-line bg-foam/60 p-3 text-sm">
+              {batchFiles.map((batchFile, index) => {
+                const matched = batchResults[index] ?? null;
+                const status =
+                  matched != null
+                    ? formatBytes(matched.outputBytes)
+                    : isProcessing && batchProgress && batchProgress.done === index
+                      ? "Compressing…"
+                      : "Waiting";
+
+                return (
+                  <li
+                    key={`${batchFile.name}-${index}`}
+                    className="flex items-start justify-between gap-3 border-b border-line/60 pb-2 last:border-0 last:pb-0"
+                  >
+                    <span className="min-w-0 truncate font-medium text-ink" title={batchFile.name}>
+                      {batchFile.name}
+                    </span>
+                    <span className="shrink-0 text-right text-xs tabular-nums text-ink-soft">
+                      <span className="block">{formatBytes(batchFile.size)}</span>
+                      <span className="mt-0.5 block text-accent-deep">{status}</span>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {batchProgress ? (
+              <p className="text-xs text-ink-soft/70">
+                Progress: {batchProgress.done} / {batchProgress.total}
+                {isProcessing ? " — compressing…" : null}
+              </p>
+            ) : null}
+
+            {batchTotals ? (
+              <div className="rounded-md border border-line bg-foam/60 px-3 py-3 text-sm">
+                <div className="flex justify-between gap-3">
+                  <span className="text-ink-soft/70">Original</span>
+                  <span className="font-medium tabular-nums text-ink">
+                    {formatBytes(batchTotals.originalBytes)}
+                  </span>
+                </div>
+                <div className="mt-2 flex justify-between gap-3">
+                  <span className="text-ink-soft/70">Compressed</span>
+                  <span className="font-medium tabular-nums text-ink">
+                    {formatBytes(batchTotals.outputBytes)}
+                  </span>
+                </div>
+                <div className="mt-2 flex justify-between gap-3">
+                  <span className="text-ink-soft/70">Saved</span>
+                  <span
+                    className={`font-semibold tabular-nums ${
+                      batchTotals.saved > 0 ? "text-accent-deep" : "text-ink-soft"
+                    }`}
+                  >
+                    {formatBytes(Math.max(0, batchTotals.saved))} ({batchTotals.pct}%)
+                  </span>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        ) : meta ? (
           <div className="rounded-md border border-line bg-foam/60 px-3 py-3 text-sm">
             <div className="flex justify-between gap-3">
               <span className="text-ink-soft/70">Original</span>
@@ -267,7 +351,7 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
                   </p>
                 ) : null}
                 {resultFilename ? (
-                  <p className="mt-2  text-xs text-ink-soft/60" title={resultFilename}>
+                  <p className="mt-2 text-xs text-ink-soft/60" title={resultFilename}>
                     File: {resultFilename}
                   </p>
                 ) : null}
@@ -291,15 +375,36 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
       </div>
 
       <PanelActions>
-        <button
-          type="button"
-          disabled={!compressResult}
-          onClick={() => downloadResult("compress")}
-          className={panelPrimaryBtnClass}
-        >
-          Download
-        </button>
-        {file ? (
+        {isBatch ? (
+          <>
+            <button
+              type="button"
+              disabled={!hasInput || isProcessing}
+              onClick={() => void runCompressBatch(compressOptions)}
+              className={panelPrimaryBtnClass}
+            >
+              {isProcessing ? "Compressing…" : "Compress all"}
+            </button>
+            <button
+              type="button"
+              disabled={batchResults.length === 0 || isProcessing}
+              onClick={() => void downloadBatchZip()}
+              className={panelSecondaryBtnClass}
+            >
+              Download ZIP
+            </button>
+          </>
+        ) : (
+          <button
+            type="button"
+            disabled={!compressResult}
+            onClick={() => downloadResult("compress")}
+            className={panelPrimaryBtnClass}
+          >
+            Download
+          </button>
+        )}
+        {hasInput ? (
           <button type="button" onClick={clear} className={panelSecondaryBtnClass}>
             Start over
           </button>

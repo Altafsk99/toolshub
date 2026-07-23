@@ -10,7 +10,7 @@ export const metadata: Metadata = buildToolMetadata(compressToolContent);
 export default function CompressImagePage() {
   return (
     <ToolPageTemplate content={compressToolContent}>
-      <ImageToolWorkspace toolbar={<CompressionPanel />} />
+      <ImageToolWorkspace allowMultiple toolbar={<CompressionPanel />} />
     </ToolPageTemplate>
   );
 }
