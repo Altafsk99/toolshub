@@ -7,32 +7,46 @@ const pdfPrivacyFaq = {
 };
 
 const pdfFreeFaq = {
-  question: "Is PrivyTool free?",
-  answer: "Yes. Basic PDF tools are free with no account required.",
+  question: "Is PrivyTool free? Do I need an account?",
+  answer:
+    "Yes — 100% free online PDF tools with no registration, no sign-up, no watermarks, and no installation required.",
 };
 
 export const mergePdfToolContent: ToolPageContent = {
   slug: "merge",
   category: "pdf",
-  title: "Merge PDF Online — Free, Private, No Upload | PrivyTool",
+  title: "Merge PDF Online Free — Combine PDF Files | PrivyTool",
   description:
-    "Combine multiple PDF files into one document in your browser. Free, fast, and private — no upload required.",
+    "Free online PDF merger. Combine multiple PDF files into one in seconds — no registration, no watermarks, no upload. Works in your browser on any device.",
   h1: "Merge PDF",
   intro:
-    "Join PDF files in the order you choose. PrivyTool merges documents locally in your browser — nothing is sent to a server.",
-  keywords: ["merge pdf", "combine pdf", "join pdf online", "pdf merger free"],
+    "Merge & combine PDF files online for free. Select multiple PDFs, reorder them, and download one document — privately in your browser with no account required.",
+  keywords: [
+    "pdf merge online free",
+    "merge pdf online free",
+    "merge pdf",
+    "combine pdf",
+    "combine pdf files",
+    "pdf merger",
+    "pdf merger free",
+    "join pdf online",
+    "merge pdf no registration",
+    "merge pdf no signup",
+    "merge pdf no upload",
+    "combine multiple pdfs",
+  ],
   howTo: [
     {
       name: "Add PDF files",
-      text: "Drag and drop two or more PDFs, or click to browse from your device.",
+      text: "Select multiple PDF files from your device — drag and drop or browse. No install needed.",
     },
     {
       name: "Reorder if needed",
-      text: "Use the up and down arrows to set the final page order before merging.",
+      text: "Use the up and down arrows to set the final order before merging.",
     },
     {
       name: "Merge and download",
-      text: "Click Merge PDFs, then download the combined document.",
+      text: "Merge & combine into one PDF, then download. Free, with no watermarks and no sign-up.",
     },
   ],
   faqs: [
@@ -230,18 +244,20 @@ export const imagesToPdfToolContent: ToolPageContent = {
 export const compressPdfToolContent: ToolPageContent = {
   slug: "compress",
   category: "pdf",
-  title: "Compress PDF Online — Free, Private, No Upload | PrivyTool",
+  title: "Compress PDF Online Free — Reduce PDF Size | PrivyTool",
   description:
-    "Reduce PDF file size in your browser. Free, private PDF compressor with live preview — no upload required.",
+    "Free online PDF compressor. Shrink PDF file size in your browser — no registration, no watermarks, no upload. Great for email and forms.",
   h1: "Compress PDF",
   intro:
-    "Shrink large PDFs for email and forms without uploading. PrivyTool compresses pages locally in your browser with a live size comparison.",
+    "Compress PDF online free. Shrink large PDFs for email and uploads without signing up — processing stays in your browser with a live size comparison.",
   keywords: [
+    "compress pdf online free",
     "compress pdf",
     "reduce pdf size",
     "pdf compressor online",
     "shrink pdf free",
     "compress pdf no upload",
+    "pdf compressor no registration",
   ],
   howTo: [
     {

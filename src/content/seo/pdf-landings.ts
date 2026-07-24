@@ -10,13 +10,22 @@ const mergeLandings: PdfSeoLandingPage[] = [
   {
     slug: "merge-pdf-online",
     category: "pdf",
-    title: "Merge PDF Online — Free, No Upload | PrivyTool",
+    title: "Merge PDF Online Free — Combine PDF Files | PrivyTool",
     description:
-      "Merge PDF files in your browser. Combine documents with live preview — free, private, no upload.",
+      "Free online PDF merger. Combine multiple PDF files in seconds — no registration, no watermarks, no upload. Merge & combine PDFs in your browser.",
     h1: "Merge PDF Online",
     intro:
-      "Combine multiple PDFs into one file locally. PrivyTool merges in your browser with a live preview — nothing is uploaded.",
-    keywords: ["merge pdf online", "combine pdf", "pdf merger free", "join pdf files"],
+      "Merge PDF online free. Combine documents with live preview — no sign-up, no installation, processing stays on your device.",
+    keywords: [
+      "pdf merge online free",
+      "merge pdf online free",
+      "merge pdf online",
+      "combine pdf",
+      "combine pdf files",
+      "pdf merger free",
+      "join pdf files",
+      "merge pdf no registration",
+    ],
     preset: { tool: "merge-pdf" },
     parentHref: "/tools/pdf/merge",
     howTo: [
@@ -41,7 +50,14 @@ const mergeLandings: PdfSeoLandingPage[] = [
     h1: "Combine PDF Files",
     intro:
       "Join reports, scans, and chapters into a single PDF. All processing stays on your device with live preview.",
-    keywords: ["combine pdf files", "join pdf documents", "merge pdf free"],
+    keywords: [
+      "combine pdf files",
+      "join pdf documents",
+      "merge pdf free",
+      "pdf merge online free",
+      "combine multiple pdfs",
+      "pdf merger no signup",
+    ],
     preset: { tool: "merge-pdf" },
     parentHref: "/tools/pdf/merge",
     howTo: [

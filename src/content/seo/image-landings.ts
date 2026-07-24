@@ -23,6 +23,52 @@ import type { SeoLandingPage } from "@/types/seo";
 
 const compressLandings: SeoLandingPage[] = [
   {
+    slug: "compress-image-online-free",
+    category: "image",
+    title: "Photo Compressor Online Free — Compress Image | PrivyTool",
+    description:
+      "Free photo compressor & image compressor. Compress image / JPG / PNG / WebP — reduce file size with no registration, no watermarks, no upload.",
+    h1: "Image Compression Online Free",
+    intro:
+      "Free photo compressor online. Compress images in your browser — no signup, no daily limits, and your files never leave your device.",
+    keywords: [
+      "photo compressor",
+      "compress image",
+      "image compressor",
+      "compress images online",
+      "image compression online free",
+      "compress image online free",
+      "free image compressor",
+      "online image compressor",
+      "compress jpg png webp",
+      "reduce image size online",
+      "reduce file size jpg",
+      "reduce image size in kb",
+      "image compressor no registration",
+    ],
+    preset: { tool: "compress", mode: "quality", qualityPercent: 70, formatId: "jpg" },
+    parentHref: "/tools/image/compress",
+    howTo: [
+      { name: "Add your image", text: "Drop a JPG, PNG, or WebP file — or several for a ZIP." },
+      {
+        name: "Choose quality or KB target",
+        text: "Lower quality for smaller files, or aim for 20 / 50 / 100 / 200 KB.",
+      },
+      {
+        name: "Download",
+        text: "Save the compressed image. Free, with no watermarks and no account.",
+      },
+    ],
+    faqs: privacyFaqs([
+      {
+        question: "Is this free image compressor unlimited?",
+        answer:
+          "Yes. There is no registration and no watermark. Batch mode supports up to 20 images per ZIP.",
+      },
+    ]),
+    related: [],
+  },
+  {
     slug: "compress-to-20kb",
     category: "image",
     title: "Compress Image to 20KB Online — Free, No Upload | PrivyTool",
@@ -31,7 +77,13 @@ const compressLandings: SeoLandingPage[] = [
     h1: "Compress Image to 20KB",
     intro:
       "Need a tiny file for forms or uploads? PrivyTool targets 20 KB locally in your browser — your image never leaves your device.",
-    keywords: ["compress image to 20kb", "reduce image to 20kb", "20kb image compressor"],
+    keywords: [
+      "compress image to 20kb",
+      "reduce image to 20kb",
+      "20kb image compressor",
+      "photo compressor",
+      "online image compressor to 20kb",
+    ],
     preset: { tool: "compress", mode: "target", targetKb: 20, formatId: "jpg" },
     parentHref: "/tools/image/compress",
     howTo: [
@@ -60,7 +112,13 @@ const compressLandings: SeoLandingPage[] = [
     h1: "Compress Image to 50KB",
     intro:
       "Hit the common 50 KB upload limit with one click. Processing runs on-device — no server upload.",
-    keywords: ["compress image to 50kb", "50kb photo compressor", "reduce image size 50kb"],
+    keywords: [
+      "compress image to 50kb",
+      "50kb photo compressor",
+      "reduce image size 50kb",
+      "photo compressor",
+      "reduce image size in kb",
+    ],
     preset: { tool: "compress", mode: "target", targetKb: 50, formatId: "jpg" },
     parentHref: "/tools/image/compress",
     howTo: [
@@ -80,13 +138,19 @@ const compressLandings: SeoLandingPage[] = [
   {
     slug: "compress-to-100kb",
     category: "image",
-    title: "Compress Image to 100KB Online — Free, No Upload | PrivyTool",
+    title: "Compress Image to 100KB Online Free — Photo Compressor | PrivyTool",
     description:
-      "Compress JPG or PNG to 100 KB in your browser. Free, private image compressor — no upload.",
+      "Compress image to 100 KB online free. Free photo compressor for JPG/PNG — reduce image size in KB with no upload.",
     h1: "Compress Image to 100KB",
     intro:
       "100 KB is a common cap for job portals and ID uploads. Compress locally with PrivyTool — nothing is sent to a server.",
-    keywords: ["compress image to 100kb", "100kb image compressor online"],
+    keywords: [
+      "compress image to 100kb",
+      "compress image to 100kb online",
+      "100kb image compressor online",
+      "photo compressor",
+      "reduce image size in kb",
+    ],
     preset: { tool: "compress", mode: "target", targetKb: 100, formatId: "jpg" },
     parentHref: "/tools/image/compress",
     howTo: [
@@ -120,13 +184,23 @@ const compressLandings: SeoLandingPage[] = [
   {
     slug: "compress-jpg",
     category: "image",
-    title: "Compress JPG Online — Free, Private, No Upload | PrivyTool",
+    title: "Compress JPG Online Free — Reduce File Size JPG | PrivyTool",
     description:
-      "Compress JPG and JPEG photos in your browser. Reduce file size without uploading — free on PrivyTool.",
+      "Free JPG/JPEG photo compressor. Reduce file size JPG online with no registration, no watermarks, and no upload.",
     h1: "Compress JPG",
     intro:
-      "Optimize JPG photos for web, email, or forms. PrivyTool compresses locally with adjustable quality — no upload.",
-    keywords: ["compress jpg", "compress jpeg online", "reduce jpg file size"],
+      "Optimize JPG photos for web, email, WhatsApp, or forms. PrivyTool compresses locally with adjustable quality — free photo compressor, no signup.",
+    keywords: [
+      "compress jpg",
+      "compress jpeg online",
+      "reduce jpg file size",
+      "reduce file size jpg",
+      "photo compressor",
+      "compress image",
+      "image compression online free",
+      "compress image online free",
+      "free jpg compressor",
+    ],
     preset: { tool: "compress", mode: "quality", qualityPercent: 70, formatId: "jpg" },
     parentHref: "/tools/image/compress",
     howTo: [
@@ -151,7 +225,13 @@ const compressLandings: SeoLandingPage[] = [
     h1: "Compress PNG",
     intro:
       "PNG is lossless — for smaller files, export to JPG or WebP. Keep PNG when you need sharp edges and transparency.",
-    keywords: ["compress png", "reduce png size", "png optimizer online"],
+    keywords: [
+      "compress png",
+      "reduce png size",
+      "png optimizer online",
+      "image compression online free",
+      "compress image online free",
+    ],
     preset: { tool: "compress", mode: "quality", qualityPercent: 90, formatId: "png" },
     parentHref: "/tools/image/compress",
     howTo: [
@@ -388,13 +468,20 @@ const resizeLandings: SeoLandingPage[] = [
   {
     slug: "resize-percentage",
     category: "image",
-    title: "Resize Image by Percentage — Free, No Upload | PrivyTool",
+    title: "Image Resizer Online Free — Resize Image by Percentage | PrivyTool",
     description:
-      "Scale images by percentage in your browser. Halve or double size — free, private resizer on PrivyTool.",
+      "Free image resizer online. Resize image by percentage with live preview — no registration, no upload.",
     h1: "Resize by Percentage",
     intro:
       "Scale relative to the original — 50% halves width and height. All math runs locally in your browser.",
-    keywords: ["resize image by percentage", "scale image percent online", "50 percent resize"],
+    keywords: [
+      "image resizer",
+      "image resizer online",
+      "resize image by percentage",
+      "scale image percent online",
+      "50 percent resize",
+      "resize image online free",
+    ],
     preset: { tool: "resize", percent: 50, lockAspect: true },
     parentHref: "/tools/image/resize",
     howTo: [
@@ -537,11 +624,12 @@ function withRelated(page: SeoLandingPage, relatedSlugs: string[]): SeoLandingPa
 
 export const seoLandingPagesWithRelated: SeoLandingPage[] = seoLandingPages.map((page) => {
   const relatedMap: Record<string, string[]> = {
+    "compress-image-online-free": ["compress-jpg", "compress-to-50kb"],
     "compress-to-20kb": ["compress-to-50kb", "compress-for-whatsapp"],
     "compress-to-50kb": ["compress-to-100kb", "compress-jpg"],
     "compress-to-100kb": ["compress-to-50kb", "compress-for-whatsapp"],
     "compress-to-200kb": ["compress-to-100kb", "compress-jpg"],
-    "compress-jpg": ["compress-webp", "compress-to-50kb"],
+    "compress-jpg": ["compress-image-online-free", "compress-to-50kb"],
     "compress-png": ["png-to-jpg", "png-to-webp"],
     "compress-webp": ["jpg-to-webp", "compress-jpg"],
     "compress-for-whatsapp": ["compress-to-50kb", "compress-to-100kb"],

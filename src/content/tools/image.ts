@@ -3,31 +3,44 @@ import type { ToolPageContent } from "@/types/seo";
 export const compressToolContent: ToolPageContent = {
   slug: "compress",
   category: "image",
-  title: "Compress Image Online — Free, Private, No Upload | PrivyTool",
+  title: "Photo Compressor Online Free — Compress Image | PrivyTool",
   description:
-    "Compress JPG, PNG, and WebP images in your browser. Fast, private, and free — your files never leave your device.",
+    "Free photo compressor & online image compressor. Compress image / JPG / PNG / WebP in seconds — reduce file size, no registration, no watermarks, no upload.",
   h1: "Compress Image",
   intro:
-    "Shrink one image with live preview, or drop several and download a ZIP — all without uploading to a server. Compression runs locally in your browser.",
+    "Free photo compressor online. Shrink one image with live preview, or drop several and download a ZIP — compress images in your browser with no signup and no server upload.",
   keywords: [
+    "photo compressor",
     "compress image",
+    "image compressor",
+    "compress images online",
+    "image compression online free",
+    "compress image online free",
+    "free image compressor",
+    "online image compressor",
     "compress jpg",
     "compress png",
+    "compress webp",
     "reduce image size",
-    "online image compressor",
+    "reduce image size in kb",
+    "reduce file size jpg",
+    "shrink image file size",
+    "image compressor no registration",
+    "compress image no upload",
+    "compress image for whatsapp",
   ],
   howTo: [
     {
       name: "Add your image",
-      text: "Drag and drop a JPG, PNG, or WebP file, or click to browse from your device.",
+      text: "Drag and drop a JPG, PNG, WebP, or AVIF file — or several files for batch ZIP — or click to browse.",
     },
     {
       name: "Choose quality or target size",
-      text: "Use the quality slider, or pick a target like 20 KB, 50 KB, 100 KB, or 200 KB. Optionally switch output to JPG or WebP.",
+      text: "Use the quality slider, or pick a target like 20 KB, 50 KB, 100 KB, or 200 KB. Optionally switch output to JPG or WebP for smaller files.",
     },
     {
       name: "Compress and download",
-      text: "Click Compress to process locally, compare the new size, then download the result.",
+      text: "Preview the new size, then download. No account, no daily limit, and nothing is uploaded to a server.",
     },
   ],
   faqs: [
@@ -39,17 +52,17 @@ export const compressToolContent: ToolPageContent = {
     {
       question: "How do I compress to a specific KB size?",
       answer:
-        "Switch to Target size, choose a preset (20 / 50 / 100 / 200 KB) or type a custom KB value, then click Compress.",
+        "Switch to Target size, choose a preset (20 / 50 / 100 / 200 KB) or type a custom KB value, then download.",
     },
     {
       question: "Which formats are supported?",
       answer:
-        "You can upload JPG, PNG, and WebP. Compressed output is JPG or WebP for the smallest files.",
+        "Upload JPG, JPEG, PNG, WebP, and AVIF (where your browser allows). JPG and WebP usually give the smallest files.",
     },
     {
-      question: "Is PrivyTool free?",
+      question: "Is this free? Do I need to sign up?",
       answer:
-        "Yes. Basic image tools are free. Optional premium features may arrive later as traffic grows.",
+        "Yes — free online photo compressor with no registration, no watermarks, and no account required.",
     },
   ],
   related: [
@@ -74,13 +87,24 @@ export const compressToolContent: ToolPageContent = {
 export const resizeToolContent: ToolPageContent = {
   slug: "resize",
   category: "image",
-  title: "Resize Image Online — Free, Private, No Upload | PrivyTool",
+  title: "Image Resizer Online Free — Resize Image | PrivyTool",
   description:
-    "Resize images in your browser with no upload required. Custom width/height, percent scale, and presets — free on PrivyTool.",
+    "Free online image resizer. Resize image by pixels or percent, use presets (passport, 1080p), fit or crop — no registration, no upload.",
   h1: "Resize Image",
   intro:
-    "Change image dimensions locally in your browser. Choose fit without crop, crop to fill, or stretch — and fill empty edges with white, black, blur, or transparent.",
-  keywords: ["resize image", "change image size", "image resizer online", "passport photo size"],
+    "Free image resizer online. Change image dimensions locally in your browser. Choose fit without crop, crop to fill, or stretch — and fill empty edges with white, black, blur, or transparent.",
+  keywords: [
+    "image resizer",
+    "image resizer online",
+    "resize image",
+    "resize image online",
+    "resize image online free",
+    "change image size",
+    "photo resizer",
+    "resize photo online",
+    "passport photo size",
+    "bulk image resizer",
+  ],
   howTo: [
     {
       name: "Upload locally",

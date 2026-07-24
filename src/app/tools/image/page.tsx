@@ -9,17 +9,21 @@ import {
 } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Image Tools — Compress, Resize & Convert Online | PrivyTool",
+  title: "Photo Compressor & Image Resizer Online Free | PrivyTool",
   description:
-    "Free privacy-first image tools that run in your browser. Compress, resize, and convert JPG, PNG, WebP, and AVIF — no upload required.",
+    "Free photo compressor, compress image, and image resizer online. JPG/PNG/WebP tools with no registration and no upload — runs in your browser.",
   path: "/tools/image",
   keywords: [
-    "image tools",
-    "online image editor",
+    "photo compressor",
     "compress image",
-    "resize image",
-    "convert image",
-    "browser image tools",
+    "image compressor",
+    "image resizer",
+    "image compression online free",
+    "compress image online free",
+    "resize image online",
+    "reduce file size jpg",
+    "free image compressor",
+    "no registration",
     "no upload",
   ],
 });

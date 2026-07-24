@@ -25,7 +25,8 @@ export const imageTools: ImageToolItem[] = [
     href: "/tools/image/compress",
     title: "Compress",
     subtitle: "Compress Image",
-    description: "Shrink JPG, PNG, and WebP with quality or target KB presets.",
+    description:
+      "Free photo compressor — shrink JPG, PNG, and WebP with quality or target KB.",
     tag: "Popular",
     icon: CompressIcon,
     tint: "from-accent/12 to-accent-bright/5",
@@ -43,7 +44,8 @@ export const imageTools: ImageToolItem[] = [
     href: "/tools/image/resize",
     title: "Resize",
     subtitle: "Resize Image",
-    description: "Set dimensions, fit modes, presets, and optional compression.",
+    description:
+      "Free image resizer — set dimensions, fit modes, presets, optional compress.",
     icon: ResizeIcon,
     tint: "from-[#5ec8ff]/14 to-accent/5",
   },

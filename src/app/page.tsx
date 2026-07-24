@@ -9,19 +9,22 @@ import {
 } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "PrivyTool — Free Privacy-First Online Tools",
+  title: "PrivyTool — Free Photo Compressor & PDF Merger Online",
   description:
-    "Compress, resize, and convert images; merge, split, and rotate PDFs — all in your browser. No upload, no account, 100% private.",
+    "Free photo compressor and PDF merge online — compress image, resize, combine PDFs. No registration, no watermarks. 100% private in your browser.",
   path: "/",
   keywords: [
-    "online tools",
-    "image tools",
-    "pdf tools",
-    "merge pdf online",
-    "split pdf",
-    "jpg to pdf",
-    "compress image online",
-    "privacy first",
+    "photo compressor",
+    "compress image",
+    "image compressor",
+    "image resizer",
+    "image compression online free",
+    "compress image online free",
+    "pdf merge online free",
+    "merge pdf online free",
+    "reduce file size jpg",
+    "free image compressor",
+    "no registration",
     "no upload",
   ],
 });

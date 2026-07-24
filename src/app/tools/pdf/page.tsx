@@ -9,18 +9,19 @@ import {
 } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "PDF Tools — Merge, Split, Rotate & Images to PDF | PrivyTool",
+  title: "PDF Tools Online Free — Merge, Compress, Split | PrivyTool",
   description:
-    "Free privacy-first PDF tools that run in your browser. Merge, compress, split, rotate PDFs, and convert images to PDF — no upload required.",
+    "Free online PDF tools: merge PDF, compress, split, rotate, and images to PDF. No registration, no watermarks, no upload — works in your browser.",
   path: "/tools/pdf",
   keywords: [
+    "pdf merge online free",
+    "merge pdf online free",
     "pdf tools",
-    "merge pdf online",
-    "compress pdf",
-    "split pdf",
-    "rotate pdf",
-    "images to pdf",
-    "browser pdf tools",
+    "combine pdf files",
+    "compress pdf online free",
+    "split pdf online",
+    "pdf merger free",
+    "no registration",
     "no upload",
   ],
 });
