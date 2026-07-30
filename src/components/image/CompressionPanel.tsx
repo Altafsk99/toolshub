@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ExportFormatSelect } from "@/components/image/ExportFormatSelect";
 import {
   PanelActions,
@@ -20,12 +20,15 @@ import type { CompressLandingPreset } from "@/types/seo";
 import type { CompressMode } from "@/types/image";
 
 const KB_PRESETS = [20, 50, 100, 200] as const;
+const ACCEPT =
+  "image/jpeg,image/png,image/webp,image/avif,image/gif,image/bmp";
 
 type CompressionPanelProps = {
   preset?: CompressLandingPreset;
 };
 
 export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
+  const addMoreRef = useRef<HTMLInputElement>(null);
   const file = useImageStore((s) => s.file);
   const meta = useImageStore((s) => s.meta);
   const batchFiles = useImageStore((s) => s.batchFiles);
@@ -40,6 +43,7 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
   const runCompressBatch = useImageStore((s) => s.runCompressBatch);
   const downloadBatchZip = useImageStore((s) => s.downloadBatchZip);
   const downloadResult = useImageStore((s) => s.downloadResult);
+  const addFiles = useImageStore((s) => s.addFiles);
   const clear = useImageStore((s) => s.clear);
   const exportFormatId = usePreferencesStore((s) => s.exportFormatId);
   const setExportFormatId = usePreferencesStore((s) => s.setExportFormatId);
@@ -405,9 +409,31 @@ export function CompressionPanel({ preset }: CompressionPanelProps = {}) {
           </button>
         )}
         {hasInput ? (
-          <button type="button" onClick={clear} className={panelSecondaryBtnClass}>
-            Start over
-          </button>
+          <>
+            <button
+              type="button"
+              disabled={isProcessing}
+              onClick={() => addMoreRef.current?.click()}
+              className={panelSecondaryBtnClass}
+            >
+              Add more
+            </button>
+            <input
+              ref={addMoreRef}
+              type="file"
+              accept={ACCEPT}
+              multiple
+              className="sr-only"
+              onChange={(e) => {
+                const list = e.target.files;
+                if (list?.length) void addFiles(Array.from(list));
+                e.target.value = "";
+              }}
+            />
+            <button type="button" onClick={clear} className={panelSecondaryBtnClass}>
+              Start over
+            </button>
+          </>
         ) : null}
       </PanelActions>
     </div>

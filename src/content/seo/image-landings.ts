@@ -63,7 +63,7 @@ const compressLandings: SeoLandingPage[] = [
       {
         question: "Is this free image compressor unlimited?",
         answer:
-          "Yes. There is no registration and no watermark. Batch mode supports up to 20 images per ZIP.",
+          "Yes. There is no registration and no watermark, and batch mode has no limit on how many images go into one ZIP.",
       },
     ]),
     related: [],

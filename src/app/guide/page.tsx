@@ -259,13 +259,13 @@ export default function GuidePage() {
                   "Quality mode: move the quality slider (lower = smaller file).",
                   "Target size mode: pick 20 / 50 / 100 / 200 KB or type a custom KB.",
                   "Single file: preview updates live → click Download.",
-                  "Multiple files: click Compress all → Download ZIP (up to 20 images).",
+                  "Multiple files: click Compress all → Download ZIP (no image limit).",
                 ]}
                 features={[
                   "Live preview and size comparison (single file)",
                   "Quality slider and target KB presets",
                   "Batch compress → one ZIP download",
-                  "Cap of 20 images per batch",
+                  "No cap on images per batch",
                   "Original vs compressed size shown before download",
                 ]}
               />

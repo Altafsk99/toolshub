@@ -43,8 +43,6 @@ export type BatchCompressItem = {
   blob: Blob;
 };
 
-export const BATCH_COMPRESS_CAP = 20;
-
 type ImageState = {
   file: File | null;
   source: EngineSource | null;
@@ -70,6 +68,8 @@ type ImageState = {
   error: string | null;
   setFile: (file: File | null) => Promise<void>;
   setFiles: (files: File[]) => Promise<void>;
+  /** Append images to the current batch (or promote a single file into a batch). */
+  addFiles: (files: File[]) => Promise<void>;
   clear: () => void;
   runIdentityExport: (options?: ExportOptions, opts?: ProcessOpts) => Promise<void>;
   runCompress: (options: CompressOptions, opts?: ProcessOpts) => Promise<void>;
@@ -226,8 +226,59 @@ export const useImageStore = create<ImageState>((set, get) => ({
     revokeUrl(prev.previewUrl);
     revokeUrl(prev.resultPreviewUrl);
 
-    const capped = images.slice(0, BATCH_COMPRESS_CAP);
-    const truncated = images.length > BATCH_COMPRESS_CAP;
+    set({
+      file: null,
+      source: null,
+      meta: null,
+      previewUrl: null,
+      resultPreviewUrl: null,
+      resultBlob: null,
+      resultFilename: null,
+      compressResult: null,
+      convertResult: null,
+      resizeResult: null,
+      cropResult: null,
+      rotateResult: null,
+      flipResult: null,
+      batchFiles: images,
+      batchResults: [],
+      batchProgress: null,
+      isProcessing: false,
+      isPreviewing: false,
+      error: null,
+    });
+  },
+
+  addFiles: async (files) => {
+    const images = files.filter((file) => file.type.startsWith("image/"));
+    if (images.length === 0) {
+      set({ error: "Please choose image files (JPG, PNG, WebP, …)." });
+      return;
+    }
+
+    const prev = get();
+    const existing =
+      prev.batchFiles.length > 0
+        ? prev.batchFiles
+        : prev.file
+          ? [prev.file]
+          : [];
+
+    if (existing.length === 0) {
+      await get().setFiles(images);
+      return;
+    }
+
+    const merged = [...existing, ...images];
+    if (merged.length === 1) {
+      await get().setFile(merged[0]!);
+      return;
+    }
+
+    batchCompressToken += 1;
+    revokeSource(prev.source);
+    revokeUrl(prev.previewUrl);
+    revokeUrl(prev.resultPreviewUrl);
 
     set({
       file: null,
@@ -243,14 +294,12 @@ export const useImageStore = create<ImageState>((set, get) => ({
       cropResult: null,
       rotateResult: null,
       flipResult: null,
-      batchFiles: capped,
+      batchFiles: merged,
       batchResults: [],
       batchProgress: null,
       isProcessing: false,
       isPreviewing: false,
-      error: truncated
-        ? `Only the first ${BATCH_COMPRESS_CAP} images were added (browser limit).`
-        : null,
+      error: null,
     });
   },
 

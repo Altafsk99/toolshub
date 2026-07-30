@@ -13,6 +13,9 @@ import {
 } from "@/components/image/PanelChrome";
 import { useImageStore } from "@/stores/imageStore";
 
+const ACCEPT =
+  "image/jpeg,image/png,image/webp,image/avif,image/gif,image/bmp";
+
 type ImageToolWorkspaceProps = {
   downloadLabel?: string;
   toolbar?: ReactNode;
@@ -31,8 +34,10 @@ export function ImageToolWorkspace({
   allowMultiple = false,
 }: ImageToolWorkspaceProps) {
   const pathname = usePathname();
+  const addMoreRef = useRef<HTMLInputElement>(null);
   const file = useImageStore((s) => s.file);
   const batchFiles = useImageStore((s) => s.batchFiles);
+  const addFiles = useImageStore((s) => s.addFiles);
   const clear = useImageStore((s) => s.clear);
   const activePath = useRef<string | null>(null);
   const hasSession = Boolean(file) || batchFiles.length > 0;
@@ -63,6 +68,29 @@ export function ImageToolWorkspace({
               The same quality, target size, and format apply to every file. Compress
               all, then download one ZIP — still entirely in your browser.
             </p>
+            {allowMultiple ? (
+              <div className="mt-4">
+                <button
+                  type="button"
+                  onClick={() => addMoreRef.current?.click()}
+                  className={panelSecondaryBtnClass}
+                >
+                  Add more
+                </button>
+                <input
+                  ref={addMoreRef}
+                  type="file"
+                  accept={ACCEPT}
+                  multiple
+                  className="sr-only"
+                  onChange={(e) => {
+                    const list = e.target.files;
+                    if (list?.length) void addFiles(Array.from(list));
+                    e.target.value = "";
+                  }}
+                />
+              </div>
+            ) : null}
           </div>
         ) : (
           <ImagePreview />
