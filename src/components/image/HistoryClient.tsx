@@ -15,6 +15,10 @@ function toolLabel(tool: HistoryToolId): string {
   if (tool === "rotate") return "Rotate";
   if (tool === "flip") return "Flip";
   if (tool === "scan") return "Scan";
+  if (tool === "adjust") return "Adjust";
+  if (tool === "blur") return "Blur / Sharpen";
+  if (tool === "watermark") return "Watermark";
+  if (tool === "metadata") return "Metadata";
   return "Resize";
 }
 
@@ -76,6 +80,22 @@ export function HistoryClient() {
   );
   const scanCount = useMemo(
     () => items.filter((item) => item.tool === "scan").length,
+    [items],
+  );
+  const adjustCount = useMemo(
+    () => items.filter((item) => item.tool === "adjust").length,
+    [items],
+  );
+  const blurCount = useMemo(
+    () => items.filter((item) => item.tool === "blur").length,
+    [items],
+  );
+  const watermarkCount = useMemo(
+    () => items.filter((item) => item.tool === "watermark").length,
+    [items],
+  );
+  const metadataCount = useMemo(
+    () => items.filter((item) => item.tool === "metadata").length,
     [items],
   );
 
@@ -165,6 +185,10 @@ export function HistoryClient() {
             <option value="rotate">Rotate ({rotateCount})</option>
             <option value="flip">Flip ({flipCount})</option>
             <option value="scan">Scan ({scanCount})</option>
+            <option value="adjust">Adjust ({adjustCount})</option>
+            <option value="blur">Blur / Sharpen ({blurCount})</option>
+            <option value="watermark">Watermark ({watermarkCount})</option>
+            <option value="metadata">Metadata ({metadataCount})</option>
           </select>
         </div>
 
@@ -204,7 +228,7 @@ export function HistoryClient() {
           ) : filteredItems.length === 0 ? (
             <p className="px-4 py-10 text-sm text-ink-soft/70">
               {items.length === 0
-                ? "No history yet. Compress, resize, convert, crop, rotate, or flip an image and click Download to save it here."
+                ? "No history yet. Process an image and click Download to save it here."
                 : `No ${filter === "all" ? "" : `${toolLabel(filter).toLowerCase()} `}history in this filter.`}
             </p>
           ) : (

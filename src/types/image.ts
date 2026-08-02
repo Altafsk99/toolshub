@@ -201,6 +201,79 @@ export type FlipResult = {
   qualityUsed?: number;
 };
 
+/** Shared result shape for adjust / blur / watermark / metadata tools */
+export type EditToolKind = "adjust" | "blur" | "watermark" | "metadata";
+
+export type AdjustOptions = {
+  /** -100…100 (0 = unchanged) */
+  brightness: number;
+  /** -100…100 (0 = unchanged) */
+  contrast: number;
+  /** -100…100 (0 = unchanged) */
+  saturation: number;
+  format?: ExportMime;
+  formatId?: ExportFormatId;
+  quality?: number;
+};
+
+export type FilterMode = "blur" | "sharpen";
+
+export type FilterOptions = {
+  mode: FilterMode;
+  /** Blur radius px (0–20) or sharpen strength (0–100) */
+  amount: number;
+  format?: ExportMime;
+  formatId?: ExportFormatId;
+  quality?: number;
+};
+
+export type WatermarkPosition =
+  | "top-left"
+  | "top-right"
+  | "center"
+  | "bottom-left"
+  | "bottom-right";
+
+export type WatermarkOptions = {
+  text: string;
+  position: WatermarkPosition;
+  /** 8–120 relative font size */
+  fontSize: number;
+  /** 0–100 */
+  opacity: number;
+  color: string;
+  format?: ExportMime;
+  formatId?: ExportFormatId;
+  quality?: number;
+};
+
+export type MetadataOptions = {
+  format?: ExportMime;
+  formatId?: ExportFormatId;
+  quality?: number;
+};
+
+export type EditResult = {
+  kind: EditToolKind;
+  blob: Blob;
+  filename: string;
+  originalWidth: number;
+  originalHeight: number;
+  width: number;
+  height: number;
+  outputBytes: number;
+  format: ExportMime;
+  formatId?: ExportFormatId;
+  qualityUsed?: number;
+  brightness?: number;
+  contrast?: number;
+  saturation?: number;
+  filterMode?: FilterMode;
+  filterAmount?: number;
+  watermarkText?: string;
+  watermarkPosition?: WatermarkPosition;
+};
+
 export type EngineSource = {
   bitmap: ImageBitmap;
   meta: ImageMeta;

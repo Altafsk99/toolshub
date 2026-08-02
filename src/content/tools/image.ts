@@ -484,3 +484,249 @@ export const scanToolContent: ToolPageContent = {
     },
   ],
 };
+
+export const adjustToolContent: ToolPageContent = {
+  slug: "adjust",
+  category: "image",
+  title: "Adjust Image Brightness Contrast Saturation Online | PrivyTool",
+  description:
+    "Adjust brightness, contrast, and saturation in your browser. Free, private photo editor — no upload required.",
+  h1: "Adjust Image",
+  intro:
+    "Fine-tune brightness, contrast, and saturation locally. PrivyTool processes in your browser — nothing is sent to a server.",
+  keywords: [
+    "adjust brightness online",
+    "contrast saturation image",
+    "photo brightness editor",
+    "adjust image online free",
+  ],
+  howTo: [
+    { name: "Upload your image", text: "Drop a JPG, PNG, or WebP file from your device." },
+    {
+      name: "Tune the sliders",
+      text: "Move brightness, contrast, and saturation. Preview updates live.",
+    },
+    { name: "Download", text: "Export in PNG, JPG, WebP, or AVIF when it looks right." },
+  ],
+  faqs: [
+    {
+      question: "Do you upload my images?",
+      answer:
+        "No. Adjustments run entirely in your browser using the Canvas API. Your files never leave your device.",
+    },
+    {
+      question: "Can I reset the sliders?",
+      answer: "Yes. Use Reset sliders to return brightness, contrast, and saturation to zero.",
+    },
+    {
+      question: "Will this compress my photo?",
+      answer:
+        "Re-encoding can change file size slightly. Use PNG for lossless-looking exports, or lower quality on JPG/WebP to shrink the file.",
+    },
+    {
+      question: "Is PrivyTool free?",
+      answer: "Yes. Basic image tools are free with no account required.",
+    },
+  ],
+  related: [
+    {
+      href: "/tools/image/blur",
+      title: "Blur / Sharpen",
+      description: "Soften or crisp up photos in the browser.",
+    },
+    {
+      href: "/tools/image/crop",
+      title: "Crop Image",
+      description: "Trim to square, circle, or social aspect ratios.",
+    },
+    {
+      href: "/tools/image",
+      title: "All Image Tools",
+      description: "Browse the full privacy-first image toolkit.",
+    },
+  ],
+};
+
+export const blurToolContent: ToolPageContent = {
+  slug: "blur",
+  category: "image",
+  title: "Blur or Sharpen Image Online — Free, Private | PrivyTool",
+  description:
+    "Blur or sharpen photos in your browser. Free Gaussian-style blur and sharpen filters — no upload required.",
+  h1: "Blur / Sharpen Image",
+  intro:
+    "Soften backgrounds or sharpen detail locally. PrivyTool applies filters in your browser — nothing is uploaded.",
+  keywords: [
+    "blur image online",
+    "sharpen image online",
+    "gaussian blur photo",
+    "sharpen photo free",
+  ],
+  howTo: [
+    { name: "Upload your image", text: "Drop a JPG, PNG, or WebP file from your device." },
+    { name: "Choose mode", text: "Switch between Blur and Sharpen, then set the amount." },
+    { name: "Download", text: "Preview updates live — download when it looks right." },
+  ],
+  faqs: [
+    {
+      question: "Do you upload my images?",
+      answer:
+        "No. Blur and sharpen run entirely in your browser. Your files never leave your device.",
+    },
+    {
+      question: "What's the difference between blur and sharpen?",
+      answer:
+        "Blur softens the image (useful for backgrounds). Sharpen increases local contrast to make edges look crisper.",
+    },
+    {
+      question: "Can heavy sharpen look unnatural?",
+      answer: "Yes — start around 30–50% and increase carefully. Over-sharpening adds halos.",
+    },
+    {
+      question: "Is PrivyTool free?",
+      answer: "Yes. Basic image tools are free with no account required.",
+    },
+  ],
+  related: [
+    {
+      href: "/tools/image/adjust",
+      title: "Adjust Image",
+      description: "Brightness, contrast, and saturation controls.",
+    },
+    {
+      href: "/tools/image/compress",
+      title: "Compress Image",
+      description: "Shrink file size with quality or target KB.",
+    },
+    {
+      href: "/tools/image",
+      title: "All Image Tools",
+      description: "Browse the full privacy-first image toolkit.",
+    },
+  ],
+};
+
+export const watermarkToolContent: ToolPageContent = {
+  slug: "watermark",
+  category: "image",
+  title: "Add Text Watermark to Image Online — Free | PrivyTool",
+  description:
+    "Add a text watermark to photos in your browser. Position, size, opacity, and color — private, no upload.",
+  h1: "Watermark Image",
+  intro:
+    "Protect or brand photos with a text watermark. PrivyTool overlays text locally — nothing is sent to a server.",
+  keywords: [
+    "watermark image online",
+    "add text watermark",
+    "copyright watermark photo",
+    "watermark png jpg free",
+  ],
+  howTo: [
+    { name: "Upload your image", text: "Drop a JPG, PNG, or WebP file from your device." },
+    {
+      name: "Set the watermark",
+      text: "Enter text, pick position, size, opacity, and color.",
+    },
+    { name: "Download", text: "Preview updates live — download the watermarked file." },
+  ],
+  faqs: [
+    {
+      question: "Do you upload my images?",
+      answer:
+        "No. Watermarking runs entirely in your browser. Your files never leave your device.",
+    },
+    {
+      question: "Can I use a logo image as a watermark?",
+      answer:
+        "This tool supports text watermarks. Image/logo overlays may arrive in a later update.",
+    },
+    {
+      question: "Will the watermark be baked into the file?",
+      answer: "Yes. After download, the text is part of the pixels — it cannot be removed easily.",
+    },
+    {
+      question: "Is PrivyTool free?",
+      answer: "Yes. Basic image tools are free with no account required.",
+    },
+  ],
+  related: [
+    {
+      href: "/tools/image/metadata",
+      title: "Remove Metadata",
+      description: "Strip EXIF and GPS data before sharing.",
+    },
+    {
+      href: "/tools/image/resize",
+      title: "Resize Image",
+      description: "Change dimensions before watermarking.",
+    },
+    {
+      href: "/tools/image",
+      title: "All Image Tools",
+      description: "Browse the full privacy-first image toolkit.",
+    },
+  ],
+};
+
+export const metadataToolContent: ToolPageContent = {
+  slug: "metadata",
+  category: "image",
+  title: "Remove EXIF Metadata from Image Online — Free | PrivyTool",
+  description:
+    "Strip EXIF, GPS, and camera metadata from photos in your browser. Free privacy tool — no upload required.",
+  h1: "Remove Image Metadata",
+  intro:
+    "Re-encode photos to remove EXIF, GPS location, camera model, and other hidden tags. PrivyTool strips metadata locally — nothing is uploaded.",
+  keywords: [
+    "remove exif online",
+    "strip image metadata",
+    "remove gps from photo",
+    "exif cleaner free",
+  ],
+  howTo: [
+    { name: "Upload your image", text: "Drop a JPG, PNG, or WebP that may contain EXIF data." },
+    {
+      name: "Choose export format",
+      text: "Pick PNG, JPG, WebP, or AVIF. Canvas re-encode drops embedded metadata.",
+    },
+    { name: "Download", text: "Save the clean file — safe to share without location tags." },
+  ],
+  faqs: [
+    {
+      question: "Do you upload my images?",
+      answer:
+        "No. Metadata removal runs entirely in your browser. Your files never leave your device.",
+    },
+    {
+      question: "What metadata is removed?",
+      answer:
+        "Re-encoding through Canvas drops EXIF, GPS, orientation tags, camera info, and other embedded metadata that isn't part of the pixel data.",
+    },
+    {
+      question: "Does the photo look the same?",
+      answer:
+        "Pixels are redrawn at the same dimensions. Lossy formats (JPG/WebP) may change file size slightly based on quality.",
+    },
+    {
+      question: "Is PrivyTool free?",
+      answer: "Yes. Basic image tools are free with no account required.",
+    },
+  ],
+  related: [
+    {
+      href: "/tools/image/watermark",
+      title: "Watermark Image",
+      description: "Add a text watermark after cleaning metadata.",
+    },
+    {
+      href: "/tools/image/compress",
+      title: "Compress Image",
+      description: "Shrink file size for sharing.",
+    },
+    {
+      href: "/tools/image",
+      title: "All Image Tools",
+      description: "Browse the full privacy-first image toolkit.",
+    },
+  ],
+};

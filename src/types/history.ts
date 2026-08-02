@@ -5,7 +5,11 @@ export type HistoryToolId =
   | "crop"
   | "rotate"
   | "flip"
-  | "scan";
+  | "scan"
+  | "adjust"
+  | "blur"
+  | "watermark"
+  | "metadata";
 
 export type HistoryEntryMeta = {
   id: string;

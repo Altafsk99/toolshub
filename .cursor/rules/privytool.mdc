@@ -26,7 +26,7 @@ Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Zustand, Framer M
 
 ## Live routes
 
-`/`, `/tools/image`, `/tools/image/compress`, `/tools/image/resize`, `/tools/image/convert`, `/tools/image/history`
+`/`, `/tools/image`, `/tools/image/compress`, `/tools/image/resize`, `/tools/image/convert`, `/tools/image/crop`, `/tools/image/rotate`, `/tools/image/flip`, `/tools/image/adjust`, `/tools/image/blur`, `/tools/image/watermark`, `/tools/image/metadata`, `/tools/image/scan`, `/tools/image/history`
 
 ## Processing pipeline
 

@@ -9,6 +9,10 @@ const imageLinks = [
   { href: "/tools/image/crop", label: "Crop" },
   { href: "/tools/image/rotate", label: "Rotate" },
   { href: "/tools/image/flip", label: "Flip" },
+  { href: "/tools/image/adjust", label: "Adjust" },
+  { href: "/tools/image/blur", label: "Blur / Sharpen" },
+  { href: "/tools/image/watermark", label: "Watermark" },
+  { href: "/tools/image/metadata", label: "Remove metadata" },
 ];
 
 const pdfLinks = [

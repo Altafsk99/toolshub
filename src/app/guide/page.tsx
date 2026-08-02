@@ -11,7 +11,7 @@ import {
 export const metadata: Metadata = buildPageMetadata({
   title: "How to Use PrivyTool — Tools & Features Guide",
   description:
-    "Step-by-step guide to PrivyTool features: compress, resize, convert, crop, rotate, flip, scan, PDF tools, export formats, and download history.",
+    "Step-by-step guide to PrivyTool features: compress, resize, convert, crop, rotate, flip, adjust, blur, watermark, metadata, scan, PDF tools, export formats, and download history.",
   path: "/guide",
   keywords: [
     "how to use privytool",
@@ -97,6 +97,10 @@ const toc = [
   ["#crop", "Crop"],
   ["#rotate", "Rotate"],
   ["#flip", "Flip"],
+  ["#adjust", "Adjust"],
+  ["#blur", "Blur / Sharpen"],
+  ["#watermark", "Watermark"],
+  ["#metadata", "Remove metadata"],
   ["#scan", "Scan document"],
   ["#pdf-compress", "Compress PDF"],
   ["#pdf-merge", "Merge PDF"],
@@ -174,7 +178,8 @@ export default function GuidePage() {
                   <Link href="/tools/image" className="text-accent-deep underline-offset-2 hover:underline">
                     /tools/image
                   </Link>
-                  ) — compress, resize, convert, crop, rotate, flip, scan.
+                  ) — compress, resize, convert, crop, rotate, flip, adjust, blur, watermark,
+                  metadata, scan.
                 </li>
                 <li>
                   <strong className="font-semibold text-ink">PDF Tools</strong> (
@@ -350,6 +355,66 @@ export default function GuidePage() {
                   "Preview, then Download.",
                 ]}
                 features={["Horizontal flip", "Vertical flip", "Live preview"]}
+              />
+
+              <ToolHowTo
+                id="adjust"
+                href="/tools/image/adjust"
+                title="Adjust"
+                steps={[
+                  "Drop an image.",
+                  "Move brightness, contrast, and saturation sliders.",
+                  "Preview live, then Download.",
+                ]}
+                features={[
+                  "Brightness / contrast / saturation",
+                  "Reset sliders",
+                  "Live preview",
+                ]}
+              />
+
+              <ToolHowTo
+                id="blur"
+                href="/tools/image/blur"
+                title="Blur / Sharpen"
+                steps={[
+                  "Drop an image.",
+                  "Choose Blur or Sharpen and set the amount.",
+                  "Preview, then Download.",
+                ]}
+                features={["Blur radius control", "Sharpen strength", "Live preview"]}
+              />
+
+              <ToolHowTo
+                id="watermark"
+                href="/tools/image/watermark"
+                title="Watermark"
+                steps={[
+                  "Drop an image.",
+                  "Enter watermark text, pick position, size, opacity, and color.",
+                  "Preview, then Download.",
+                ]}
+                features={[
+                  "Text watermark",
+                  "Five position presets",
+                  "Opacity and color controls",
+                ]}
+              />
+
+              <ToolHowTo
+                id="metadata"
+                href="/tools/image/metadata"
+                title="Remove metadata"
+                steps={[
+                  "Drop a photo that may contain EXIF / GPS data.",
+                  "Choose an export format (and quality if lossy).",
+                  "Download the clean re-encoded file.",
+                ]}
+                features={[
+                  "Strips EXIF / GPS / camera tags",
+                  "Canvas re-encode in the browser",
+                  "PNG / JPG / WebP / AVIF export",
+                ]}
               />
 
               <ToolHowTo

@@ -19,6 +19,7 @@ export function ImagePreview() {
   const cropResult = useImageStore((s) => s.cropResult);
   const rotateResult = useImageStore((s) => s.rotateResult);
   const flipResult = useImageStore((s) => s.flipResult);
+  const editResult = useImageStore((s) => s.editResult);
   const resultFilename = useImageStore((s) => s.resultFilename);
   const clear = useImageStore((s) => s.clear);
   const freeModeActive = useCropUiStore((s) => s.freeModeActive);
@@ -58,6 +59,7 @@ export function ImagePreview() {
     cropResult?.width ??
     rotateResult?.width ??
     flipResult?.width ??
+    editResult?.width ??
     compressResult?.width ??
     convertResult?.width ??
     meta.width;
@@ -66,6 +68,7 @@ export function ImagePreview() {
     cropResult?.height ??
     rotateResult?.height ??
     flipResult?.height ??
+    editResult?.height ??
     compressResult?.height ??
     convertResult?.height ??
     meta.height;
@@ -74,6 +77,7 @@ export function ImagePreview() {
     cropResult?.outputBytes ??
     rotateResult?.outputBytes ??
     flipResult?.outputBytes ??
+    editResult?.outputBytes ??
     compressResult?.outputBytes ??
     convertResult?.outputBytes ??
     meta.size;
@@ -82,6 +86,7 @@ export function ImagePreview() {
     cropResult?.format ??
     rotateResult?.format ??
     flipResult?.format ??
+    editResult?.format ??
     compressResult?.format ??
     convertResult?.format ??
     meta.type ??
@@ -93,6 +98,19 @@ export function ImagePreview() {
     : `${meta.width}×${meta.height}`;
   const bytes = showingResult ? resultBytes : meta.size;
   const typeLabel = showingResult ? resultType : meta.type || "image";
+
+  const editBadge =
+    editResult?.kind === "adjust"
+      ? "Adjusted"
+      : editResult?.kind === "blur"
+        ? editResult.filterMode === "sharpen"
+          ? "Sharpened"
+          : "Blurred"
+        : editResult?.kind === "watermark"
+          ? "Watermarked"
+          : editResult?.kind === "metadata"
+            ? "Clean metadata"
+            : null;
 
   const badgeLabel = resizeResult
     ? resizeResult.compressed
@@ -108,11 +126,13 @@ export function ImagePreview() {
           ? flipResult.axis === "horizontal"
             ? "Flipped H"
             : "Flipped V"
-          : compressResult
-            ? "Compressed"
-            : convertResult
-              ? "Converted"
-              : "Result";
+          : editBadge
+            ? editBadge
+            : compressResult
+              ? "Compressed"
+              : convertResult
+                ? "Converted"
+                : "Result";
 
   return (
     <motion.div

@@ -1,13 +1,18 @@
 "use client";
 
-import { create } from "zustand";
 import { compressSource, formatBytes } from "@/lib/image/compress";
 import { cropSource } from "@/lib/image/crop";
 import {
-  downloadBlob,
-  exportSource,
-  loadImageFromFile,
-  revokeSource,
+    adjustSource,
+    filterSource,
+    stripMetadataSource,
+    watermarkSource,
+} from "@/lib/image/edit";
+import {
+    downloadBlob,
+    exportSource,
+    loadImageFromFile,
+    revokeSource,
 } from "@/lib/image/engine";
 import { resizeSource } from "@/lib/image/resize";
 import { flipSource, rotateSource } from "@/lib/image/transform";
@@ -15,21 +20,27 @@ import { zipNamedBlobs } from "@/lib/image/zip";
 import { useHistoryStore } from "@/stores/historyStore";
 import type { HistoryToolId } from "@/types/history";
 import type {
-  CompressOptions,
-  CompressResult,
-  ConvertResult,
-  CropOptions,
-  CropResult,
-  EngineSource,
-  ExportOptions,
-  FlipOptions,
-  FlipResult,
-  ImageMeta,
-  ResizeOptions,
-  ResizeResult,
-  RotateOptions,
-  RotateResult,
+    AdjustOptions,
+    CompressOptions,
+    CompressResult,
+    ConvertResult,
+    CropOptions,
+    CropResult,
+    EditResult,
+    EngineSource,
+    ExportOptions,
+    FilterOptions,
+    FlipOptions,
+    FlipResult,
+    ImageMeta,
+    MetadataOptions,
+    ResizeOptions,
+    ResizeResult,
+    RotateOptions,
+    RotateResult,
+    WatermarkOptions,
 } from "@/types/image";
+import { create } from "zustand";
 
 export type ProcessOpts = {
   /** Live preview: skips heavy UI busy state and ignores stale results */
@@ -59,6 +70,7 @@ type ImageState = {
   cropResult: CropResult | null;
   rotateResult: RotateResult | null;
   flipResult: FlipResult | null;
+  editResult: EditResult | null;
   /** Multi-file compress queue (empty in single-file mode) */
   batchFiles: File[];
   batchResults: BatchCompressItem[];
@@ -82,6 +94,10 @@ type ImageState = {
   clearRotateResult: () => void;
   runFlip: (options: FlipOptions, opts?: ProcessOpts) => Promise<void>;
   clearFlipResult: () => void;
+  runAdjust: (options: AdjustOptions, opts?: ProcessOpts) => Promise<void>;
+  runFilter: (options: FilterOptions, opts?: ProcessOpts) => Promise<void>;
+  runWatermark: (options: WatermarkOptions, opts?: ProcessOpts) => Promise<void>;
+  runStripMetadata: (options?: MetadataOptions, opts?: ProcessOpts) => Promise<void>;
   downloadResult: (tool?: HistoryToolId) => void;
 };
 
@@ -97,6 +113,7 @@ let exportToken = 0;
 let cropToken = 0;
 let rotateToken = 0;
 let flipToken = 0;
+let editToken = 0;
 
 const emptyBatch = {
   batchFiles: [] as File[],
@@ -119,6 +136,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
   cropResult: null,
   rotateResult: null,
   flipResult: null,
+  editResult: null,
   ...emptyBatch,
   isProcessing: false,
   isPreviewing: false,
@@ -132,6 +150,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
     cropToken += 1;
     rotateToken += 1;
     flipToken += 1;
+    editToken += 1;
     const prev = get();
     revokeSource(prev.source);
     revokeUrl(prev.previewUrl);
@@ -152,6 +171,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
         cropResult: null,
         rotateResult: null,
         flipResult: null,
+        editResult: null,
         ...emptyBatch,
         isProcessing: false,
         isPreviewing: false,
@@ -176,6 +196,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
         cropResult: null,
         rotateResult: null,
         flipResult: null,
+        editResult: null,
         ...emptyBatch,
         isProcessing: false,
         isPreviewing: false,
@@ -194,6 +215,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
         cropResult: null,
         rotateResult: null,
         flipResult: null,
+        editResult: null,
         ...emptyBatch,
         isProcessing: false,
         isPreviewing: false,
@@ -221,6 +243,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
     cropToken += 1;
     rotateToken += 1;
     flipToken += 1;
+    editToken += 1;
     const prev = get();
     revokeSource(prev.source);
     revokeUrl(prev.previewUrl);
@@ -240,6 +263,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
       cropResult: null,
       rotateResult: null,
       flipResult: null,
+        editResult: null,
       batchFiles: images,
       batchResults: [],
       batchProgress: null,
@@ -294,6 +318,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
       cropResult: null,
       rotateResult: null,
       flipResult: null,
+        editResult: null,
       batchFiles: merged,
       batchResults: [],
       batchProgress: null,
@@ -311,6 +336,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
     cropToken += 1;
     rotateToken += 1;
     flipToken += 1;
+    editToken += 1;
     const prev = get();
     revokeSource(prev.source);
     revokeUrl(prev.previewUrl);
@@ -328,6 +354,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
       cropResult: null,
       rotateResult: null,
       flipResult: null,
+        editResult: null,
       convertResult: null,
       ...emptyBatch,
       isProcessing: false,
@@ -380,6 +407,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
         cropResult: null,
         rotateResult: null,
         flipResult: null,
+        editResult: null,
         isProcessing: false,
         isPreviewing: false,
       });
@@ -420,6 +448,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
         cropResult: null,
         rotateResult: null,
         flipResult: null,
+        editResult: null,
         isProcessing: false,
         isPreviewing: false,
       });
@@ -553,6 +582,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
         cropResult: null,
         rotateResult: null,
         flipResult: null,
+        editResult: null,
         isProcessing: false,
         isPreviewing: false,
       });
@@ -576,6 +606,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
       cropResult: null,
       rotateResult: null,
       flipResult: null,
+        editResult: null,
       isProcessing: false,
       isPreviewing: false,
       error: null,
@@ -609,6 +640,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
         resizeResult: null,
         rotateResult: null,
         flipResult: null,
+        editResult: null,
         isProcessing: false,
         isPreviewing: false,
       });
@@ -663,6 +695,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
         resizeResult: null,
         cropResult: null,
         flipResult: null,
+        editResult: null,
         isProcessing: false,
         isPreviewing: false,
       });
@@ -684,6 +717,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
       resultBlob: null,
       resultFilename: null,
       flipResult: null,
+      editResult: null,
       isProcessing: false,
       isPreviewing: false,
       error: null,
@@ -717,6 +751,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
         resizeResult: null,
         cropResult: null,
         rotateResult: null,
+        editResult: null,
         isProcessing: false,
         isPreviewing: false,
       });
@@ -726,6 +761,170 @@ export const useImageStore = create<ImageState>((set, get) => ({
         isProcessing: false,
         isPreviewing: false,
         error: "Flip failed. Try again with another image.",
+      });
+    }
+  },
+
+  runAdjust: async (options, opts) => {
+    const { source } = get();
+    if (!source) return;
+
+    const silent = Boolean(opts?.silent);
+    const token = ++editToken;
+    set(
+      silent
+        ? { isPreviewing: true, error: null }
+        : { isProcessing: true, isPreviewing: false, error: null },
+    );
+
+    try {
+      const result = await adjustSource(source, options);
+      if (token !== editToken) return;
+      revokeUrl(get().resultPreviewUrl);
+      set({
+        resultBlob: result.blob,
+        resultFilename: result.filename,
+        resultPreviewUrl: URL.createObjectURL(result.blob),
+        resultRevision: get().resultRevision + 1,
+        editResult: result,
+        compressResult: null,
+        convertResult: null,
+        resizeResult: null,
+        cropResult: null,
+        rotateResult: null,
+        flipResult: null,
+        isProcessing: false,
+        isPreviewing: false,
+      });
+    } catch {
+      if (token !== editToken) return;
+      set({
+        isProcessing: false,
+        isPreviewing: false,
+        error: "Adjust failed. Try different slider values.",
+      });
+    }
+  },
+
+  runFilter: async (options, opts) => {
+    const { source } = get();
+    if (!source) return;
+
+    const silent = Boolean(opts?.silent);
+    const token = ++editToken;
+    set(
+      silent
+        ? { isPreviewing: true, error: null }
+        : { isProcessing: true, isPreviewing: false, error: null },
+    );
+
+    try {
+      const result = await filterSource(source, options);
+      if (token !== editToken) return;
+      revokeUrl(get().resultPreviewUrl);
+      set({
+        resultBlob: result.blob,
+        resultFilename: result.filename,
+        resultPreviewUrl: URL.createObjectURL(result.blob),
+        resultRevision: get().resultRevision + 1,
+        editResult: result,
+        compressResult: null,
+        convertResult: null,
+        resizeResult: null,
+        cropResult: null,
+        rotateResult: null,
+        flipResult: null,
+        isProcessing: false,
+        isPreviewing: false,
+      });
+    } catch {
+      if (token !== editToken) return;
+      set({
+        isProcessing: false,
+        isPreviewing: false,
+        error: "Filter failed. Try a smaller blur or sharpen amount.",
+      });
+    }
+  },
+
+  runWatermark: async (options, opts) => {
+    const { source } = get();
+    if (!source) return;
+
+    const silent = Boolean(opts?.silent);
+    const token = ++editToken;
+    set(
+      silent
+        ? { isPreviewing: true, error: null }
+        : { isProcessing: true, isPreviewing: false, error: null },
+    );
+
+    try {
+      const result = await watermarkSource(source, options);
+      if (token !== editToken) return;
+      revokeUrl(get().resultPreviewUrl);
+      set({
+        resultBlob: result.blob,
+        resultFilename: result.filename,
+        resultPreviewUrl: URL.createObjectURL(result.blob),
+        resultRevision: get().resultRevision + 1,
+        editResult: result,
+        compressResult: null,
+        convertResult: null,
+        resizeResult: null,
+        cropResult: null,
+        rotateResult: null,
+        flipResult: null,
+        isProcessing: false,
+        isPreviewing: false,
+      });
+    } catch {
+      if (token !== editToken) return;
+      set({
+        isProcessing: false,
+        isPreviewing: false,
+        error: "Watermark failed. Try shorter text or another image.",
+      });
+    }
+  },
+
+  runStripMetadata: async (options, opts) => {
+    const { source } = get();
+    if (!source) return;
+
+    const silent = Boolean(opts?.silent);
+    const token = ++editToken;
+    set(
+      silent
+        ? { isPreviewing: true, error: null }
+        : { isProcessing: true, isPreviewing: false, error: null },
+    );
+
+    try {
+      const result = await stripMetadataSource(source, options ?? {});
+      if (token !== editToken) return;
+      revokeUrl(get().resultPreviewUrl);
+      set({
+        resultBlob: result.blob,
+        resultFilename: result.filename,
+        resultPreviewUrl: URL.createObjectURL(result.blob),
+        resultRevision: get().resultRevision + 1,
+        editResult: result,
+        compressResult: null,
+        convertResult: null,
+        resizeResult: null,
+        cropResult: null,
+        rotateResult: null,
+        flipResult: null,
+        isProcessing: false,
+        isPreviewing: false,
+      });
+    } catch {
+      if (token !== editToken) return;
+      set({
+        isProcessing: false,
+        isPreviewing: false,
+        error: "Metadata removal failed. Try another format or image.",
       });
     }
   },
@@ -742,6 +941,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
       cropResult,
       rotateResult,
       flipResult,
+      editResult,
     } = get();
 
     if (resultBlob && resultFilename) {
@@ -753,6 +953,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
           cropResult?.width ??
           rotateResult?.width ??
           flipResult?.width ??
+          editResult?.width ??
           compressResult?.width ??
           convertResult?.width ??
           meta?.width ??
@@ -762,6 +963,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
           cropResult?.height ??
           rotateResult?.height ??
           flipResult?.height ??
+          editResult?.height ??
           compressResult?.height ??
           convertResult?.height ??
           meta?.height ??
@@ -771,6 +973,7 @@ export const useImageStore = create<ImageState>((set, get) => ({
           cropResult?.format ??
           rotateResult?.format ??
           flipResult?.format ??
+          editResult?.format ??
           compressResult?.format ??
           convertResult?.format ??
           resultBlob.type ??

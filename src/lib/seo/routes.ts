@@ -1,11 +1,15 @@
 import {
+  adjustToolContent,
+  blurToolContent,
   compressToolContent,
   convertToolContent,
   cropToolContent,
   flipToolContent,
+  metadataToolContent,
   resizeToolContent,
   rotateToolContent,
   scanToolContent,
+  watermarkToolContent,
 } from "@/content/tools/image";
 import { pdfToolPages } from "@/content/tools/pdf";
 import { getAllBlogPosts } from "@/lib/blog/posts";
@@ -29,6 +33,10 @@ export const imageToolPages: ToolPageContent[] = [
   cropToolContent,
   rotateToolContent,
   flipToolContent,
+  adjustToolContent,
+  blurToolContent,
+  watermarkToolContent,
+  metadataToolContent,
   scanToolContent,
 ];
 
